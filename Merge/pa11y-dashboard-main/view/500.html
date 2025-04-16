@@ -1,0 +1,35 @@
+{{! 
+This file is part of Pa11y Dashboard.
+
+Pa11y Dashboard is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pa11y Dashboard is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pa11y Dashboard.  If not, see <http://www.gnu.org/licenses/>.
+}}
+<div class="col-md-8">
+	<h1>Eeek! 500 error.</h1>
+	<p class="h2">Let's see what we can do here:</h2>
+	<ul>
+		<li>Do you have <a href="https://www.mongodb.com/">MongoDB</a> installed and <code>mongod</code> running?</li>
+		<li>Check out the <a href="https://github.com/pa11y/dashboard/blob/master/README.md#troubleshooting">Troubleshooting guide</a> for more information.</li>
+		<li>Search for a related <a href="https://github.com/pa11y/dashboard/issues">Github issue</a>, or open one yourself.</li>
+	</ul>
+	{{#if error}}
+		<h2>Stack-Trace</h2>
+		<pre>{{error.stack}}</pre>
+	{{/if}}
+</div>
+<div class="col-md-4">
+	<div class="well well-lg">
+		<p class="h2 text-center">Server Error Score</p>
+		<p class="supersize-me">lots</p>
+	</div>
+</div>
