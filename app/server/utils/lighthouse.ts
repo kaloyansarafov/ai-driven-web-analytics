@@ -11,10 +11,30 @@ export async function getLighthouseReport(url: string, browser: Browser) {
     port: parseInt(new URL(browser.wsEndpoint()).port)
   };
 
-  const runnerResult = await lighthouse(url, options);
+  // Timeout wrapper for Lighthouse (default 60s)
+  function withTimeout<T>(promise: Promise<T>, ms: number, errorMsg: string): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(errorMsg)), ms);
+      promise
+        .then((val) => {
+          clearTimeout(timer);
+          resolve(val);
+        })
+        .catch((err) => {
+          clearTimeout(timer);
+          reject(err);
+        });
+    });
+  }
+
+  const runnerResult = await withTimeout(
+    lighthouse(url, options),
+    60000,
+    'Lighthouse audit timed out after 60 seconds'
+  );
   if (!runnerResult) {
     throw new Error('Lighthouse audit failed');
   }
   
   return runnerResult.lhr;
-} 
+}

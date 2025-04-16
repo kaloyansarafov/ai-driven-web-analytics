@@ -4,7 +4,7 @@
     <div class="text-center space-y-4">
       <UBadge color="primary" variant="subtle">Web Analytics Tool</UBadge>
       <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white">
-        Website Performance Scanner
+        Website Performance Scanner - UI connections
       </h1>
       <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
         Get instant insights about your website's performance and accessibility with our AI-powered analysis tool
