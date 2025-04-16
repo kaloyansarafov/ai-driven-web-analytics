@@ -1,0 +1,29 @@
+# Use latest rule archive
+ruleArchive: latest
+
+# Specify policies to scan
+policies:
+  - IBM_Accessibility
+
+# Specify violation levels on which to fail the test
+failLevels:
+  - violation
+  - potentialviolation
+
+# Specify violation levels that should be reported
+reportLevels:
+  - violation
+  - potentialviolation
+
+# Disable file output
+outputFormat: disable
+
+# Use memory-only label
+label:
+  - memory-only
+
+# No output folder needed since we're disabling output
+outputFolder: ""
+
+# Disable timestamp in filenames
+outputFilenameTimestamp: false 
