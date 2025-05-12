@@ -867,6 +867,61 @@
                               "
                               class="mt-3 space-y-3 text-sm"
                             >
+                              <!-- AI Recommendations -->
+                              <div v-if="issue.aiRecommendations || issue.isLoadingAI" class="pt-2 border-t border-gray-200 dark:border-gray-700">
+                                <div class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+                                  AI Analysis
+                                </div>
+                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                  <!-- Loading State -->
+                                  <div v-if="issue.isLoadingAI" class="p-4">
+                                    <div class="flex items-center space-x-3">
+                                      <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+                                      <span class="text-sm text-gray-600 dark:text-gray-400">Generating AI recommendations...</span>
+                                    </div>
+                                  </div>
+                                  
+                                  <!-- AI Content -->
+                                  <div v-else-if="issue.aiRecommendations" class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Explanation -->
+                                    <div class="p-4">
+                                      <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Explanation
+                                      </h4>
+                                      <p class="text-gray-600 dark:text-gray-400">
+                                        {{ issue.aiRecommendations.explanation }}
+                                      </p>
+                                    </div>
+
+                                    <!-- Recommendations -->
+                                    <div class="p-4">
+                                      <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Recommendations
+                                      </h4>
+                                      <ul class="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-400">
+                                        <li v-for="(rec, index) in issue.aiRecommendations.recommendations" :key="index">
+                                          {{ rec }}
+                                        </li>
+                                      </ul>
+                                    </div>
+
+                                    <!-- Technical Terms -->
+                                    <div v-if="issue.aiRecommendations.technicalTerms.length > 0" class="p-4">
+                                      <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Technical Terms
+                                      </h4>
+                                      <dl class="space-y-2">
+                                        <div v-for="(term, index) in issue.aiRecommendations.technicalTerms" :key="index" 
+                                             class="bg-gray-50 dark:bg-gray-700/50 p-2 rounded">
+                                          <dt class="font-medium text-gray-700 dark:text-gray-300">{{ term.term }}</dt>
+                                          <dd class="text-gray-600 dark:text-gray-400">{{ term.definition }}</dd>
+                                        </div>
+                                      </dl>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
                               <!-- HTML Context -->
                               <div v-if="issue.context" class="overflow-hidden">
                                 <div
@@ -1374,6 +1429,15 @@ interface Issue {
   selector?: string;
   detail?: string;
   pageUrl?: string;
+  isLoadingAI?: boolean;
+  aiRecommendations?: {
+    explanation: string;
+    recommendations: string[];
+    technicalTerms: {
+      term: string;
+      definition: string;
+    }[];
+  };
 }
 
 // Define a type for the scan summary
@@ -1460,13 +1524,27 @@ function handleRescan(rescanUrl: string) {
 }
 
 // Toggle individual issue details
-function toggleDetails(issueGlobalIndex: number) {
+async function toggleDetails(issueGlobalIndex: number) {
   const position = expandedDetails.value.indexOf(issueGlobalIndex);
   if (position === -1) {
     expandedDetails.value.push(issueGlobalIndex);
     const techPos = showTechDetails.value.indexOf(issueGlobalIndex);
     if (techPos !== -1) {
       showTechDetails.value.splice(techPos, 1);
+    }
+    
+    // Fetch AI recommendations if not already present
+    const issue = results.value[issueGlobalIndex];
+    if (!issue.aiRecommendations) {
+      issue.isLoadingAI = true;
+      try {
+        const recommendations = await getAIRecommendations(issue);
+        if (recommendations) {
+          issue.aiRecommendations = recommendations;
+        }
+      } finally {
+        issue.isLoadingAI = false;
+      }
     }
   } else {
     expandedDetails.value.splice(position, 1);
@@ -2208,6 +2286,20 @@ function shortenUrl(url: string) {
     return urlObj.hostname + (urlObj.pathname !== '/' ? urlObj.pathname : '');
   } catch {
     return url;
+  }
+}
+
+// Add this function after the existing functions
+async function getAIRecommendations(issue: Issue) {
+  try {
+    const response = await axios.post('/api/gemini', { issue });
+    if (response.data?.success) {
+      return response.data.data;
+    }
+    return null;
+  } catch (err) {
+    console.error('Error getting AI recommendations:', err);
+    return null;
   }
 }
 </script>

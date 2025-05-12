@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   pages: false,
 
   runtimeConfig: {
+    geminiApiKey: process.env.GEMINI_API_KEY,
     public: {
       waveApiUrl: "https://wave.webaim.org/api/request",
       pa11yApiUrl:

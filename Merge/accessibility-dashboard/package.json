@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "accessibility-checker": "^4.0.4",
     "axios": "^1.3.5",
     "chart.js": "^4.2.1",
