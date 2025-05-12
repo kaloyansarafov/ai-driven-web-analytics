@@ -37,7 +37,7 @@
                 </svg>
               </button>
               <h1 class="text-xl font-semibold text-blue-600 ml-2">
-                A11y Dashboard
+                SEO & A11y Dashboard
               </h1>
             </div>
 
@@ -222,11 +222,22 @@
                         <input
                           type="checkbox"
                           v-model="selectedTools"
-                          value="axe"
+                          value="lighthouse"
                           class="rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-700"
                         />
                         <span class="ml-2 text-gray-700 dark:text-gray-300"
-                          >Axe</span
+                          >Lighthouse</span
+                        >
+                      </label>
+                      <label class="inline-flex items-center">
+                        <input
+                          type="checkbox"
+                          v-model="selectedTools"
+                          value="ibm-a11y"
+                          class="rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-700"
+                        />
+                        <span class="ml-2 text-gray-700 dark:text-gray-300"
+                          >IBM A11y</span
                         >
                       </label>
                     </div>
@@ -631,6 +642,30 @@
                       >
                         Pa11y
                       </button>
+                      <button
+                        v-if="hasLighthouseIssues"
+                        @click="filterSource = 'lighthouse'"
+                        :class="{
+                          'bg-blue-600 text-white': filterSource === 'lighthouse',
+                          'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300':
+                            filterSource !== 'lighthouse',
+                        }"
+                        class="px-3 py-1 rounded text-sm font-medium transition-colors"
+                      >
+                        Lighthouse
+                      </button>
+                      <button
+                        v-if="hasIbmA11yIssues"
+                        @click="filterSource = 'ibm-a11y'"
+                        :class="{
+                          'bg-blue-600 text-white': filterSource === 'ibm-a11y',
+                          'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300':
+                            filterSource !== 'ibm-a11y',
+                        }"
+                        class="px-3 py-1 rounded text-sm font-medium transition-colors"
+                      >
+                        IBM A11y
+                      </button>
                     </div>
 
                     <!-- Type Filter -->
@@ -840,7 +875,7 @@
                                   HTML Context:
                                 </div>
                                 <pre
-                                  class="p-3 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700 overflow-x-auto font-mono text-xs text-gray-800 dark:text-gray-300"
+                                  class="p-3 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700 overflow-x-auto font-mono text-xs text-gray-800 dark:text-gray-300 whitespace-pre-wrap break-words max-h-48"
                                   >{{ issue.context }}</pre
                                 >
                               </div>
@@ -855,7 +890,7 @@
                                   Selector:
                                 </div>
                                 <code
-                                  class="p-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700 block overflow-x-auto font-mono text-xs text-gray-800 dark:text-gray-300"
+                                  class="p-2 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700 block overflow-x-auto font-mono text-xs text-gray-800 dark:text-gray-300 whitespace-pre-wrap break-words max-h-24"
                                   >{{ issue.selector }}</code
                                 >
                               </div>
@@ -910,7 +945,18 @@
                                   Suggested Fix:
                                 </div>
                                 <div class="text-gray-700 dark:text-gray-300">
-                                  {{ issue.detail }}
+                                  <template v-for="(part, index) in formatDetailWithLinks(issue.detail)" :key="index">
+                                    <a
+                                      v-if="part.isLink"
+                                      :href="part.text"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="text-blue-600 dark:text-blue-400 hover:underline"
+                                    >
+                                      {{ shortenUrl(part.text) }}
+                                    </a>
+                                    <span v-else>{{ part.text }}</span>
+                                  </template>
                                 </div>
                               </div>
                             </div>
@@ -1153,11 +1199,22 @@
                       <input
                         type="checkbox"
                         v-model="defaultTools"
-                        value="axe"
+                        value="lighthouse"
                         class="rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-700"
                       />
                       <span class="ml-2 text-gray-700 dark:text-gray-300"
-                        >Axe</span
+                        >Lighthouse</span
+                      >
+                    </label>
+                    <label class="flex items-center">
+                      <input
+                        type="checkbox"
+                        v-model="defaultTools"
+                        value="ibm-a11y"
+                        class="rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-700"
+                      />
+                      <span class="ml-2 text-gray-700 dark:text-gray-300"
+                        >IBM A11y</span
                       >
                     </label>
                   </div>
@@ -1246,17 +1303,33 @@
                       <h4
                         class="text-lg font-medium text-gray-800 dark:text-white mb-2"
                       >
-                        Axe
+                        Lighthouse
                       </h4>
                       <p class="text-gray-600 dark:text-gray-300 mb-2">
-                        Axe is an accessibility testing engine for websites and
-                        other HTML-based user interfaces.
+                        Lighthouse is an open-source, automated tool for improving the quality of web pages. It has audits for performance, accessibility, progressive web apps, SEO, and more.
                       </p>
                       <a
-                        href="https://www.deque.com/axe/"
+                        href="https://developers.google.com/web/tools/lighthouse"
                         target="_blank"
                         class="text-blue-600 dark:text-blue-400 hover:underline"
-                        >Learn more about Axe</a
+                        >Learn more about Lighthouse</a
+                      >
+                    </div>
+
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                      <h4
+                        class="text-lg font-medium text-gray-800 dark:text-white mb-2"
+                      >
+                        IBM Accessibility Checker
+                      </h4>
+                      <p class="text-gray-600 dark:text-gray-300 mb-2">
+                        IBM's Accessibility Checker is a comprehensive tool that helps identify accessibility issues and provides detailed guidance on how to fix them according to WCAG guidelines.
+                      </p>
+                      <a
+                        href="https://www.ibm.com/able/toolkit/tools"
+                        target="_blank"
+                        class="text-blue-600 dark:text-blue-400 hover:underline"
+                        >Learn more about IBM Accessibility Checker</a
                       >
                     </div>
                   </div>
@@ -1297,7 +1370,7 @@ interface Issue {
   code: string;
   message: string;
   context?: string;
-  source: "pa11y" | "wave" | "axe";
+  source: "pa11y" | "wave" | "lighthouse" | "ibm-a11y";
   selector?: string;
   detail?: string;
   pageUrl?: string;
@@ -1508,6 +1581,15 @@ const hasPa11yIssues = computed(() =>
   results.value.some((issue) => issue.source === "pa11y")
 );
 
+// Add these computed properties after the existing hasWaveIssues and hasPa11yIssues
+const hasLighthouseIssues = computed(() =>
+  results.value.some((issue) => issue.source === 'lighthouse')
+);
+
+const hasIbmA11yIssues = computed(() =>
+  results.value.some((issue) => issue.source === 'ibm-a11y')
+);
+
 // Run an accessibility scan
 async function runScan() {
   if (!url.value || selectedTools.value.length === 0) {
@@ -1624,8 +1706,10 @@ async function runSinglePageScan() {
       scanPromises.push(runPa11yScan());
     } else if (tool === "wave") {
       scanPromises.push(runWaveScan());
-    } else if (tool === "axe") {
-      scanPromises.push(runAxeScan());
+    } else if (tool === "lighthouse") {
+      scanPromises.push(runLighthouseScan());
+    } else if (tool === "ibm-a11y") {
+      scanPromises.push(runIbmA11yScan());
     }
   }
 
@@ -1786,30 +1870,73 @@ async function runWaveScan() {
   }
 }
 
-// Placeholder for Axe integration
-async function runAxeScan() {
-  // This is a placeholder for Axe integration
-  console.log("Axe scan not yet implemented");
+async function runLighthouseScan() {
+  try {
+    console.log("Running Lighthouse scan on:", url.value);
+    
+    // Make API call to backend Lighthouse endpoint
+    const response = await axios.post("/api/lighthouse", {
+      url: url.value,
+      categories: ['accessibility', 'seo'] // Focus on accessibility and SEO
+    });
 
-  // Simulate a delay for demonstration purposes
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (response.data?.success) {
+      const lighthouseIssues = response.data.audits
+        .filter((audit: any) => audit.score !== null && audit.score < 1)
+        .map((audit: any) => ({
+          type: audit.score === 0 ? "error" : "warning",
+          code: audit.id,
+          message: audit.title,
+          context: audit.description,
+          source: "lighthouse",
+          selector: audit.selector,
+          detail: audit.explanation
+        }));
 
-  // Sample data for demonstration
-  const sampleIssues: Issue[] = [
-    {
-      type: "error",
-      code: "color-contrast",
-      message: "Elements must have sufficient color contrast",
-      context: '<div style="color: #888; background-color: #999">Text</div>',
-      source: "axe",
-      selector: 'div[style*="color: #888"]',
-      detail:
-        "Contrast ratio should be at least 4.5:1 for normal text and 3:1 for large text.",
-    },
-  ];
+      results.value.push(...lighthouseIssues);
+      console.log(`Lighthouse scan completed, added ${lighthouseIssues.length} issues.`);
+    } else {
+      throw new Error(response.data?.error || "Lighthouse scan failed");
+    }
+  } catch (err: any) {
+    console.error("Lighthouse scan error:", err);
+    if (error.value !== null) {
+      error.value = "Lighthouse scan failed: " + (err.response?.data?.error || err.message);
+    }
+  }
+}
 
-  // Add sample issues to results
-  results.value.push(...sampleIssues);
+async function runIbmA11yScan() {
+  try {
+    console.log("Running IBM Accessibility Checker scan on:", url.value);
+    
+    // Make API call to backend IBM A11y endpoint
+    const response = await axios.post("/api/ibm-a11y", {
+      url: url.value
+    });
+
+    if (response.data?.success) {
+      const ibmIssues = response.data.issues.map((issue: any) => ({
+        type: issue.type,
+        code: issue.code,
+        message: issue.message,
+        context: issue.context,
+        source: "ibm-a11y",
+        selector: issue.selector,
+        detail: issue.detail
+      }));
+
+      results.value.push(...ibmIssues);
+      console.log(`IBM A11y scan completed, added ${ibmIssues.length} issues.`);
+    } else {
+      throw new Error(response.data?.error || "IBM A11y scan failed");
+    }
+  } catch (err: any) {
+    console.error("IBM A11y scan error:", err);
+    if (error.value !== null) {
+      error.value = "IBM A11y scan failed: " + (err.response?.data?.error || err.message);
+    }
+  }
 }
 
 // Save scanned URL to recent scans and store scan results
@@ -1864,7 +1991,8 @@ function saveFullScanHistory(scannedUrl: string) {
       toolVersions: {
         pa11y: selectedTools.value.includes("pa11y") ? "6.1.0" : null,
         wave: selectedTools.value.includes("wave") ? "3.1.2" : null,
-        axe: selectedTools.value.includes("axe") ? "4.4.2" : null,
+        lighthouse: selectedTools.value.includes("lighthouse") ? "10.0.0" : null,
+        "ibm-a11y": selectedTools.value.includes("ibm-a11y") ? "4.0.0" : null
       },
       // previousScanId: undefined, // Properties are optional in interface
       // improvement: undefined,
@@ -2031,6 +2159,55 @@ function loadSavedReports() {
   } catch (error) {
     console.error("Error loading saved reports:", error);
     savedReports.value = [];
+  }
+}
+
+// Add these functions in the script section, before the return statement
+// Add this interface before the formatDetailWithLinks function
+interface DetailPart {
+  text: string;
+  isLink: boolean;
+}
+
+function formatDetailWithLinks(text: string): DetailPart[] {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts: DetailPart[] = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = urlRegex.exec(text)) !== null) {
+    // Add text before the URL
+    if (match.index > lastIndex) {
+      parts.push({
+        text: text.slice(lastIndex, match.index),
+        isLink: false
+      });
+    }
+    // Add the URL
+    parts.push({
+      text: match[0],
+      isLink: true
+    });
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add any remaining text
+  if (lastIndex < text.length) {
+    parts.push({
+      text: text.slice(lastIndex),
+      isLink: false
+    });
+  }
+
+  return parts;
+}
+
+function shortenUrl(url: string) {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.hostname + (urlObj.pathname !== '/' ? urlObj.pathname : '');
+  } catch {
+    return url;
   }
 }
 </script>

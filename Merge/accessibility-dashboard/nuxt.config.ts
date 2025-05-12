@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss"],
   css: ["~/assets/css/tailwind.css"],
   pages: false,
+
   runtimeConfig: {
     public: {
       waveApiUrl: "https://wave.webaim.org/api/request",
@@ -11,6 +12,7 @@ export default defineNuxtConfig({
         process.env.PA11Y_API_URL || "http://localhost:3000/api/pa11y",
     },
   },
+
   app: {
     head: {
       title: "Accessibility Dashboard",
@@ -38,4 +40,6 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  compatibilityDate: "2025-04-17",
 });

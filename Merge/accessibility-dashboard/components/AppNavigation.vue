@@ -61,7 +61,7 @@
             />
           </svg>
           <span class="text-xl font-semibold text-gray-800 dark:text-white"
-            >A11y Dashboard</span
+            >SEO & A11y Dashboard</span
           >
         </div>
         <nav aria-label="Main Navigation">
