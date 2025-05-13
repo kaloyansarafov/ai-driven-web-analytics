@@ -90,7 +90,61 @@
                     d="M3 12l2-2m0 0l7-7 7 7m-7-7v14"
                   />
                 </svg>
-                <span>Dashboard</span>
+                <span>Home Page</span>
+              </button>
+            </li>
+            <li>
+              <button
+                @click="navigateTo('accessibility-analysis')"
+                class="w-full flex items-center space-x-2 p-2 rounded-md"
+                :class="
+                  activePage === 'accessibility-analysis'
+                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
+                </svg>
+                <span>Accessibility Analysis</span>
+              </button>
+            </li>
+            <li>
+              <button
+                @click="navigateTo('seo-analysis')"
+                class="w-full flex items-center space-x-2 p-2 rounded-md"
+                :class="
+                  activePage === 'seo-analysis'
+                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+                <span>SEO Analysis</span>
               </button>
             </li>
             <li>
@@ -292,7 +346,61 @@
                       d="M3 12l2-2m0 0l7-7 7 7m-7-7v14"
                     />
                   </svg>
-                  <span>Dashboard</span>
+                  <span>Home Page</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  @click="navigateTo('accessibility-analysis')"
+                  class="w-full flex items-center space-x-2 p-2 rounded-md"
+                  :class="
+                    activePage === 'accessibility-analysis'
+                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                    />
+                  </svg>
+                  <span>Accessibility Analysis</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  @click="navigateTo('seo-analysis')"
+                  class="w-full flex items-center space-x-2 p-2 rounded-md"
+                  :class="
+                    activePage === 'seo-analysis'
+                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                  <span>SEO Analysis</span>
                 </button>
               </li>
               <li>
@@ -429,16 +537,9 @@ const activePage = ref("dashboard");
 // Helper function to format URL for display (removes protocol, trailing slashes, etc.)
 function formatUrl(url) {
   try {
-    // Remove protocol
-    let formatted = url.replace(/^(https?:\/\/)?(www\.)?/, "");
-    // Remove trailing slash
-    formatted = formatted.replace(/\/$/, "");
-    // Limit length
-    if (formatted.length > 30) {
-      formatted = formatted.substring(0, 30) + "...";
-    }
-    return formatted;
-  } catch (e) {
+    const urlObj = new URL(url);
+    return urlObj.hostname + urlObj.pathname;
+  } catch {
     return url;
   }
 }

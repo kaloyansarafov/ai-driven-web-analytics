@@ -1,5 +1,5 @@
 import { defineEventHandler, readBody, createError } from 'h3';
-import puppeteer from 'puppeteer';
+import { chromium } from 'playwright';
 import lighthouse from 'lighthouse';
 import { URL } from 'url';
 
@@ -26,51 +26,63 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // Launch Puppeteer
-    const browser = await puppeteer.launch({
+    // Launch Playwright Chromium
+    const browser = await chromium.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--remote-debugging-port=9222', '--no-sandbox', '--disable-setuid-sandbox']
     });
+    let context, page;
 
+    // Get the wsEndpoint for Lighthouse
+    // Playwright does not expose wsEndpoint directly, so we use the default port
+    // Lighthouse will connect to ws://localhost:9222
     try {
-      // Create a new page
-      const page = await browser.newPage();
-      
-      // Run Lighthouse
-      const { lhr } = await lighthouse(url, {
-        port: (new URL(browser.wsEndpoint())).port,
-        output: 'json',
-        logLevel: 'info',
-        onlyCategories: ['performance','accessibility', 'seo', 'best-practices'],
-        skipAudits: ['screenshot-thumbnails', 'final-screenshot', 'full-page-screenshot']
-      });
+      context = await browser.newContext();
+      page = await context.newPage();
+      try {
+        // Run Lighthouse
+        const result = await lighthouse(url, {
+          port: 9222,
+          output: 'json',
+          logLevel: 'info',
+          onlyCategories: ['performance','accessibility', 'seo', 'best-practices'],
+          skipAudits: ['screenshot-thumbnails', 'final-screenshot', 'full-page-screenshot']
+        });
+        const lhr = result?.lhr;
+        if (!lhr) throw new Error('Lighthouse did not return results');
 
-      // Process the results
-      const rawResults = lhr?.audits;
+        // Process the results
+        const rawResults = lhr.audits;
 
-      const audits = Object.values(lhr.audits)
-        .filter((audit: any) => audit.score !== null && audit.score < 1)
-        .map((audit: any): LighthouseAudit => ({
-          id: audit.id,
-          title: audit.title,
-          description: audit.description,
-          score: audit.score,
-          scoreDisplayMode: audit.scoreDisplayMode,
-          explanation: audit.explanation,
-          selector: audit.explanation,
-          impact: audit.impact
-        }));
+        const audits = Object.values(lhr.audits)
+          .filter((audit: any) => audit.score !== null && audit.score < 1)
+          .map((audit: any): LighthouseAudit => ({
+            id: audit.id,
+            title: audit.title,
+            description: audit.description,
+            score: audit.score,
+            scoreDisplayMode: audit.scoreDisplayMode,
+            explanation: audit.explanation,
+            selector: audit.explanation,
+            impact: audit.impact
+          }));
 
-      return {
-        success: true,
-        rawResults,
-        audits,
-        categories: {
-          accessibility: lhr.categories.accessibility,
-          seo: lhr.categories.seo
-        }
-      };
+        return {
+          success: true,
+          rawResults,
+          audits,
+          categories: {
+            accessibility: lhr.categories.accessibility,
+            seo: lhr.categories.seo
+          }
+        };
+      } finally {
+        // Always close page and context
+        if (page) await page.close();
+        if (context) await context.close();
+      }
     } finally {
+      // Always close browser
       await browser.close();
     }
   } catch (error: any) {

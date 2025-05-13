@@ -1,8 +1,5 @@
 import { defineEventHandler, readBody, createError } from "h3";
-import puppeteer, {
-  Browser as PuppeteerBrowser,
-  Page as PuppeteerPage,
-} from "puppeteer";
+import { chromium, Browser as PlaywrightBrowser, Page as PlaywrightPage } from 'playwright';
 import pa11y from "pa11y";
 import axios from "axios";
 import { JSDOM } from "jsdom";
@@ -42,12 +39,18 @@ interface AccessibilityIssue {
   [key: string]: any;
 }
 
-// Function to extract links using Puppeteer
+// Helper sleep function
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Function to extract links using Playwright
 async function extractLinks(url: string, baseUrl: string): Promise<string[]> {
-  let browser: PuppeteerBrowser | null = null;
+  let browser: PlaywrightBrowser | null = null;
+  let context: any = null;
+  let page: PlaywrightPage | null = null;
   try {
-    // Launch Puppeteer
-    browser = await puppeteer.launch({
+    browser = await chromium.launch({
       args: [
         "--no-sandbox",
         "--disable-dev-shm-usage",
@@ -56,7 +59,8 @@ async function extractLinks(url: string, baseUrl: string): Promise<string[]> {
       ],
       headless: true,
     });
-    const page: PuppeteerPage = await browser.newPage();
+    context = await browser.newContext();
+    page = await context.newPage();
 
     // Validate URL and determine base hostname
     const validUrl =
@@ -76,12 +80,12 @@ async function extractLinks(url: string, baseUrl: string): Promise<string[]> {
 
     // Navigate to the URL
     await page.goto(validUrl, {
-      waitUntil: "networkidle2",
+      waitUntil: "networkidle",
       timeout: 30000,
     });
 
     // Wait for 2 seconds using modern syntax
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await sleep(2000);
 
     // Extract links matching the base hostname
     const links = await page.evaluate((baseHost) => {
@@ -122,22 +126,15 @@ async function extractLinks(url: string, baseUrl: string): Promise<string[]> {
         });
       return [...new Set(urlLinks)];
     }, baseHostname);
-
-    await page.close();
-    if (browser) {
-      await browser.close();
-    }
     return links;
   } catch (error: any) {
     console.error(`Error extracting links from ${url}:`, error.message);
-    if (browser) {
-      try {
-        await browser.close();
-      } catch (e) {
-        console.error("Error closing browser during link extraction error:", e);
-      }
-    }
     return [];
+  } finally {
+    // Always close page, context, and browser
+    if (page) await page!.close();
+    if (context) await context!.close();
+    if (browser) await browser!.close();
   }
 }
 
