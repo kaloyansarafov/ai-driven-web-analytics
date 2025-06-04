@@ -42,9 +42,9 @@
 
     <!-- Sidebar for desktop -->
     <div
-      class="hidden lg:block w-64 bg-white border-r border-gray-200 h-full overflow-y-auto dark:bg-gray-800 dark:border-gray-700"
+      class="hidden lg:flex flex-col w-64 bg-white border-r border-gray-200 h-full overflow-y-auto dark:bg-gray-800 dark:border-gray-700"
     >
-      <div class="p-4">
+      <div class="p-4 flex-1">
         <div class="flex items-center space-x-2 mb-6">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -66,6 +66,33 @@
         </div>
         <nav aria-label="Main Navigation">
           <ul class="space-y-2">
+            <li>
+              <button
+                @click="navigateTo('combined-dashboard')"
+                class="w-full flex items-center space-x-2 p-2 rounded-md"
+                :class="
+                  activePage === 'combined-dashboard'
+                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 3v8H3a9 9 0 1018 0h-8V3z"
+                  />
+                </svg>
+                <span>Dashboard</span>
+              </button>
+            </li>
             <li>
               <button
                 @click="navigateTo('dashboard')"
@@ -237,25 +264,19 @@
           </ul>
         </nav>
       </div>
-
-      <!-- Recent scans section -->
-      <div class="border-t border-gray-200 dark:border-gray-700 p-4">
-        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
-          Recent Scans
-        </h3>
-        <ul v-if="recentScans.length > 0" class="space-y-2 text-sm">
-          <li v-for="(scan, index) in recentScans" :key="index">
-            <button
-              @click="scanUrl(scan)"
-              class="text-left w-full text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 truncate block"
-            >
-              {{ formatUrl(scan) }}
-            </button>
-          </li>
-        </ul>
-        <p v-else class="text-xs text-gray-500 dark:text-gray-400 italic">
-          No recent scans yet
-        </p>
+      <!-- Sidebar bottom controls -->
+      <div class="flex flex-col items-center gap-4 p-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
+        <ThemeToggle />
+        <button
+          class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="User menu"
+        >
+          <img
+            class="h-8 w-8 rounded-full"
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            alt="User avatar"
+          />
+        </button>
       </div>
     </div>
 
@@ -322,6 +343,22 @@
         <div class="flex-1 overflow-y-auto">
           <nav class="p-4" aria-label="Mobile Navigation">
             <ul class="space-y-2">
+              <li>
+                <button
+                  @click="navigateTo('combined-dashboard')"
+                  class="w-full flex items-center space-x-2 p-2 rounded-md"
+                  :class="
+                    activePage === 'combined-dashboard'
+                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  "
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3v8H3a9 9 0 1018 0h-8V3z" />
+                  </svg>
+                  <span>Dashboard</span>
+                </button>
+              </li>
               <li>
                 <button
                   @click="navigateTo('dashboard')"

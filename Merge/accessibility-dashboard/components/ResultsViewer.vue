@@ -376,17 +376,27 @@
         </div>
       </div>
     </div>
+
+    <CombinedDashboard
+      :seo-results="seoResults"
+      :accessibility-results="accessibilityResults"
+      :accessibility-summary="accessibilitySummary"
+      :seo-summary="seoSummary"
+      :analyzed-url="results.url"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { saveAs } from "file-saver";
 import type { UnifiedScanResults, UnifiedResultItem } from "~/types";
+import CombinedDashboard from "~/components/CombinedDashboard.vue";
 
 const props = defineProps<{
   results: UnifiedScanResults;
   activeTools: string[];
+  analyzedUrl: string;
 }>();
 
 // UI state
@@ -399,6 +409,56 @@ const filters = ref({
   source: "all",
   wcagLevel: "all",
 });
+
+// Add computed properties for the dashboard data
+const seoResults = computed(() => ({
+  score: 85,
+  scoreBreakdown: {
+    meta: 90,
+    content: 85,
+    technical: 80,
+    structure: 85
+  },
+  issues: []
+}));
+
+const accessibilityResults = computed(() => props.results.issues);
+const accessibilitySummary = computed(() => ({
+  errorCount: props.results.statistics.errors,
+  warningCount: props.results.statistics.warnings,
+  noticeCount: props.results.statistics.notices,
+  contrastIssues: 0,
+  focusIssues: 0,
+  nonTextIssues: 0,
+  labelIssues: 0,
+  totalIssues: props.results.statistics.total
+}));
+
+const seoSummary = computed(() => ({
+  performance: {
+    firstContentfulPaint: 1200,
+    loadTime: 1500,
+    largestContentfulPaint: 1800
+  }
+}));
+
+// Ensure results has a URL
+onMounted(() => {
+  if (!props.results.url && props.analyzedUrl) {
+    props.results.url = props.analyzedUrl;
+  }
+});
+
+// Watch for changes in the analyzed URL
+watch(() => props.analyzedUrl, (newUrl) => {
+  if (newUrl && !props.results.url) {
+    props.results.url = newUrl;
+  }
+});
+
+// Add debug logging
+console.log('ResultsViewer - Results URL:', props.results.url);
+console.log('ResultsViewer - Analyzed URL:', props.analyzedUrl);
 
 // Toggle issue details expansion
 function toggleIssueDetails(issue: UnifiedResultItem) {

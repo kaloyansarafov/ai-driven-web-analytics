@@ -18,11 +18,21 @@
     </div>
 
     <div v-else-if="unifiedResults.issues.length > 0" class="my-8">
-      <ResultsViewer :results="unifiedResults" :active-tools="activeTools" />
+      <ResultsViewer 
+        :results="unifiedResults" 
+        :active-tools="activeTools"
+        :analyzed-url="targetUrl"
+      />
     </div>
 
     <div v-else-if="scanCompleted" class="my-8 text-center py-10">
-      <p class="text-xl text-green-600">No accessibility issues found!</p>
+      <p class="text-xl text-green-600">Analysis Complete!</p>
+      <NuxtLink
+        :to="`/combined-dashboard?url=${encodeURIComponent(targetUrl)}`"
+        class="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+      >
+        View Combined Dashboard
+      </NuxtLink>
     </div>
   </div>
 </template>
@@ -87,6 +97,8 @@ async function runScan(formData: {
 
     // Add to history if we have results
     if (unifiedResults.value.issues.length > 0) {
+      // Add URL to the results
+      unifiedResults.value.url = targetUrl.value;
       historyStore.addScanToHistory(unifiedResults.value, activeTools.value);
 
       // Also update any matching bookmark

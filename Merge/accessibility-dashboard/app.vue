@@ -40,14 +40,8 @@
                 SEO & A11y Dashboard
               </h1>
             </div>
-
-            <div class="hidden lg:block">
-              <h1 class="text-xl font-semibold text-gray-800 dark:text-white">
-                Accessibility Dashboard
-              </h1>
-            </div>
-
-            <div class="flex items-center space-x-3">
+            <!-- Only show user, notification, and theme toggle on mobile header -->
+            <div class="flex items-center space-x-3 lg:hidden">
               <ThemeToggle />
               <a
                 href="#"
@@ -99,148 +93,102 @@
         <main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-4">
           <!-- Dashboard View -->
           <div v-if="currentView === 'dashboard'">
-            <div class="mb-6">
-              <h2 class="text-2xl font-bold mb-2">Website Analysis</h2>
-              <p class="text-gray-600 dark:text-gray-300">
-                Enter a URL to analyze both accessibility and SEO performance.
-              </p>
-            </div>
-
-            <!-- Scan Form Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-              <form @submit.prevent="runAnalyses" class="space-y-4">
-                <div>
-                  <label
-                    for="url"
-                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    URL to Analyze
-                  </label>
-                  <div class="mt-1">
-                    <input
-                      type="url"
-                      id="url"
-                      v-model="url"
-                      placeholder="https://example.com"
-                      class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                      :disabled="isLoading"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Analysis Types
-                  </label>
-                  <div class="space-y-2">
-                    <label class="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        v-model="analysisTypes.accessibility"
-                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
-                        :disabled="isLoading"
-                      />
-                      <span class="text-sm text-gray-700 dark:text-gray-300">Accessibility Analysis</span>
-                    </label>
-                    <label class="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        v-model="analysisTypes.seo"
-                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
-                        :disabled="isLoading"
-                      />
-                      <span class="text-sm text-gray-700 dark:text-gray-300">SEO Analysis</span>
-                    </label>
-                  </div>
-                </div>
-
-                <!-- Accessibility Tools Section -->
-                <div v-if="analysisTypes.accessibility" class="space-y-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Accessibility Tools
-                    </label>
-                    <div class="space-y-2">
-                      <label
-                        v-for="tool in availableTools"
-                        :key="tool.id"
-                        class="flex items-center space-x-3"
-                      >
-                        <input
-                          type="checkbox"
-                          :value="tool.id"
-                          v-model="selectedTools"
-                          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
-                          :disabled="isLoading"
-                        />
-                        <span class="text-sm text-gray-700 dark:text-gray-300">{{ tool.name }}</span>
-                      </label>
+            <!-- HERO SECTION FULL WIDTH BACKGROUND START -->
+            <div class="w-full bg-[linear-gradient(90deg,_#3C585E_0%,_#232B62_100%)] min-h-[420px] overflow-x-hidden">
+              <div class="flex items-center justify-center py-12 min-h-[420px]">
+                <section class="flex flex-col lg:flex-row items-center justify-between w-full max-w-6xl mx-auto rounded-2xl shadow-xl p-8 relative z-10">
+                  <!-- Left: Text and Form -->
+                  <div class="flex-1 max-w-xl text-left">
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4">Welcome to Crea8ion.lab!</h1>
+                    <h2 class="text-3xl font-bold text-white mb-4">Manage your SEO and Accessibility Dashboard Easily!</h2>
+                    <p class="text-lg text-blue-100 mb-8 max-w-lg">
+                      Our dashboard will help you get all the analytics that you need to improve the SEO and WCAG Accessibility of your website. Just paste the website link below, and let us explore the results together!
+                    </p>
+                    <!-- Scan Form (preserve all logic) -->
+                    <div class="bg-white/90 dark:bg-gray-800/90 rounded-lg shadow p-6 w-full">
+                      <form @submit.prevent="runAnalyses" class="space-y-4">
+                        <div>
+                          <label for="url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL</label>
+                          <div class="mt-1 flex items-center space-x-2">
+                            <input
+                              type="url"
+                              id="url"
+                              v-model="url"
+                              placeholder="enter url link here"
+                              class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                              :disabled="isLoading"
+                            />
+                            <button
+                              type="submit"
+                              :disabled="isLoading || !url || (!analysisTypes.accessibility && !analysisTypes.seo)"
+                              class="px-6 py-2 rounded-md font-semibold bg-black text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {{ isLoading ? 'Analyzing...' : 'Analyze' }}
+                            </button>
+                          </div>
+                        </div>
+                        <!-- Advanced Options Toggle -->
+                        <div class="flex items-center space-x-2">
+                          <input type="checkbox" id="advanced-options" v-model="showAdvancedOptions" class="toggle toggle-sm" />
+                          <label for="advanced-options" class="text-xs text-gray-600 dark:text-gray-300 cursor-pointer">Advanced Options</label>
+                        </div>
+                        <!-- Advanced Options Section (conditionally shown) -->
+                        <div v-if="showAdvancedOptions" class="space-y-4 border-t pt-4 mt-2">
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Analysis Types</label>
+                            <div class="space-y-2">
+                              <label class="flex items-center space-x-3">
+                                <input type="checkbox" v-model="analysisTypes.accessibility" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded" :disabled="isLoading" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Accessibility Analysis</span>
+                              </label>
+                              <label class="flex items-center space-x-3">
+                                <input type="checkbox" v-model="analysisTypes.seo" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded" :disabled="isLoading" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300">SEO Analysis</span>
+                              </label>
+                            </div>
+                          </div>
+                          <div v-if="analysisTypes.accessibility" class="space-y-4">
+                            <div>
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Accessibility Tools</label>
+                              <div class="space-y-2">
+                                <label v-for="tool in availableTools" :key="tool.id" class="flex items-center space-x-3">
+                                  <input type="checkbox" :value="tool.id" v-model="selectedTools" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded" :disabled="isLoading" />
+                                  <span class="text-sm text-gray-700 dark:text-gray-300">{{ tool.name }}</span>
+                                </label>
+                              </div>
+                            </div>
+                            <div v-if="selectedTools.includes('wave')">
+                              <label class="flex items-center space-x-3">
+                                <input type="checkbox" v-model="visualReport" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded" :disabled="isLoading" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Include Visual Report</span>
+                              </label>
+                            </div>
+                            <div>
+                              <label class="flex items-center space-x-3">
+                                <input type="checkbox" v-model="includeHistory" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded" :disabled="isLoading" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Track Scan History</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                   </div>
-
-                  <div v-if="selectedTools.includes('wave')">
-                    <label class="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        v-model="visualReport"
-                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
-                        :disabled="isLoading"
-                      />
-                      <span class="text-sm text-gray-700 dark:text-gray-300">
-                        Include Visual Report
-                      </span>
-                    </label>
+                  <!-- Right: Illustration -->
+                  <div class="flex-1 flex items-center justify-center mt-10 lg:mt-0">
+                    <img 
+                      src="/assets/Image/Side%20Illustration.png" 
+                      alt="Person analyzing dashboard illustration" 
+                      class="max-w-xs w-full h-auto rounded-xl shadow-lg" 
+                      loading="lazy"
+                    />
                   </div>
-
-                  <div>
-                    <label class="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        v-model="includeHistory"
-                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
-                        :disabled="isLoading"
-                      />
-                      <span class="text-sm text-gray-700 dark:text-gray-300">
-                        Track Scan History
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                <div class="flex justify-end">
-                  <button
-                    type="submit"
-                    :disabled="isLoading || !url || (!analysisTypes.accessibility && !analysisTypes.seo)"
-                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <svg
-                      v-if="isLoading"
-                      class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                      ></circle>
-                      <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    {{ isLoading ? "Analyzing..." : "Start Analysis" }}
-                  </button>
-                </div>
-              </form>
+                </section>
+              </div>
             </div>
+            <!-- HERO SECTION FULL WIDTH BACKGROUND END -->
 
-            <!-- Results Navigation -->
+            <!-- Results Navigation (unchanged) -->
             <div v-if="analysisComplete" class="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
               <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Analysis Complete</h3>
               <div class="flex flex-wrap gap-4">
@@ -258,10 +206,16 @@
                 >
                   View SEO Results
                 </button>
+                <button
+                  @click="navigateToAnalysis('combined')"
+                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                >
+                  View Combined Dashboard
+                </button>
               </div>
             </div>
 
-            <!-- Loading state -->
+            <!-- Loading state (unchanged) -->
             <div
               v-if="isLoading"
               class="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
@@ -326,7 +280,7 @@
               </div>
             </div>
 
-            <!-- Error message -->
+            <!-- Error message (unchanged) -->
             <div
               v-else-if="error"
               class="mt-8 bg-red-50 dark:bg-red-900/20 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg shadow-md"
@@ -428,6 +382,10 @@
               <!-- Help content -->
             </div>
           </div>
+
+          <div v-else-if="currentView === 'combined-dashboard'">
+            <CombinedDashboard :seo-results="seoAnalysisResults" :accessibility-results="results" :accessibility-summary="accessibilitySummary" :seo-summary="seoSummary" />
+          </div>
         </main>
       </div>
     </div>
@@ -445,6 +403,7 @@ import SummaryChart from "./components/SummaryChart.vue";
 import AccessibilityAnalysis from "./components/AccessibilityAnalysis.vue";
 import SEOAnalysis from "./pages/seo-analysis.vue";
 import { nanoid } from "nanoid/non-secure";
+import CombinedDashboard from "./pages/combined-dashboard.vue";
 
 // Define the Issue type
 interface Issue {
@@ -548,6 +507,8 @@ const settings = ref({
   waveApiKey: '',
   // Add other settings as needed
 });
+const showAdvancedOptions = ref(false);
+const targetUrl = ref('');
 
 // Add this function to safely access localStorage
 function getLocalStorage(key: string, defaultValue: string = ''): string {
@@ -605,10 +566,48 @@ function handleRecentScan(selectedUrl: string) {
 
 // Handle navigation from AppNavigation
 function handleNavigation(view: string) {
-  currentView.value = view;
+  // Reset mobile menu if open
+  isMobileMenuOpen.value = false;
+  
+  // Handle specific views
   if (view === "saved-reports") {
     loadSavedReports();
+  } else if (view === "dashboard") {
+    // Reset analysis states when going back to dashboard
+    scanCompleted.value = false;
+    analysisComplete.value = false;
+    error.value = '';
+    // Clear the results
+    results.value = [];
+    seoAnalysisResults.value = null;
+  } else if (view === "combined-dashboard") {
+    // Load the latest analysis results if available
+    const latestAnalysis = localStorage.getItem('latestAnalysis');
+    if (latestAnalysis) {
+      try {
+        const parsed = JSON.parse(latestAnalysis);
+        // Update the reactive state
+        url.value = parsed.url || '';
+        results.value = parsed.accessibilityResults || [];
+        seoAnalysisResults.value = parsed.seoResults || null;
+        // Update the summaries through their setters if they exist
+        if (parsed.accessibilitySummary) {
+          Object.assign(accessibilitySummary.value, parsed.accessibilitySummary);
+        }
+        if (parsed.seoSummary) {
+          Object.assign(seoSummary.value, parsed.seoSummary);
+        }
+      } catch (error) {
+        console.error('Error loading latest analysis:', error);
+      }
+    }
   }
+  
+  // Update the current view
+  currentView.value = view;
+  
+  // Scroll to top of the page
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Handle rescan request from HistoryTracking component
@@ -1346,26 +1345,100 @@ async function runSEOAnalysis() {
 }
 
 // Update the navigateToAnalysis function
-function navigateToAnalysis(type: 'accessibility' | 'seo') {
+function navigateToAnalysis(type: 'accessibility' | 'seo' | 'combined') {
   if (type === 'accessibility') {
     if (!results.value.length) {
       console.error('No accessibility results available');
       return;
     }
     currentView.value = 'accessibility-analysis';
-  } else {
+  } else if (type === 'seo') {
     if (!url.value || !seoAnalysisResults.value) {
       console.error('Missing URL or SEO analysis results');
       return;
     }
     currentView.value = 'seo-analysis';
+  } else if (type === 'combined') {
+    if (!url.value || (!results.value.length && !seoAnalysisResults.value)) {
+      console.error('No analysis results available');
+      return;
+    }
+    currentView.value = 'combined-dashboard';
+    // Store the results in localStorage for the combined dashboard
+    const combinedResults = {
+      url: url.value,
+      seoResults: seoAnalysisResults.value,
+      accessibilityResults: results.value,
+      accessibilitySummary: accessibilitySummary.value,
+      seoSummary: seoSummary.value,
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('latestAnalysis', JSON.stringify(combinedResults));
   }
 }
+
+const accessibilitySummary = computed({
+  get: () => {
+    const contrastIssues = results.value.filter(issue => 
+      issue.code && issue.code.toLowerCase().includes('contrast')).length;
+    const focusIssues = results.value.filter(issue => 
+      issue.code && issue.code.toLowerCase().includes('focus')).length;
+    const nonTextIssues = results.value.filter(issue => 
+      issue.code && (issue.code.toLowerCase().includes('alt') || issue.code.toLowerCase().includes('non-text'))).length;
+    const labelIssues = results.value.filter(issue => 
+      issue.code && issue.code.toLowerCase().includes('label')).length;
+    
+    return {
+      errorCount: errorCount.value,
+      warningCount: warningCount.value,
+      noticeCount: noticeCount.value,
+      contrastIssues,
+      focusIssues,
+      nonTextIssues,
+      labelIssues,
+      totalIssues: results.value.length
+    };
+  },
+  set: (newValue) => {
+    // Allow setting the summary if needed
+    if (newValue) {
+      Object.assign(accessibilitySummary.value, newValue);
+    }
+  }
+});
+
+const seoSummary = computed({
+  get: () => {
+    if (!seoAnalysisResults.value) return {};
+    return {
+      performance: seoAnalysisResults.value.performance,
+      language: seoAnalysisResults.value.language,
+      improvement: seoAnalysisResults.value.improvement,
+      metrics: seoAnalysisResults.value.metrics,
+    };
+  },
+  set: (newValue) => {
+    // Allow setting the summary if needed
+    if (newValue) {
+      Object.assign(seoSummary.value, newValue);
+    }
+  }
+});
+
+// Function to set scan completed and target URL
+function setScanCompleted(url: string) {
+  scanCompleted.value = true;
+  targetUrl.value = url;
+}
+
+// Expose the function to child components
+defineExpose({ setScanCompleted });
 </script>
 
 <style>
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
 }
 </style>
