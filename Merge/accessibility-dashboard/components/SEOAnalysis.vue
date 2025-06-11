@@ -50,36 +50,7 @@
       </div>
       <div class="score-explanation modern">The SEO score is calculated based on four main categories: Meta, Content, Technical, and Structure. Each category contributes up to 25 points, for a total of 100. The score reflects the average across all successfully crawled pages.</div>
     </div>
-    <!-- Issues by Page Section -->
-    <div class="issues-by-page-section">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-xl font-semibold">Issues by Page</h3>
-          <button @click="openAIRecommendation({ type: 'info', message: 'General advice for Issues by Page', category: 'All' })"
-                  class="ai-fix-button prominent">
-            Fix with AI
-          </button>
-        </div>
-        <div v-for="(issues, url) in sortedIssuesByPage" :key="url" class="page-issues-block card">
-          <div class="page-url-title">{{ url }}</div>
-          <div v-if="issues.length === 0" class="no-issues">No issues</div>
-          <div v-for="(issue, idx) in issues" :key="idx" class="issue-card enhanced" :class="issue.type">
-            <div class="issue-header">
-              <span class="issue-type-icon" :class="issue.type">
-                <template v-if="issue.type === 'error'">&#9888;</template>
-                <template v-else-if="issue.type === 'warning'">&#9889;</template>
-                <template v-else>&#9432;</template>
-              </span>
-              <span class="issue-type-label" :class="issue.type">{{ issue.type.toUpperCase() }}</span>
-              <span class="issue-message">{{ issue.message }}</span>
-            </div>
-            <div v-if="issue.element" class="issue-element">{{ issue.element }}</div>
-            <div class="issue-recommendation">{{ issue.recommendation }}</div>
-            <button @click="openAIRecommendation(issue)" class="ai-fix-button prominent">Get AI Analysis</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <!-- Add search component before the issues section -->
     <div class="mt-8">
       <IssueSearch
@@ -93,6 +64,7 @@
         @search="handleSearch"
       />
     </div>
+
     <!-- Issues by Category Section (accordion/card style) -->
     <div class="category-issues-section">
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -120,6 +92,131 @@
             </div>
             <div class="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
               <div v-for="issue in filteredIssuesByCategory[cat]" :key="issue.message"
+                :class="{
+                  'bg-red-50 dark:bg-red-900/20': issue.type === 'error',
+                  'bg-yellow-50 dark:bg-yellow-900/20': issue.type === 'warning',
+                  'bg-blue-50 dark:bg-blue-900/20': issue.type === 'notice'
+                }"
+                class="p-3 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                @click="scrollToIssue(issue)">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0">
+                    <svg v-if="issue.type === 'error'" class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg v-else-if="issue.type === 'warning'" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg v-else class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div class="ml-3 flex-1">
+                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ issue.message }}</div>
+                    <div class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ issue.recommendation }}</div>
+                    <div class="mt-1 text-xs text-gray-400 dark:text-gray-500">Page: {{ issue.url }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issues by Page Section -->
+    <div class="issues-by-page-section">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold">Issues by Page</h3>
+          <button @click="openAIRecommendation({ type: 'info', message: 'General advice for Issues by Page', category: 'All' })"
+                  class="ai-fix-button prominent">
+            Fix with AI
+          </button>
+        </div>
+        <div v-for="(issues, url) in sortedIssuesByPage" :key="url" class="page-issues-block card">
+          <div class="page-url-title">{{ url }}</div>
+          <div v-if="issues.length === 0" class="no-issues">No issues</div>
+          <div v-for="(issue, idx) in issues" :key="idx" 
+            :id="`issue-${url}-${issue.message}`.replace(/[^a-zA-Z0-9-]/g, '-')"
+            class="issue-card enhanced" 
+            :class="issue.type">
+            <div class="issue-header">
+              <span class="issue-type-icon" :class="issue.type">
+                <template v-if="issue.type === 'error'">&#9888;</template>
+                <template v-else-if="issue.type === 'warning'">&#9889;</template>
+                <template v-else>&#9432;</template>
+              </span>
+              <span class="issue-type-label" :class="issue.type">{{ issue.type.toUpperCase() }}</span>
+              <span class="issue-message">{{ issue.message }}</span>
+            </div>
+            <div v-if="issue.element" class="issue-element">{{ issue.element }}</div>
+            <div class="issue-recommendation">{{ issue.recommendation }}</div>
+            <button @click="openAIRecommendation(issue)" class="ai-fix-button prominent">Get AI Analysis</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Robots.txt Analysis Section -->
+    <div v-if="analysis.robotsAnalysis.exists" class="mt-8">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 robots-analysis-section">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold">Robots.txt Analysis</h3>
+          <button @click="openAIRecommendation({ type: 'info', message: 'General advice for Robots.txt', category: 'Robots.txt' })"
+                  class="ai-fix-button prominent">
+            Fix with AI
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Directives -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h4 class="font-medium mb-2">User Agents</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="agent in analysis.robotsAnalysis.directives.userAgent" :key="agent">
+                  {{ agent }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium mb-2">Sitemaps</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="sitemap in analysis.robotsAnalysis.directives.sitemap" :key="sitemap">
+                  {{ sitemap }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium mb-2">Allow Directives</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="path in analysis.robotsAnalysis.directives.allow" :key="path">
+                  {{ path }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium mb-2">Disallow Directives</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="path in analysis.robotsAnalysis.directives.disallow" :key="path">
+                  {{ path }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Crawl Delay -->
+          <div v-if="analysis.robotsAnalysis.directives.crawlDelay !== null">
+            <h4 class="font-medium mb-2">Crawl Delay</h4>
+            <p>{{ analysis.robotsAnalysis.directives.crawlDelay }} seconds</p>
+          </div>
+
+          <!-- Issues -->
+          <div v-if="analysis.robotsAnalysis.issues.length > 0">
+            <h4 class="font-medium mb-2">Issues</h4>
+            <div class="space-y-2">
+              <div v-for="(issue, index) in analysis.robotsAnalysis.issues" :key="index"
                 :class="{
                   'bg-red-50 dark:bg-red-900/20': issue.type === 'error',
                   'bg-yellow-50 dark:bg-yellow-900/20': issue.type === 'warning',
@@ -161,6 +258,7 @@
         </div>
       </div>
     </div>
+
     <!-- High Impact Issues Section (deduped and grouped) -->
     <div class="high-impact-section">
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -188,6 +286,7 @@
         </div>
       </div>
     </div>
+
     <!-- Main Body -->
     <div class="dashboard-main">
       <!-- Recommendations -->
@@ -382,108 +481,6 @@
       </div>
     </div>
 
-    <!-- Add Robots.txt Analysis Section -->
-    <div v-if="analysis?.robotsAnalysis" class="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-      <h3 class="text-xl font-semibold mb-4">Robots.txt Analysis</h3>
-      
-      <div class="mb-4">
-        <div class="flex items-center mb-2">
-          <span class="font-medium mr-2">Status:</span>
-          <span :class="analysis.robotsAnalysis.exists ? 'text-green-600' : 'text-red-600'">
-            {{ analysis.robotsAnalysis.exists ? 'Found' : 'Not Found' }}
-          </span>
-        </div>
-
-        <div v-if="analysis.robotsAnalysis.exists" class="space-y-4">
-          <!-- Directives -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h4 class="font-medium mb-2">User Agents</h4>
-              <ul class="list-disc list-inside">
-                <li v-for="agent in analysis.robotsAnalysis.directives.userAgent" :key="agent">
-                  {{ agent }}
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-medium mb-2">Sitemaps</h4>
-              <ul class="list-disc list-inside">
-                <li v-for="sitemap in analysis.robotsAnalysis.directives.sitemap" :key="sitemap">
-                  {{ sitemap }}
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-medium mb-2">Allow Directives</h4>
-              <ul class="list-disc list-inside">
-                <li v-for="path in analysis.robotsAnalysis.directives.allow" :key="path">
-                  {{ path }}
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-medium mb-2">Disallow Directives</h4>
-              <ul class="list-disc list-inside">
-                <li v-for="path in analysis.robotsAnalysis.directives.disallow" :key="path">
-                  {{ path }}
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Crawl Delay -->
-          <div v-if="analysis.robotsAnalysis.directives.crawlDelay !== null">
-            <h4 class="font-medium mb-2">Crawl Delay</h4>
-            <p>{{ analysis.robotsAnalysis.directives.crawlDelay }} seconds</p>
-          </div>
-
-          <!-- Issues -->
-          <div v-if="analysis.robotsAnalysis.issues.length > 0">
-            <h4 class="font-medium mb-2">Issues</h4>
-            <div class="space-y-2">
-              <div v-for="(issue, index) in analysis.robotsAnalysis.issues" :key="index"
-                :class="{
-                  'bg-red-50 dark:bg-red-900/20': issue.type === 'error',
-                  'bg-yellow-50 dark:bg-yellow-900/20': issue.type === 'warning',
-                  'bg-blue-50 dark:bg-blue-900/20': issue.type === 'notice'
-                }"
-                class="p-3 rounded-lg">
-                <div class="flex items-start">
-                  <div class="flex-shrink-0">
-                    <svg v-if="issue.type === 'error'" class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                    </svg>
-                    <svg v-else-if="issue.type === 'warning'" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                    </svg>
-                    <svg v-else class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                    </svg>
-                  </div>
-                  <div class="ml-3">
-                    <h5 class="text-sm font-medium" :class="{
-                      'text-red-800 dark:text-red-200': issue.type === 'error',
-                      'text-yellow-800 dark:text-yellow-200': issue.type === 'warning',
-                      'text-blue-800 dark:text-blue-200': issue.type === 'notice'
-                    }">
-                      {{ issue.message }}
-                    </h5>
-                    <p class="mt-1 text-sm" :class="{
-                      'text-red-700 dark:text-red-300': issue.type === 'error',
-                      'text-yellow-700 dark:text-yellow-300': issue.type === 'warning',
-                      'text-blue-700 dark:text-blue-300': issue.type === 'notice'
-                    }">
-                      {{ issue.recommendation }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Add AIRecommendation side panel component at the root -->
     <AIRecommendation
       :is-open="isAIRecommendationOpen"
@@ -601,7 +598,10 @@ const filteredIssuesByCategory = computed(() => {
       return !query || 
         issue.message.toLowerCase().includes(query) ||
         issue.recommendation.toLowerCase().includes(query);
-    });
+    }).map(issue => ({
+      ...issue,
+      url: props.analysis.url // Add the root URL to each robots.txt issue
+    }));
   }
 
   return grouped;
@@ -710,6 +710,44 @@ const handleSearch = (query: string) => {
 const nonEmptyCategories = computed(() => {
   return categoryList.filter(cat => filteredIssuesByCategory.value[cat].length > 0);
 });
+
+function scrollToIssue(issue: any) {
+  // Handle robots.txt issues
+  if (issue.category === 'Robots.txt' || issue.url === props.analysis?.url) {
+    const robotsSection = document.querySelector('.robots-analysis-section');
+    if (robotsSection) {
+      robotsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Add a temporary highlight effect
+      robotsSection.classList.add('highlight-issue');
+      setTimeout(() => {
+        robotsSection.classList.remove('highlight-issue');
+      }, 2000);
+    }
+    return;
+  }
+
+  // Find the corresponding issue in the issues by page section
+  const pageIssues = sortedIssuesByPage.value[issue.url] || [];
+  const targetIssue = pageIssues.find((i: any) => 
+    i.message === issue.message && 
+    i.recommendation === issue.recommendation
+  );
+
+  if (targetIssue) {
+    // Create a unique ID for the issue if it doesn't exist
+    const issueId = `issue-${issue.url}-${issue.message}`.replace(/[^a-zA-Z0-9-]/g, '-');
+    const element = document.getElementById(issueId);
+    
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Add a temporary highlight effect
+      element.classList.add('highlight-issue');
+      setTimeout(() => {
+        element.classList.remove('highlight-issue');
+      }, 2000);
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -1107,6 +1145,7 @@ const nonEmptyCategories = computed(() => {
   font-size: 0.95rem;
   color: #666;
   margin-top: 0.5rem;
+  margin-bottom: 0;
 }
 .issues-by-page-section, .recommendations-by-page-section {
   margin-bottom: 2rem;
@@ -1505,5 +1544,18 @@ const nonEmptyCategories = computed(() => {
 
 .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(156, 163, 175, 0.5);
+}
+
+.highlight-issue {
+  animation: highlight 2s ease-out;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: rgba(59, 130, 246, 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
 }
 </style> 
