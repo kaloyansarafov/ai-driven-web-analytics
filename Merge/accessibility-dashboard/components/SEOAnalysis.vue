@@ -80,6 +80,19 @@
         </div>
       </div>
     </div>
+    <!-- Add search component before the issues section -->
+    <div class="mt-8">
+      <IssueSearch
+        :total-count="(props.analysis?.issues || []).length + (props.analysis?.robotsAnalysis?.issues || []).length"
+        :filtered-count="filteredIssues.length + (props.analysis?.robotsAnalysis?.issues || []).filter(issue => {
+          const query = searchQuery.toLowerCase();
+          return !query || 
+            issue.message.toLowerCase().includes(query) ||
+            issue.recommendation.toLowerCase().includes(query);
+        }).length"
+        @search="handleSearch"
+      />
+    </div>
     <!-- Issues by Category Section (accordion/card style) -->
     <div class="category-issues-section">
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -90,29 +103,58 @@
             Fix with AI
           </button>
         </div>
-        <div class="category-accordion">
-          <div v-for="cat in categoryList" :key="cat" class="category-accordion-card">
-            <div class="category-accordion-header" :class="cat.toLowerCase().replace(/\s/g, '-')">
-              <span class="category-icon">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div v-for="cat in nonEmptyCategories" :key="cat" class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+            <div class="flex items-center mb-2">
+              <span class="text-2xl mr-2">
                 <template v-if="cat === 'Meta Data'">&#128196;</template>
                 <template v-else-if="cat === 'Content'">&#128221;</template>
                 <template v-else-if="cat === 'Technical'">&#9881;</template>
                 <template v-else-if="cat === 'Robots.txt'">&#128203;</template>
+                <template v-else>&#128203;</template>
               </span>
               <span class="category-title">{{ cat }}</span>
-              <span class="category-issue-count">({{ issuesByCategory[cat].length }})</span>
+              <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                ({{ filteredIssuesByCategory[cat].length }})
+              </span>
             </div>
-            <div class="category-accordion-body">
-              <div v-if="issuesByCategory[cat].length === 0" class="no-issues">No issues</div>
-              <div v-for="(issue, idx) in issuesByCategory[cat]" :key="idx" class="issue-card mini" :class="issue.type">
-                <div class="issue-header">
-                  <span class="issue-type-label" :class="issue.type">{{ issue.type.toUpperCase() }}</span>
-                  <span class="issue-message">{{ issue.message }}</span>
+            <div class="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+              <div v-for="issue in filteredIssuesByCategory[cat]" :key="issue.message"
+                :class="{
+                  'bg-red-50 dark:bg-red-900/20': issue.type === 'error',
+                  'bg-yellow-50 dark:bg-yellow-900/20': issue.type === 'warning',
+                  'bg-blue-50 dark:bg-blue-900/20': issue.type === 'notice'
+                }"
+                class="p-3 rounded-lg">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0">
+                    <svg v-if="issue.type === 'error'" class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg v-else-if="issue.type === 'warning'" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg v-else class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div class="ml-3">
+                    <h5 class="text-sm font-medium" :class="{
+                      'text-red-800 dark:text-red-200': issue.type === 'error',
+                      'text-yellow-800 dark:text-yellow-200': issue.type === 'warning',
+                      'text-blue-800 dark:text-blue-200': issue.type === 'notice'
+                    }">
+                      {{ issue.message }}
+                    </h5>
+                    <p class="mt-1 text-sm" :class="{
+                      'text-red-700 dark:text-red-300': issue.type === 'error',
+                      'text-yellow-700 dark:text-yellow-300': issue.type === 'warning',
+                      'text-blue-700 dark:text-blue-300': issue.type === 'notice'
+                    }">
+                      {{ issue.recommendation }}
+                    </p>
+                  </div>
                 </div>
-                <div v-if="issue.element" class="issue-element">{{ issue.element }}</div>
-                <div class="issue-recommendation">{{ issue.recommendation }}</div>
-                <div class="issue-url">Page: <span class="issue-url-link">{{ issue.url }}</span></div>
-                <button @click="openAIRecommendation(issue)" class="ai-fix-button prominent">Get AI Analysis</button>
               </div>
             </div>
           </div>
@@ -456,6 +498,7 @@ import CircleProgress from 'vue3-circle-progress';
 import { computed, ref } from 'vue';
 import type { SEOAnalysis } from '../utils/seo/SEOAnalyzer';
 import AIRecommendation from './AIRecommendation.vue';
+import IssueSearch from './IssueSearch.vue';
 
 const props = defineProps<{ analysis: SEOAnalysis | null }>();
 
@@ -521,7 +564,19 @@ const issueCounts = computed(() => ({
 
 const categoryList = ['Meta Data', 'Content', 'Technical', 'Structure', 'Robots.txt'];
 
-const issuesByCategory = computed(() => {
+const searchQuery = ref('');
+const filteredIssues = computed(() => {
+  if (!searchQuery.value) return props.analysis?.issues || [];
+  
+  const query = searchQuery.value.toLowerCase();
+  return (props.analysis?.issues || []).filter(issue => 
+    issue.message.toLowerCase().includes(query) ||
+    issue.recommendation?.toLowerCase().includes(query) ||
+    issue.url?.toLowerCase().includes(query)
+  );
+});
+
+const filteredIssuesByCategory = computed(() => {
   const grouped = {
     'Meta Data': [],
     'Content': [],
@@ -529,19 +584,24 @@ const issuesByCategory = computed(() => {
     'Structure': [],
     'Robots.txt': []
   };
-  (props.analysis?.issues || []).forEach(issue => {
-    // Simple mapping based on keywords in message or recommendation
+
+  filteredIssues.value.forEach(issue => {
     const msg = (issue.message + ' ' + (issue.recommendation || '')).toLowerCase();
     if (msg.includes('meta') || msg.includes('title') || msg.includes('description') || msg.includes('canonical') || msg.includes('robots') || msg.includes('og') || msg.includes('twitter')) grouped['Meta Data'].push(issue);
     else if (msg.includes('content') || msg.includes('word count') || msg.includes('keyword')) grouped['Content'].push(issue);
     else if (msg.includes('image') || msg.includes('link') || msg.includes('performance') || msg.includes('load time')) grouped['Technical'].push(issue);
     else if (msg.includes('heading') || msg.includes('structure')) grouped['Structure'].push(issue);
-    else grouped['Technical'].push(issue); // fallback
+    else grouped['Technical'].push(issue);
   });
 
   // Add robots.txt issues
   if (props.analysis?.robotsAnalysis?.issues) {
-    grouped['Robots.txt'] = props.analysis.robotsAnalysis.issues;
+    grouped['Robots.txt'] = props.analysis.robotsAnalysis.issues.filter(issue => {
+      const query = searchQuery.value.toLowerCase();
+      return !query || 
+        issue.message.toLowerCase().includes(query) ||
+        issue.recommendation.toLowerCase().includes(query);
+    });
   }
 
   return grouped;
@@ -642,6 +702,14 @@ function closeAIRecommendation() {
   isAIRecommendationOpen.value = false;
   selectedIssue.value = null;
 }
+
+const handleSearch = (query: string) => {
+  searchQuery.value = query;
+};
+
+const nonEmptyCategories = computed(() => {
+  return categoryList.filter(cat => filteredIssuesByCategory.value[cat].length > 0);
+});
 </script>
 
 <style scoped>
@@ -1403,5 +1471,39 @@ function closeAIRecommendation() {
   color: #666;
   margin-top: 0.5rem;
   margin-bottom: 0;
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.7);
+}
+
+/* Dark mode styles */
+.dark .custom-scrollbar {
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.3);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.5);
 }
 </style> 

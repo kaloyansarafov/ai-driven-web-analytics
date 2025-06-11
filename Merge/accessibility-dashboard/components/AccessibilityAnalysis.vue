@@ -57,6 +57,15 @@
       </div>
     </div>
 
+    <!-- Add search component before the results section -->
+    <div class="mt-8">
+      <IssueSearch
+        :total-count="(props.results || []).length"
+        :filtered-count="filteredResults.length"
+        @search="handleSearch"
+      />
+    </div>
+
     <!-- Results Section -->
     <div v-if="results.length > 0" id="results-section" class="mt-8">
       <!-- Summary Stats Cards -->
@@ -497,6 +506,7 @@ import { ref, computed } from 'vue';
 import SummaryChart from './SummaryChart.vue';
 import HistoryTracking from './HistoryTracking.vue';
 import axios from 'axios';
+import IssueSearch from './IssueSearch.vue';
 
 const props = defineProps<{
   results: any[];
@@ -517,13 +527,19 @@ const filterType = ref('all');
 const expandedGroups = ref<string[]>([]);
 const expandedDetails = ref<number[]>([]);
 const showTechDetails = ref<number[]>([]);
+const searchQuery = ref('');
 
 // Computed properties
 const filteredResults = computed(() => {
-  if (filterSource.value === 'all') {
-    return props.results;
-  }
-  return props.results.filter((issue) => issue.source === filterSource.value);
+  if (!searchQuery.value) return props.results || [];
+  
+  const query = searchQuery.value.toLowerCase();
+  return (props.results || []).filter(result => 
+    result.message.toLowerCase().includes(query) ||
+    result.recommendation?.toLowerCase().includes(query) ||
+    result.url?.toLowerCase().includes(query) ||
+    result.code?.toLowerCase().includes(query)
+  );
 });
 
 const filteredIssues = computed(() => {
@@ -699,4 +715,8 @@ async function getAIRecommendations(issue: any) {
     return null;
   }
 }
+
+const handleSearch = (query: string) => {
+  searchQuery.value = query;
+};
 </script> 
