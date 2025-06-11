@@ -97,7 +97,7 @@
                 <template v-if="cat === 'Meta Data'">&#128196;</template>
                 <template v-else-if="cat === 'Content'">&#128221;</template>
                 <template v-else-if="cat === 'Technical'">&#9881;</template>
-                <template v-else>&#128203;</template>
+                <template v-else-if="cat === 'Robots.txt'">&#128203;</template>
               </span>
               <span class="category-title">{{ cat }}</span>
               <span class="category-issue-count">({{ issuesByCategory[cat].length }})</span>
@@ -340,6 +340,108 @@
       </div>
     </div>
 
+    <!-- Add Robots.txt Analysis Section -->
+    <div v-if="analysis?.robotsAnalysis" class="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+      <h3 class="text-xl font-semibold mb-4">Robots.txt Analysis</h3>
+      
+      <div class="mb-4">
+        <div class="flex items-center mb-2">
+          <span class="font-medium mr-2">Status:</span>
+          <span :class="analysis.robotsAnalysis.exists ? 'text-green-600' : 'text-red-600'">
+            {{ analysis.robotsAnalysis.exists ? 'Found' : 'Not Found' }}
+          </span>
+        </div>
+
+        <div v-if="analysis.robotsAnalysis.exists" class="space-y-4">
+          <!-- Directives -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h4 class="font-medium mb-2">User Agents</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="agent in analysis.robotsAnalysis.directives.userAgent" :key="agent">
+                  {{ agent }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium mb-2">Sitemaps</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="sitemap in analysis.robotsAnalysis.directives.sitemap" :key="sitemap">
+                  {{ sitemap }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium mb-2">Allow Directives</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="path in analysis.robotsAnalysis.directives.allow" :key="path">
+                  {{ path }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium mb-2">Disallow Directives</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="path in analysis.robotsAnalysis.directives.disallow" :key="path">
+                  {{ path }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Crawl Delay -->
+          <div v-if="analysis.robotsAnalysis.directives.crawlDelay !== null">
+            <h4 class="font-medium mb-2">Crawl Delay</h4>
+            <p>{{ analysis.robotsAnalysis.directives.crawlDelay }} seconds</p>
+          </div>
+
+          <!-- Issues -->
+          <div v-if="analysis.robotsAnalysis.issues.length > 0">
+            <h4 class="font-medium mb-2">Issues</h4>
+            <div class="space-y-2">
+              <div v-for="(issue, index) in analysis.robotsAnalysis.issues" :key="index"
+                :class="{
+                  'bg-red-50 dark:bg-red-900/20': issue.type === 'error',
+                  'bg-yellow-50 dark:bg-yellow-900/20': issue.type === 'warning',
+                  'bg-blue-50 dark:bg-blue-900/20': issue.type === 'notice'
+                }"
+                class="p-3 rounded-lg">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0">
+                    <svg v-if="issue.type === 'error'" class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg v-else-if="issue.type === 'warning'" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg v-else class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div class="ml-3">
+                    <h5 class="text-sm font-medium" :class="{
+                      'text-red-800 dark:text-red-200': issue.type === 'error',
+                      'text-yellow-800 dark:text-yellow-200': issue.type === 'warning',
+                      'text-blue-800 dark:text-blue-200': issue.type === 'notice'
+                    }">
+                      {{ issue.message }}
+                    </h5>
+                    <p class="mt-1 text-sm" :class="{
+                      'text-red-700 dark:text-red-300': issue.type === 'error',
+                      'text-yellow-700 dark:text-yellow-300': issue.type === 'warning',
+                      'text-blue-700 dark:text-blue-300': issue.type === 'notice'
+                    }">
+                      {{ issue.recommendation }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Add AIRecommendation side panel component at the root -->
     <AIRecommendation
       :is-open="isAIRecommendationOpen"
@@ -417,14 +519,15 @@ const issueCounts = computed(() => ({
   low: issuesByImpact.value.low.length
 }));
 
-const categoryList = ['Meta Data', 'Content', 'Technical', 'Structure'];
+const categoryList = ['Meta Data', 'Content', 'Technical', 'Structure', 'Robots.txt'];
 
 const issuesByCategory = computed(() => {
   const grouped = {
     'Meta Data': [],
     'Content': [],
     'Technical': [],
-    'Structure': []
+    'Structure': [],
+    'Robots.txt': []
   };
   (props.analysis?.issues || []).forEach(issue => {
     // Simple mapping based on keywords in message or recommendation
@@ -435,6 +538,12 @@ const issuesByCategory = computed(() => {
     else if (msg.includes('heading') || msg.includes('structure')) grouped['Structure'].push(issue);
     else grouped['Technical'].push(issue); // fallback
   });
+
+  // Add robots.txt issues
+  if (props.analysis?.robotsAnalysis?.issues) {
+    grouped['Robots.txt'] = props.analysis.robotsAnalysis.issues;
+  }
+
   return grouped;
 });
 
@@ -1090,6 +1199,7 @@ function closeAIRecommendation() {
   font-size: 0.95rem;
   color: #666;
   margin-top: 0.5rem;
+  margin-bottom: 0;
 }
 .ai-fix-button.prominent {
   background: none;
