@@ -1,0 +1,30 @@
+{{! 
+This file is part of Pa11y Dashboard.
+
+Pa11y Dashboard is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pa11y Dashboard is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pa11y Dashboard.  If not, see <http://www.gnu.org/licenses/>.
+}}
+
+{{#content "title"}}
+    Delete {{task.url}} ({{task.standard}})
+{{/content}}
+
+<form class="col-md-12" action="{{task.hrefDelete}}" method="post" data-test="delete-url-form">
+	<div class="legend">
+		<legend>Delete URL ({{simplify-url task.url}})</legend>
+	</div>
+	<p class="lead">Are you sure you wish to delete <strong>{{task.url}}</strong> <small>({{task.standard}})</small> and it's associated results?</p>
+    <button class="btn btn-success" type="submit">Yes <span class="glyphicon glyphicon-ok"></span></button>
+    <a class="btn btn-primary" href="/">No <span class="glyphicon glyphicon-remove"></span></a>
+</form>
+

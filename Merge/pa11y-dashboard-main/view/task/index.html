@@ -1,0 +1,91 @@
+{{!
+This file is part of Pa11y Dashboard.
+
+Pa11y Dashboard is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pa11y Dashboard is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pa11y Dashboard.  If not, see <http://www.gnu.org/licenses/>.
+}}
+
+{{#content "title"}}
+	Pa11y Dashboard Results for {{task.name}} - ({{task.standard}})
+{{/content}}
+
+{{#added}}
+	<div class="col-md-12 clearfix" data-test="alert">
+		<div class="alert alert-success">
+			<button data-dismiss="alert" class="close" type="button" aria-label="Close">×</button>
+			<strong>Whoop whoop!</strong>
+			<p>Your new URL has been added.</p>
+		</div>
+	</div>
+{{/added}}
+
+{{#running}}
+	<div class="col-md-12 clearfix" data-test="alert">
+		<div class="alert alert-success">
+			<button data-dismiss="alert" class="close" type="button" aria-label="Close">×</button>
+			<strong>New results incoming!</strong>
+			<p>
+				New results are being generated for this URL in the background.
+				This can take up to a minute to complete.
+			</p>
+		</div>
+	</div>
+{{/running}}
+
+{{#ruleIgnored}}
+	<div class="col-md-12 clearfix" data-test="alert">
+		<div class="alert alert-success">
+			<button data-dismiss="alert" class="close" type="button" aria-label="Close">×</button>
+			<strong>Rule ignored!</strong>
+			<p>
+				You've ignored an accessibility rule for this URL.
+				<a href="{{task.hrefRun}}">Click here to generate results with the ignored rule excluded</a>
+			</p>
+		</div>
+	</div>
+{{/ruleIgnored}}
+
+{{#ruleUnignored}}
+	<div class="col-md-12 clearfix" data-test="alert">
+		<div class="alert alert-success">
+			<button data-dismiss="alert" class="close" type="button" aria-label="Close">×</button>
+			<strong>Rule unignored!</strong>
+			<p>
+				You've removed an ignored accessibility rule for this URL.
+				<a href="{{task.hrefRun}}">Click here to generate results with the ignored rule included again</a>
+			</p>
+		</div>
+	</div>
+{{/ruleUnignored}}
+
+{{> task-header}}
+
+{{#if results}}
+
+	{{#unless hasOneResult}}
+		{{> graph}}
+	{{/unless}}
+
+{{/if}}
+
+{{#if mainResult}}
+	{{> result}}
+{{else}}
+	<div class="col-md-12" data-test="alert">
+		<div class="alert alert-info">
+			<h4>There are no results to show</h4>
+			<p>Pa11y has not been run against this URL yet so there are no results to show.</p>
+			<p><a href="{{task.hrefRun}}">Click here to generate results for this URL</a>.</p>
+		</div>
+	</div>
+{{/if}}
