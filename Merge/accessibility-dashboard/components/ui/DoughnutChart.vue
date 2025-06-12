@@ -1,8 +1,8 @@
 <template>
   <div class="relative flex flex-col items-center justify-center w-full h-full">
-    <Doughnut :data="chartData" :options="chartOptions" class="w-full h-full" />
+    <Doughnut :data="chartData" :options="chartOptions" class="w-full h-full" :circumference="size" />
     <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-      <span class="text-2xl font-extrabold text-gray-900">{{ value }}<span v-if="showPercent">%</span></span>
+      <span class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ value }}<span v-if="showPercent">%</span></span>
     </div>
     <div v-if="label" class="mt-2 text-sm text-gray-500 font-medium text-center">{{ label }}</div>
   </div>
