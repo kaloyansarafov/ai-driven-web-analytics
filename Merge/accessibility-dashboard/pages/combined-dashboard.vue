@@ -1,39 +1,39 @@
 <template>
-  <div v-if="isAnalysisComplete" class="min-h-screen bg-neutral-100 dark:bg-neutral-900 py-6">
+  <div v-if="isAnalysisComplete" class="min-h-screen bg-gray-50 dark:bg-gray-900 py-6">
     <!-- Minimalistic Header -->
     <div class="max-w-7xl mx-auto mb-6 px-4">
-      <div class="bg-white dark:bg-neutral-800 rounded-xl shadow-sm p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div class="flex items-center gap-2">
-            <h1 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Web Analytics Dashboard</h1>
+            <h1 class="text-lg font-semibold text-gray-900 dark:text-white">Web Analytics Dashboard</h1>
             <span class="text-gray-400 dark:text-gray-500">•</span>
             <span class="text-sm text-gray-600 dark:text-gray-300 font-medium truncate max-w-[300px] sm:max-w-[500px]">{{ currentUrl || 'No URL analyzed' }}</span>
-      </div>
+          </div>
           <div class="flex items-center gap-3 text-sm">
             <span class="text-gray-500 dark:text-gray-300">Last analyzed: {{ lastAnalyzedDate }}</span>
-            <button @click="refreshAnalysis" class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-700 hover:bg-gray-200 dark:hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-neutral-900">
+            <button @click="refreshAnalysis" class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-gray-900">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
               Refresh
             </button>
-                </div>
-              </div>
-            </div>
           </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Top Section: Two-column layout -->
     <div class="max-w-7xl mx-auto mb-8 grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Left: Combined Score Doughnuts -->
       <div class="h-full">
-        <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-8 flex-1 flex flex-col justify-center items-center h-full">
+        <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-8 flex-1 flex flex-col justify-center items-center h-full">
           <div class="flex flex-col items-center w-full justify-center flex-1">
             <!-- Large Overall Score Doughnut -->
             <div class="relative flex items-center justify-center mb-4">
               <div class="absolute w-[200px] h-[200px] rounded-full bg-[#6BCCFE] dark:bg-blue-400 opacity-10"></div>
               <DoughnutChart :value="overallScore" :color="overallScore > 80 ? '#22C55E' : '#FACC15'" :size="200" :showPercent="true" />
             </div>
-            <div class="text-[18px] font-semibold text-[#454459] dark:text-gray-200 mb-4">Overall Score</div>
+            <div class="text-[18px] font-semibold text-gray-800 dark:text-white mb-4">Overall Score</div>
             <!-- Row of two smaller doughnuts -->
             <div class="flex flex-row items-center justify-center gap-12 w-full">
               <div class="flex flex-col items-center">
@@ -41,14 +41,14 @@
                   <div class="absolute w-[90px] h-[90px] rounded-full bg-[#6BCCFE] dark:bg-blue-400 opacity-10"></div>
                   <DoughnutChart :value="rounded(a11yScore)" :color="a11yScore > 80 ? '#22C55E' : '#FACC15'" :size="90" :showPercent="true" />
                 </div>
-                <div class="text-[14px] font-semibold text-[#454459] dark:text-gray-200">Accessibility</div>
+                <div class="text-[14px] font-semibold text-gray-800 dark:text-white">Accessibility</div>
               </div>
               <div class="flex flex-col items-center">
                 <div class="relative flex items-center justify-center mb-2">
                   <div class="absolute w-[90px] h-[90px] rounded-full bg-[#6BCCFE] dark:bg-blue-400 opacity-10"></div>
                   <DoughnutChart :value="seoScore" :color="seoScore > 80 ? '#22C55E' : '#FACC15'" :size="90" :showPercent="true" />
                 </div>
-                <div class="text-[14px] font-semibold text-[#454459] dark:text-gray-200">SEO</div>
+                <div class="text-[14px] font-semibold text-gray-800 dark:text-white">SEO</div>
               </div>
             </div>
           </div>
@@ -59,8 +59,8 @@
         <!-- Row 1: Non-text & Focus Visible -->
         <div class="flex flex-row gap-6">
           <!-- Non-text Doughnut Card -->
-          <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-6 flex flex-col items-center flex-1">
-            <div class="text-[16px] font-semibold text-[#454459] dark:text-gray-200 mb-2">Non-text</div>
+          <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-6 flex flex-col items-center flex-1">
+            <div class="text-[16px] font-semibold text-gray-800 dark:text-white mb-2">Non-text</div>
             <div class="relative flex items-center justify-center mb-2">
               <div class="absolute w-[90px] h-[90px] rounded-full bg-[#6BCCFE] dark:bg-blue-400 opacity-10"></div>
               <DoughnutChart :value="nonTextScore" :color="getScoreColor(nonTextScore)" :size="90" />
@@ -68,8 +68,8 @@
             <div class="text-xs text-gray-600 dark:text-gray-300 text-center">Images with Alt Text</div>
           </div>
           <!-- Focus Visible Doughnut Card -->
-          <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-6 flex flex-col items-center flex-1">
-            <div class="text-[16px] font-semibold text-[#454459] dark:text-gray-200 mb-2">Focus Visible</div>
+          <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-6 flex flex-col items-center flex-1">
+            <div class="text-[16px] font-semibold text-gray-800 dark:text-white mb-2">Focus Visible</div>
             <div class="relative flex items-center justify-center mb-2">
               <div class="absolute w-[90px] h-[90px] rounded-full bg-[#6BCCFE] dark:bg-blue-400 opacity-10"></div>
               <DoughnutChart :value="focusVisibleScore" :color="getScoreColor(focusVisibleScore)" :size="90" />
@@ -80,8 +80,8 @@
         <!-- Row 2: Performance & Critical Issues -->
         <div class="flex flex-row gap-6">
           <!-- Performance Doughnut Card -->
-          <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-6 flex flex-col items-center flex-1">
-            <div class="text-[16px] font-semibold text-[#454459] dark:text-gray-200 mb-2">Performance</div>
+          <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-6 flex flex-col items-center flex-1">
+            <div class="text-[16px] font-semibold text-gray-800 dark:text-white mb-2">Performance</div>
             <div class="relative flex items-center justify-center mb-2">
               <div class="absolute w-[90px] h-[90px] rounded-full bg-[#6BCCFE] dark:bg-blue-400 opacity-10"></div>
               <DoughnutChart :value="calculateOverallPerformance()" :color="getScoreColor(calculateOverallPerformance())" :size="90" />
@@ -89,9 +89,9 @@
             <div class="text-xs text-gray-600 dark:text-gray-300 text-center">Performance Score</div>
           </div>
           <!-- Critical Issues Card -->
-          <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-6 flex flex-col items-center flex-1">
-            <div class="text-[16px] font-semibold text-[#454459] dark:text-gray-200 mb-2">Critical Issues</div>
-            <div class="text-2xl font-extrabold text-red-600 mb-2">
+          <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-6 flex flex-col items-center flex-1">
+            <div class="text-[16px] font-semibold text-gray-800 dark:text-white mb-2">Critical Issues</div>
+            <div class="text-2xl font-extrabold text-red-600 dark:text-red-400 mb-2">
               {{ (currentAccessibilitySummary?.errorCount || 0) + (currentSeoResults?.issues?.filter(i => i.severity === 'high').length || 0) }}
             </div>
             <div class="text-xs text-gray-600 dark:text-gray-300 mb-2">Critical Issues Found</div>
@@ -99,27 +99,27 @@
               <div class="flex items-center justify-between mb-1">
                 <span class="inline-flex items-center">
                   <span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-                  <span class="text-red-600 font-semibold">Critical</span>
+                  <span class="text-red-600 dark:text-red-400 font-semibold">Critical</span>
                 </span>
-                <span class="text-gray-900 dark:text-gray-100 font-medium">{{ rounded(currentAccessibilitySummary?.errorCount || 0) }}</span>
+                <span class="text-gray-900 dark:text-white font-medium">{{ rounded(currentAccessibilitySummary?.errorCount || 0) }}</span>
               </div>
               <div class="flex items-center justify-between mb-1">
                 <span class="inline-flex items-center">
                   <span class="w-2 h-2 rounded-full bg-yellow-400 mr-2"></span>
-                  <span class="text-yellow-600 font-semibold">Warnings</span>
+                  <span class="text-yellow-600 dark:text-yellow-400 font-semibold">Warnings</span>
                 </span>
-                <span class="text-gray-900 dark:text-gray-100 font-medium">{{ rounded(currentAccessibilitySummary?.warningCount || 0) }}</span>
+                <span class="text-gray-900 dark:text-white font-medium">{{ rounded(currentAccessibilitySummary?.warningCount || 0) }}</span>
               </div>
               <div class="flex items-center justify-between mb-1">
                 <span class="inline-flex items-center">
                   <span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
-                  <span class="text-blue-600 font-semibold">Notices</span>
+                  <span class="text-blue-600 dark:text-blue-400 font-semibold">Notices</span>
                 </span>
-                <span class="text-gray-900 dark:text-gray-100 font-medium">{{ rounded(currentAccessibilitySummary?.noticeCount || 0) }}</span>
+                <span class="text-gray-900 dark:text-white font-medium">{{ rounded(currentAccessibilitySummary?.noticeCount || 0) }}</span>
               </div>
-              <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-200 dark:border-neutral-700">
-                <span class="text-gray-700 dark:text-gray-200 font-medium">Total Issues</span>
-                <span class="text-gray-900 dark:text-gray-100 font-bold text-lg">{{ rounded(currentAccessibilitySummary?.totalIssues || 0) }}</span>
+              <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                <span class="text-gray-700 dark:text-gray-300 font-medium">Total Issues</span>
+                <span class="text-gray-900 dark:text-white font-bold text-lg">{{ rounded(currentAccessibilitySummary?.totalIssues || 0) }}</span>
               </div>
             </div>
           </div>
@@ -129,54 +129,54 @@
 
     <!-- Metrics Section -->
     <div class="max-w-7xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-2 mt-8">
-      <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center">
-        <div class="text-[14px] font-semibold text-[#454459] dark:text-gray-200 mb-4">Performance Metrics</div>
+      <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center">
+        <div class="text-[14px] font-semibold text-gray-800 dark:text-white mb-4">Performance Metrics</div>
         <div class="grid grid-cols-2 gap-8 w-full">
           <div class="flex flex-col items-center">
             <span class="text-[32px] font-semibold text-[#0fbe23] dark:text-green-400">{{ formatTime(currentSeoSummary?.metrics?.performance?.firstContentfulPaint) }}</span>
-            <span class="text-[14px] text-[#454459] dark:text-gray-200">First Contentful Paint</span>
+            <span class="text-[14px] text-gray-800 dark:text-gray-300">First Contentful Paint</span>
           </div>
           <div class="flex flex-col items-center">
             <span class="text-[32px] font-semibold text-[#0fbe23] dark:text-green-400">{{ formatTime(currentSeoSummary?.metrics?.performance?.loadTime) }}</span>
-            <span class="text-[14px] text-[#454459] dark:text-gray-200">Load Time</span>
+            <span class="text-[14px] text-gray-800 dark:text-gray-300">Load Time</span>
           </div>
           <div class="flex flex-col items-center">
             <span class="text-[32px] font-semibold text-[#0fbe23] dark:text-green-400">{{ formatTime(currentSeoSummary?.metrics?.performance?.largestContentfulPaint) }}</span>
-            <span class="text-[14px] text-[#454459] dark:text-gray-200">Largest Contentful Paint</span>
+            <span class="text-[14px] text-gray-800 dark:text-gray-300">Largest Contentful Paint</span>
           </div>
           <div class="flex flex-col items-center">
             <span class="text-[32px] font-semibold text-[#0fbe23] dark:text-green-400">{{ formatTime(currentSeoSummary?.metrics?.performance?.timeToInteractive) }}</span>
-            <span class="text-[14px] text-[#454459] dark:text-gray-200">Time to Interactive</span>
+            <span class="text-[14px] text-gray-800 dark:text-gray-300">Time to Interactive</span>
           </div>
         </div>
       </div>
-      <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center">
-        <div class="text-[14px] font-semibold text-[#454459] dark:text-gray-200 mb-4">Labels / Instructions</div>
+      <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center">
+        <div class="text-[14px] font-semibold text-gray-800 dark:text-white mb-4">Labels / Instructions</div>
         <div class="w-full">
           <div class="mb-4">
             <div class="flex justify-between mb-1">
-              <span class="text-[12px] text-[#454459] dark:text-gray-200">Home page</span>
-              <span class="text-[12px] text-[#454459] dark:text-gray-200">74</span>
+              <span class="text-[12px] text-gray-800 dark:text-gray-300">Home page</span>
+              <span class="text-[12px] text-gray-800 dark:text-gray-300">74</span>
             </div>
-            <div class="w-full h-2 bg-[#F2F7FF] dark:bg-neutral-700 rounded-full">
+            <div class="w-full h-2 bg-[#F2F7FF] dark:bg-gray-700 rounded-full">
               <div class="h-full bg-gradient-to-r from-[#EEA216] to-[#FFE57D] dark:from-yellow-500 dark:to-yellow-300 rounded-full" style="width: 74%"></div>
             </div>
           </div>
           <div class="mb-4">
             <div class="flex justify-between mb-1">
-              <span class="text-[12px] text-[#454459] dark:text-gray-200">Another page</span>
-              <span class="text-[12px] text-[#454459] dark:text-gray-200">52</span>
+              <span class="text-[12px] text-gray-800 dark:text-gray-300">Another page</span>
+              <span class="text-[12px] text-gray-800 dark:text-gray-300">52</span>
             </div>
-            <div class="w-full h-2 bg-[#F2F7FF] dark:bg-neutral-700 rounded-full">
+            <div class="w-full h-2 bg-[#F2F7FF] dark:bg-gray-700 rounded-full">
               <div class="h-full bg-gradient-to-r from-[#EEA216] to-[#FFE57D] dark:from-yellow-500 dark:to-yellow-300 rounded-full" style="width: 52%"></div>
             </div>
           </div>
           <div>
             <div class="flex justify-between mb-1">
-              <span class="text-[12px] text-[#454459] dark:text-gray-200">Contact page</span>
-              <span class="text-[12px] text-[#454459] dark:text-gray-200">27</span>
+              <span class="text-[12px] text-gray-800 dark:text-gray-300">Contact page</span>
+              <span class="text-[12px] text-gray-800 dark:text-gray-300">27</span>
             </div>
-            <div class="w-full h-2 bg-[#F2F7FF] dark:bg-neutral-700 rounded-full">
+            <div class="w-full h-2 bg-[#F2F7FF] dark:bg-gray-700 rounded-full">
               <div class="h-full bg-gradient-to-r from-[#EEA216] to-[#FFE57D] dark:from-yellow-500 dark:to-yellow-300 rounded-full" style="width: 27%"></div>
             </div>
           </div>
@@ -187,15 +187,15 @@
     <!-- Reintroduced Metrics & Cards -->
     <div class="max-w-7xl mx-auto grid gap-8 grid-cols-1 md:grid-cols-2 mt-8">
       <!-- Left: SEO Meta Analysis Card -->
-      <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center min-h-[400px]">
-        <div class="text-[16px] font-semibold text-[#454459] dark:text-gray-200 mb-2">SEO Category Scores</div>
+      <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center min-h-[400px]">
+        <div class="text-[16px] font-semibold text-gray-800 dark:text-white mb-2">SEO Category Scores</div>
         <div class="w-full flex flex-col gap-4">
           <div v-for="(cat, index) in seoMetaAnalysis" :key="index" class="flex flex-col gap-0.5">
             <div class="flex items-center justify-between">
-              <span class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ cat.name }}</span>
-              <span class="text-sm font-bold text-gray-900 dark:text-gray-100">{{ cat.score }}%</span>
+              <span class="text-sm font-semibold text-gray-800 dark:text-white">{{ cat.name }}</span>
+              <span class="text-sm font-bold text-gray-900 dark:text-white">{{ cat.score }}%</span>
             </div>
-            <div class="w-full h-2 bg-gray-200 dark:bg-neutral-700 rounded-full mb-0.5">
+            <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full mb-0.5">
               <div class="h-full rounded-full" :class="getScoreColorClass(cat.score)" :style="{ width: `${cat.score}%` }"></div>
             </div>
             <div v-if="cat.issues.length" class="space-y-0.5 pl-6">
@@ -211,12 +211,12 @@
       </div>
       <!-- Right: Contrast and Labels stacked vertically -->
       <div class="flex flex-col gap-8">
-        <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center">
-          <div class="text-[16px] font-semibold text-[#454459] dark:text-gray-200 mb-2">Contrast (minimum)</div>
+        <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center">
+          <div class="text-[16px] font-semibold text-gray-800 dark:text-white mb-2">Contrast (minimum)</div>
           <BarChart :labels="['Page 1','Page 2','Page 3','Page 4','Page 5','Page 6','Page 7']" :values="[20,40,30,60,80,50,70]" color="#3B82F6" label="Contrast" :height="120" />
         </div>
-        <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center">
-          <div class="text-[16px] font-semibold text-[#454459] dark:text-gray-200 mb-2">Labels / Instructions</div>
+        <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center">
+          <div class="text-[16px] font-semibold text-gray-800 dark:text-white mb-2">Labels / Instructions</div>
           <BarChart :labels="['Home page','Another page','Contact page']" :values="[74,52,27]" color="#6366F1" label="Inputs without labels" :height="120" />
         </div>
       </div>
@@ -224,16 +224,16 @@
 
     <!-- AI-generated Analysis Overview -->
     <div class="max-w-7xl mx-auto mt-8">
-      <div class="bg-white dark:bg-neutral-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center min-h-[200px]">
-        <div class="text-[16px] font-semibold text-[#454459] dark:text-gray-200 mb-2">Analysis Overview</div>
+      <div class="bg-white dark:bg-gray-800 rounded-[20px] shadow-lg p-8 flex flex-col items-center min-h-[200px]">
+        <div class="text-[16px] font-semibold text-gray-800 dark:text-white mb-2">Analysis Overview</div>
         <div class="w-full">
           <div v-if="aiOverviewLoading" class="text-center text-gray-400 dark:text-gray-300 py-8">
             Generating analysis overview...
           </div>
-          <div v-else-if="aiOverviewError" class="text-center text-red-500 py-8">
+          <div v-else-if="aiOverviewError" class="text-center text-red-500 dark:text-red-400 py-8">
             Could not generate AI summary. <button @click="fetchAiOverview" class="underline text-blue-600 dark:text-blue-400">Retry</button>
           </div>
-          <div v-else-if="aiOverviewSummary && aiOverviewSummary.length" class="bg-gray-50 dark:bg-neutral-900 rounded-lg p-5 prose prose-base max-w-none border border-blue-100 dark:border-blue-900 shadow-sm dark:text-gray-100">
+          <div v-else-if="aiOverviewSummary && aiOverviewSummary.length" class="bg-gray-50 dark:bg-gray-900 rounded-lg p-5 prose prose-base max-w-none border border-blue-100 dark:border-blue-900 shadow-sm dark:text-gray-100">
             <div v-html="formatAiSummary(aiOverviewSummary)"></div>
           </div>
           <div v-else class="text-center py-8">
@@ -247,10 +247,10 @@
     </div>
 
   </div>
-  <div v-else class="min-h-screen bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center">
+  <div v-else class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
     <div class="text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Analysis in Progress</h2>
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Analysis in Progress</h2>
       <p class="text-gray-600 dark:text-gray-300">Please wait while we analyze your website...</p>
     </div>
   </div>

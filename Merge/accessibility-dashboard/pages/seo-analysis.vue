@@ -256,4 +256,11 @@ input[type="url"]:focus {
 .results-section {
   margin-top: 2rem;
 }
+
+.seo-analysis-page h2,
+.seo-analysis-page p,
+h2.text-2xl.font-bold.mb-2,
+p.text-gray-600.dark\:text-gray-300 {
+  color: #fff !important;
+}
 </style> 

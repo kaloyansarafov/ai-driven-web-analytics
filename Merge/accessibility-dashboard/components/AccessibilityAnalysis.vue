@@ -719,4 +719,13 @@ async function getAIRecommendations(issue: any) {
 const handleSearch = (query: string) => {
   searchQuery.value = query;
 };
-</script> 
+</script>
+
+<style scoped>
+div.mb-6 > h2,
+div.mb-6 > p,
+h2.text-2xl.font-bold.mb-2,
+p.text-gray-600.dark\:text-gray-300 {
+  color: #fff !important;
+}
+</style> 

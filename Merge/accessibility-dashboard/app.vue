@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+    class="min-h-screen bg-[linear-gradient(90deg,_#3C585E_0%,_#232B62_100%)] text-gray-900 dark:text-gray-100"
   >
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar navigation - hidden on mobile -->
@@ -12,13 +12,13 @@
       />
 
       <div class="flex flex-col flex-1 w-0 overflow-hidden">
-        <header class="bg-white dark:bg-gray-800 shadow-sm z-10">
+        <header class="bg-white/10 backdrop-blur-sm shadow-sm z-10">
           <div class="flex justify-between items-center px-4 py-3">
             <div class="flex items-center lg:hidden">
               <!-- Mobile logo and menu button -->
               <button
                 @click="isMobileMenuOpen = !isMobileMenuOpen"
-                class="text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 p-1"
+                class="text-white focus:outline-none focus:ring-2 focus:ring-blue-500 p-1"
                 aria-label="Open menu"
               >
                 <svg
@@ -36,7 +36,7 @@
                   />
                 </svg>
               </button>
-              <h1 class="text-xl font-semibold text-blue-600 ml-2">
+              <h1 class="text-xl font-semibold text-white ml-2">
                 SEO & A11y Dashboard
               </h1>
             </div>
@@ -45,7 +45,7 @@
               <ThemeToggle />
               <a
                 href="#"
-                class="relative p-1 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="relative p-1 rounded-full text-white hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="Notifications"
               >
                 <svg
@@ -90,11 +90,11 @@
         </div>
 
         <!-- Main content -->
-        <main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-4">
+        <main class="flex-1 overflow-y-auto p-4">
           <!-- Dashboard View -->
           <div v-if="currentView === 'dashboard'">
             <!-- HERO SECTION FULL WIDTH BACKGROUND START -->
-            <div class="w-full bg-[linear-gradient(90deg,_#3C585E_0%,_#232B62_100%)] min-h-[420px] overflow-x-hidden">
+            <div class="w-full min-h-[420px] overflow-x-hidden">
               <div class="flex items-center justify-center py-12 min-h-[420px]">
                 <section class="flex flex-col lg:flex-row items-center justify-between w-full max-w-6xl mx-auto rounded-2xl shadow-xl p-8 relative z-10">
                   <!-- Left: Text and Form -->
@@ -189,7 +189,7 @@
             <!-- HERO SECTION FULL WIDTH BACKGROUND END -->
 
             <!-- Results Navigation (unchanged) -->
-            <div v-if="analysisComplete" class="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div v-if="analysisComplete" class="mt-8 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-md p-6">
               <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Analysis Complete</h3>
               <div class="flex flex-wrap gap-4">
                 <button
@@ -218,7 +218,7 @@
             <!-- Loading state (unchanged) -->
             <div
               v-if="isLoading"
-              class="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
+              class="mt-8 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-md p-6"
             >
               <div class="text-center mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
@@ -283,7 +283,7 @@
             <!-- Error message (unchanged) -->
             <div
               v-else-if="error"
-              class="mt-8 bg-red-50 dark:bg-red-900/20 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg shadow-md"
+              class="mt-8 bg-red-50/90 dark:bg-red-900/20 backdrop-blur-sm border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg shadow-md"
               role="alert"
             >
               <div class="flex">

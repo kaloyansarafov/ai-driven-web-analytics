@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="min-h-screen bg-white dark:bg-gray-800 p-6 shadow-md">
     <ScanForm @run-scan="runScan" />
 
     <div v-if="isLoading" class="my-8 text-center py-10">
-      <p class="text-lg text-gray-600">Scanning {{ targetUrl }}...</p>
+      <p class="text-lg text-gray-600 dark:text-gray-300">Scanning {{ targetUrl }}...</p>
       <div
         class="mt-4 w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto"
       ></div>
@@ -11,7 +11,7 @@
 
     <div
       v-else-if="error"
-      class="my-8 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+      class="my-8 bg-red-100 dark:bg-red-900/20 border border-red-400 dark:border-red-800/40 text-red-700 dark:text-red-400 px-4 py-3 rounded relative"
     >
       <strong class="font-bold">Error!</strong>
       <span class="block sm:inline ml-2">{{ error }}</span>
@@ -26,7 +26,7 @@
     </div>
 
     <div v-else-if="scanCompleted" class="my-8 text-center py-10">
-      <p class="text-xl text-green-600">Analysis Complete!</p>
+      <p class="text-xl text-green-600 dark:text-green-400">Analysis Complete!</p>
       <NuxtLink
         :to="`/combined-dashboard?url=${encodeURIComponent(targetUrl)}`"
         class="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
