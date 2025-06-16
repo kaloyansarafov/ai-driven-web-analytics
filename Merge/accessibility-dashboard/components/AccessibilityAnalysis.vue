@@ -142,6 +142,52 @@
             </div>
           </div>
         </div>
+
+        <!-- WCAG Compliance Summary -->
+        <div class="mt-8">
+          <h3 class="text-lg font-semibold mb-3">WCAG Compliance Issues</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-3 border rounded-md flex items-center">
+              <div
+                class="bg-red-100 text-red-800 font-bold text-lg rounded-full h-10 w-10 flex items-center justify-center mr-3"
+              >
+                A
+              </div>
+              <div>
+                <div class="font-medium">Level A</div>
+                <div class="text-sm text-gray-500">
+                  {{ wcagACount }} issues
+                </div>
+              </div>
+            </div>
+            <div class="p-3 border rounded-md flex items-center">
+              <div
+                class="bg-orange-100 text-orange-800 font-bold text-lg rounded-full h-10 w-10 flex items-center justify-center mr-3"
+              >
+                AA
+              </div>
+              <div>
+                <div class="font-medium">Level AA</div>
+                <div class="text-sm text-gray-500">
+                  {{ wcagAACount }} issues
+                </div>
+              </div>
+            </div>
+            <div class="p-3 border rounded-md flex items-center">
+              <div
+                class="bg-yellow-100 text-yellow-800 font-bold text-lg rounded-full h-10 w-10 flex items-center justify-center mr-3"
+              >
+                AAA
+              </div>
+              <div>
+                <div class="font-medium">Level AAA</div>
+                <div class="text-sm text-gray-500">
+                  {{ wcagAAACount }} issues
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Filter Controls -->
@@ -576,6 +622,35 @@ const hasLighthouseIssues = computed(() =>
 
 const hasIbmA11yIssues = computed(() =>
   props.results.some((issue) => issue.source === 'ibm-a11y')
+);
+
+// WCAG Compliance Level Counts
+function extractWcagLevelFromIssue(issue) {
+  // Check code for WCAG2A, WCAG2AA, WCAG2AAA
+  if (issue.code) {
+    if (/WCAG2AAA?/i.test(issue.code)) {
+      if (/WCAG2AAA/i.test(issue.code)) return 'AAA';
+      if (/WCAG2AA/i.test(issue.code)) return 'AA';
+      if (/WCAG2A/i.test(issue.code)) return 'A';
+    }
+  }
+  // Check message for WCAG AA, WCAG AAA, WCAG A
+  if (issue.message) {
+    if (/WCAG\s*AAA/i.test(issue.message)) return 'AAA';
+    if (/WCAG\s*AA/i.test(issue.message)) return 'AA';
+    if (/WCAG\s*A/i.test(issue.message)) return 'A';
+  }
+  return undefined;
+}
+
+const wcagACount = computed(() =>
+  filteredResults.value.filter(issue => extractWcagLevelFromIssue(issue) === 'A').length
+);
+const wcagAACount = computed(() =>
+  filteredResults.value.filter(issue => extractWcagLevelFromIssue(issue) === 'AA').length
+);
+const wcagAAACount = computed(() =>
+  filteredResults.value.filter(issue => extractWcagLevelFromIssue(issue) === 'AAA').length
 );
 
 // Methods

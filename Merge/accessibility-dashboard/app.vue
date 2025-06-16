@@ -1424,4 +1424,27 @@ body {
     "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
 }
+
+/* Modern Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 10px;
+  background: #232b62;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #3C585E 0%, #232B62 100%);
+  border-radius: 8px;
+  border: 2px solid #232b62;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #232B62 0%, #3C585E 100%);
+}
+::-webkit-scrollbar-corner {
+  background: #232b62;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3C585E #232B62;
+}
 </style>

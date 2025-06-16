@@ -4,6 +4,7 @@ ruleArchive: latest
 # Specify policies to scan
 policies:
   - IBM_Accessibility
+  - WCAG_2_2
 
 # Specify violation levels on which to fail the test
 failLevels:
