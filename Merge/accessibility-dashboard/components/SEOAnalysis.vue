@@ -1437,24 +1437,36 @@ function scrollToIssue(issue: any) {
   background: none;
   color: #1976d2;
   font-size: 1em;
-  padding: 0.18em 0.45em;
+  padding: 0.4em 1.2em;
   margin-left: 0.3em;
   border: none;
-  border-radius: 50%;
+  border-radius: 9999px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
+  transition: background 0.15s, border 0.15s, box-shadow 0.15s;
   white-space: nowrap;
-  line-height: 1;
+  line-height: 1.2;
+  font-weight: 500;
+  box-shadow: none;
+  max-width: max-content;
 }
 .ai-fix-button.prominent:hover,
 .ai-fix-button.prominent:focus {
   background: #e3f2fd;
+  border: 1.5px solid #1976d2;
+  color: #1976d2;
+  outline: none;
+  box-shadow: 0 0 0 2px #1976d2, 0 1.5px 4px 0 rgba(30,41,59,0.03);
+  transition: background 0.15s, border 0.15s, box-shadow 0.15s;
 }
-.ai-fix-button.prominent:active {
-  background: #bbdefb;
+.dark .ai-fix-button.prominent:hover,
+.dark .ai-fix-button.prominent:focus {
+  background: #1e3a8a !important;
+  border: 1.5px solid #60a5fa !important;
+  color: #60a5fa !important;
+  box-shadow: 0 0 0 2px #60a5fa, 0 1.5px 4px 0 rgba(30,41,59,0.10);
 }
 /* Remove icon emoji, use SVG in template instead */
 .ai-fix-button.prominent::before {
@@ -1588,6 +1600,27 @@ function scrollToIssue(issue: any) {
 .score-card.structure {
   border-color: #f44336;
 }
+.dark .score-card {
+  background: #23272f !important;
+  color: #f3f4f6 !important;
+  border-color: #374151 !important;
+}
+.dark .score-card.total {
+  border-color: #374151 !important;
+}
+.dark .score-card.meta {
+  border-color: #2563eb !important;
+}
+.dark .score-card.content {
+  border-color: #22c55e !important;
+}
+.dark .score-card.technical {
+  border-color: #f59e42 !important;
+}
+.dark .score-card.structure {
+  border-color: #ef4444 !important;
+}
+
 .score-card-title {
   font-size: 1.1rem;
   font-weight: 600;

@@ -404,6 +404,7 @@ import AccessibilityAnalysis from "./components/AccessibilityAnalysis.vue";
 import SEOAnalysis from "./pages/seo-analysis.vue";
 import { nanoid } from "nanoid/non-secure";
 import CombinedDashboard from "./pages/combined-dashboard.vue";
+import type { SEOAnalysis as SEOAnalysisType } from './utils/seo/SEOAnalyzer';
 
 // Define the Issue type
 interface Issue {
@@ -814,17 +815,16 @@ async function runAnalyses() {
     }
     url.value = formattedUrl;
 
-    // Run accessibility analysis if selected
+    // Prepare scan promises
+    const scanPromises: Promise<any>[] = [];
+
+    // Accessibility analysis (if selected)
     if (analysisTypes.value.accessibility && selectedTools.value.length > 0) {
-      // Set WAVE report URL if WAVE is selected
       if (selectedTools.value.includes("wave") && visualReport.value) {
         waveReportUrl.value = `https://wave.webaim.org/report#/${encodeURIComponent(formattedUrl)}`;
       }
-
-      // Run each selected tool
-      const scanPromises: Promise<any>[] = [];
-
-      for (const tool of selectedTools.value) {
+      // Run each selected tool in parallel
+      const accessibilityPromises = selectedTools.value.map(async (tool) => {
         try {
           analysisProgress.value.accessibility.currentTool = tool;
           analysisProgress.value.accessibility.status = `Running ${tool} analysis...`;
@@ -843,33 +843,30 @@ async function runAnalyses() {
           if (toolResults) {
             results.value.push(...toolResults);
           }
-          
-          analysisProgress.value.accessibility.completed++;
-          updateOverallProgress();
         } catch (toolError: any) {
           console.error(`${tool} scan error:`, toolError);
           error.value += `\n${tool} scan failed: ${toolError.message || 'Unknown error'}`;
+        } finally {
           analysisProgress.value.accessibility.completed++;
           updateOverallProgress();
         }
-      }
-
-      // Wait for all scans to complete
-      await Promise.allSettled(scanPromises);
-      analysisProgress.value.accessibility.status = 'Accessibility analysis complete';
-
-      // Save scan results if history tracking is enabled
-      if (includeHistory.value) {
-        saveToRecentScans(url.value);
-      }
-      scanCompleted.value = true;
+      });
+      scanPromises.push(Promise.allSettled(accessibilityPromises).then(() => {
+        analysisProgress.value.accessibility.status = 'Accessibility analysis complete';
+        if (includeHistory.value) {
+          saveToRecentScans(url.value);
+        }
+        scanCompleted.value = true;
+      }));
     }
 
-    // Run SEO analysis if selected
+    // SEO analysis (if selected)
     if (analysisTypes.value.seo) {
-      await runSEOAnalysis();
+      scanPromises.push(runSEOAnalysis());
     }
 
+    // Wait for all selected analyses to complete
+    await Promise.allSettled(scanPromises);
     analysisComplete.value = true;
     analysisProgress.value.overall = 100;
   } catch (err: any) {
@@ -1301,44 +1298,30 @@ async function getAIRecommendations(issue: Issue) {
 // Update the runSEOAnalysis function
 async function runSEOAnalysis() {
   try {
-    const steps = ['performance', 'content', 'technical', 'meta'];
-    let combinedResults = {};
-    
-    for (const step of steps) {
-      analysisProgress.value.seo.currentStep = step;
-      analysisProgress.value.seo.status = `Analyzing ${step}...`;
-      
-      const response = await fetch('/api/seo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          url: url.value,
-          options: {
-            [step]: true
-          }
-        })
-      });
+    analysisProgress.value.seo.currentStep = 'all';
+    analysisProgress.value.seo.status = 'Analyzing SEO...';
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `Failed to analyze ${step}`);
-      }
+    const response = await fetch('/api/seo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url: url.value
+      })
+    });
 
-      const data = await response.json();
-      combinedResults = {
-        ...combinedResults,
-        ...data
-      };
-      
-      analysisProgress.value.seo.completed++;
-      updateOverallProgress();
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to analyze SEO');
     }
 
+    const data = await response.json();
+    seoAnalysisResults.value = data;
+    analysisProgress.value.seo.completed = 1;
     analysisProgress.value.seo.status = 'SEO analysis complete';
-    seoAnalysisResults.value = combinedResults;
-    return combinedResults;
+    updateOverallProgress();
+    return data;
   } catch (err: any) {
     throw new Error(err.message || 'Failed to complete SEO analysis');
   }
