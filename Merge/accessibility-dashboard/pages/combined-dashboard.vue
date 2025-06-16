@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isAnalysisComplete" class="min-h-screen bg-gray-50 dark:bg-gray-900 py-6">
+  <div v-if="isAnalysisComplete" class="min-h-screen py-6">
     <!-- Minimalistic Header -->
     <div class="max-w-7xl mx-auto mb-6 px-4">
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">

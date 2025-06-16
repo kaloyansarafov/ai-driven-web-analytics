@@ -99,10 +99,10 @@
                 <section class="flex flex-col lg:flex-row items-center justify-between w-full max-w-6xl mx-auto rounded-2xl shadow-xl p-8 relative z-10">
                   <!-- Left: Text and Form -->
                   <div class="flex-1 max-w-xl text-left">
-                    <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4">Welcome to Crea8ion.lab!</h1>
-                    <h2 class="text-3xl font-bold text-white mb-4">Manage your SEO and Accessibility Dashboard Easily!</h2>
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4">Welcome to The Cre8ion Lab!</h1>
+                    <h2 class="text-3xl font-bold text-white mb-4">Manage your website's SEO and Accessibility metrics Easily!</h2>
                     <p class="text-lg text-blue-100 mb-8 max-w-lg">
-                      Our dashboard will help you get all the analytics that you need to improve the SEO and WCAG Accessibility of your website. Just paste the website link below, and let us explore the results together!
+                      Our dashboard will help you get all the analytics that you need to improve the SEO and Accessibility of your website. Just enter the website link below, and let us explore the results together!
                     </p>
                     <!-- Scan Form (preserve all logic) -->
                     <div class="bg-white/90 dark:bg-gray-800/90 rounded-lg shadow p-6 w-full">
@@ -114,7 +114,7 @@
                               type="url"
                               id="url"
                               v-model="url"
-                              placeholder="enter url link here"
+                              placeholder="https://example.com"
                               class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                               :disabled="isLoading"
                             />
