@@ -50,36 +50,7 @@
       </div>
       <div class="score-explanation modern">The SEO score is calculated based on four main categories: Meta, Content, Technical, and Structure. Each category contributes up to 25 points, for a total of 100. The score reflects the average across all successfully crawled pages.</div>
     </div>
-    <!-- Issues by Page Section -->
-    <div class="issues-by-page-section">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-xl font-semibold">Issues by Page</h3>
-          <button @click="openAIRecommendation({ type: 'info', message: 'General advice for Issues by Page', category: 'All' })"
-                  class="ai-fix-button prominent">
-            Fix with AI
-          </button>
-        </div>
-        <div v-for="(issues, url) in sortedIssuesByPage" :key="url" class="page-issues-block card">
-          <div class="page-url-title">{{ url }}</div>
-          <div v-if="issues.length === 0" class="no-issues">No issues</div>
-          <div v-for="(issue, idx) in issues" :key="idx" class="issue-card enhanced" :class="issue.type">
-            <div class="issue-header">
-              <span class="issue-type-icon" :class="issue.type">
-                <template v-if="issue.type === 'error'">&#9888;</template>
-                <template v-else-if="issue.type === 'warning'">&#9889;</template>
-                <template v-else>&#9432;</template>
-              </span>
-              <span class="issue-type-label" :class="issue.type">{{ issue.type.toUpperCase() }}</span>
-              <span class="issue-message">{{ issue.message }}</span>
-            </div>
-            <div v-if="issue.element" class="issue-element">{{ issue.element }}</div>
-            <div class="issue-recommendation">{{ issue.recommendation }}</div>
-            <button @click="openAIRecommendation(issue)" class="ai-fix-button prominent">Get AI Analysis</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <!-- Add search component before the issues section -->
     <div class="mt-8">
       <IssueSearch
@@ -93,6 +64,7 @@
         @search="handleSearch"
       />
     </div>
+
     <!-- Issues by Category Section (accordion/card style) -->
     <div class="category-issues-section">
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -120,6 +92,131 @@
             </div>
             <div class="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
               <div v-for="issue in filteredIssuesByCategory[cat]" :key="issue.message"
+                :class="{
+                  'bg-red-50 dark:bg-red-900/20': issue.type === 'error',
+                  'bg-yellow-50 dark:bg-yellow-900/20': issue.type === 'warning',
+                  'bg-blue-50 dark:bg-blue-900/20': issue.type === 'notice'
+                }"
+                class="p-3 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                @click="scrollToIssue(issue)">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0">
+                    <svg v-if="issue.type === 'error'" class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg v-else-if="issue.type === 'warning'" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg v-else class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div class="ml-3 flex-1">
+                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ issue.message }}</div>
+                    <div class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ issue.recommendation }}</div>
+                    <div class="mt-1 text-xs text-gray-400 dark:text-gray-500">Page: {{ issue.url }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issues by Page Section -->
+    <div class="issues-by-page-section">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold">Issues by Page</h3>
+          <button @click="openAIRecommendation({ type: 'info', message: 'General advice for Issues by Page', category: 'All' })"
+                  class="ai-fix-button prominent">
+            Fix with AI
+          </button>
+        </div>
+        <div v-for="(issues, url) in sortedIssuesByPage" :key="url" class="page-issues-block card">
+          <div class="page-url-title">{{ url }}</div>
+          <div v-if="issues.length === 0" class="no-issues">No issues</div>
+          <div v-for="(issue, idx) in issues" :key="idx" 
+            :id="`issue-${url}-${issue.message}`.replace(/[^a-zA-Z0-9-]/g, '-')"
+            class="issue-card enhanced" 
+            :class="issue.type">
+            <div class="issue-header">
+              <span class="issue-type-icon" :class="issue.type">
+                <template v-if="issue.type === 'error'">&#9888;</template>
+                <template v-else-if="issue.type === 'warning'">&#9889;</template>
+                <template v-else>&#9432;</template>
+              </span>
+              <span class="issue-type-label" :class="issue.type">{{ issue.type.toUpperCase() }}</span>
+              <span class="issue-message">{{ issue.message }}</span>
+            </div>
+            <div v-if="issue.element" class="issue-element">{{ issue.element }}</div>
+            <div class="issue-recommendation">{{ issue.recommendation }}</div>
+            <button @click="openAIRecommendation(issue)" class="ai-fix-button prominent">Get AI Analysis</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Robots.txt Analysis Section -->
+    <div v-if="analysis.robotsAnalysis.exists" class="mt-8">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 robots-analysis-section">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold">Robots.txt Analysis</h3>
+          <button @click="openAIRecommendation({ type: 'info', message: 'General advice for Robots.txt', category: 'Robots.txt' })"
+                  class="ai-fix-button prominent">
+            Fix with AI
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Directives -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h4 class="font-medium mb-2">User Agents</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="agent in analysis.robotsAnalysis.directives.userAgent" :key="agent">
+                  {{ agent }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium mb-2">Sitemaps</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="sitemap in analysis.robotsAnalysis.directives.sitemap" :key="sitemap">
+                  {{ sitemap }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium mb-2">Allow Directives</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="path in analysis.robotsAnalysis.directives.allow" :key="path">
+                  {{ path }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-medium mb-2">Disallow Directives</h4>
+              <ul class="list-disc list-inside">
+                <li v-for="path in analysis.robotsAnalysis.directives.disallow" :key="path">
+                  {{ path }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Crawl Delay -->
+          <div v-if="analysis.robotsAnalysis.directives.crawlDelay !== null">
+            <h4 class="font-medium mb-2">Crawl Delay</h4>
+            <p>{{ analysis.robotsAnalysis.directives.crawlDelay }} seconds</p>
+          </div>
+
+          <!-- Issues -->
+          <div v-if="analysis.robotsAnalysis.issues.length > 0">
+            <h4 class="font-medium mb-2">Issues</h4>
+            <div class="space-y-2">
+              <div v-for="(issue, index) in analysis.robotsAnalysis.issues" :key="index"
                 :class="{
                   'bg-red-50 dark:bg-red-900/20': issue.type === 'error',
                   'bg-yellow-50 dark:bg-yellow-900/20': issue.type === 'warning',
@@ -161,6 +258,7 @@
         </div>
       </div>
     </div>
+
     <!-- High Impact Issues Section (deduped and grouped) -->
     <div class="high-impact-section">
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -188,6 +286,7 @@
         </div>
       </div>
     </div>
+
     <!-- Main Body -->
     <div class="dashboard-main">
       <!-- Recommendations -->
@@ -363,7 +462,7 @@
         <div v-if="recs.length === 0" class="no-recs">No recommendations</div>
         <ul>
           <li v-for="rec in recs" :key="rec.message">
-            <span class="rec-priority" :class="rec.priority">{{ rec.priority }}</span>
+            <span class="rec-priority" :class="rec.priority">{{ rec.priority.toUpperCase() }}</span>
             {{ rec.message }}
             <span class="rec-impact">{{ rec.impact }}</span>
             <button @click="openAIRecommendation(rec)" class="ai-fix-button prominent">Get AI Analysis</button>
@@ -379,108 +478,6 @@
         <div class="failed-page-url">{{ page.url }}</div>
         <div class="failed-page-status">Status: {{ page.status }}</div>
         <div class="failed-page-error">Failed to load page content.</div>
-      </div>
-    </div>
-
-    <!-- Add Robots.txt Analysis Section -->
-    <div v-if="analysis?.robotsAnalysis" class="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-      <h3 class="text-xl font-semibold mb-4">Robots.txt Analysis</h3>
-      
-      <div class="mb-4">
-        <div class="flex items-center mb-2">
-          <span class="font-medium mr-2">Status:</span>
-          <span :class="analysis.robotsAnalysis.exists ? 'text-green-600' : 'text-red-600'">
-            {{ analysis.robotsAnalysis.exists ? 'Found' : 'Not Found' }}
-          </span>
-        </div>
-
-        <div v-if="analysis.robotsAnalysis.exists" class="space-y-4">
-          <!-- Directives -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h4 class="font-medium mb-2">User Agents</h4>
-              <ul class="list-disc list-inside">
-                <li v-for="agent in analysis.robotsAnalysis.directives.userAgent" :key="agent">
-                  {{ agent }}
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-medium mb-2">Sitemaps</h4>
-              <ul class="list-disc list-inside">
-                <li v-for="sitemap in analysis.robotsAnalysis.directives.sitemap" :key="sitemap">
-                  {{ sitemap }}
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-medium mb-2">Allow Directives</h4>
-              <ul class="list-disc list-inside">
-                <li v-for="path in analysis.robotsAnalysis.directives.allow" :key="path">
-                  {{ path }}
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-medium mb-2">Disallow Directives</h4>
-              <ul class="list-disc list-inside">
-                <li v-for="path in analysis.robotsAnalysis.directives.disallow" :key="path">
-                  {{ path }}
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Crawl Delay -->
-          <div v-if="analysis.robotsAnalysis.directives.crawlDelay !== null">
-            <h4 class="font-medium mb-2">Crawl Delay</h4>
-            <p>{{ analysis.robotsAnalysis.directives.crawlDelay }} seconds</p>
-          </div>
-
-          <!-- Issues -->
-          <div v-if="analysis.robotsAnalysis.issues.length > 0">
-            <h4 class="font-medium mb-2">Issues</h4>
-            <div class="space-y-2">
-              <div v-for="(issue, index) in analysis.robotsAnalysis.issues" :key="index"
-                :class="{
-                  'bg-red-50 dark:bg-red-900/20': issue.type === 'error',
-                  'bg-yellow-50 dark:bg-yellow-900/20': issue.type === 'warning',
-                  'bg-blue-50 dark:bg-blue-900/20': issue.type === 'notice'
-                }"
-                class="p-3 rounded-lg">
-                <div class="flex items-start">
-                  <div class="flex-shrink-0">
-                    <svg v-if="issue.type === 'error'" class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                    </svg>
-                    <svg v-else-if="issue.type === 'warning'" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                    </svg>
-                    <svg v-else class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                    </svg>
-                  </div>
-                  <div class="ml-3">
-                    <h5 class="text-sm font-medium" :class="{
-                      'text-red-800 dark:text-red-200': issue.type === 'error',
-                      'text-yellow-800 dark:text-yellow-200': issue.type === 'warning',
-                      'text-blue-800 dark:text-blue-200': issue.type === 'notice'
-                    }">
-                      {{ issue.message }}
-                    </h5>
-                    <p class="mt-1 text-sm" :class="{
-                      'text-red-700 dark:text-red-300': issue.type === 'error',
-                      'text-yellow-700 dark:text-yellow-300': issue.type === 'warning',
-                      'text-blue-700 dark:text-blue-300': issue.type === 'notice'
-                    }">
-                      {{ issue.recommendation }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -601,7 +598,10 @@ const filteredIssuesByCategory = computed(() => {
       return !query || 
         issue.message.toLowerCase().includes(query) ||
         issue.recommendation.toLowerCase().includes(query);
-    });
+    }).map(issue => ({
+      ...issue,
+      url: props.analysis.url // Add the root URL to each robots.txt issue
+    }));
   }
 
   return grouped;
@@ -710,6 +710,44 @@ const handleSearch = (query: string) => {
 const nonEmptyCategories = computed(() => {
   return categoryList.filter(cat => filteredIssuesByCategory.value[cat].length > 0);
 });
+
+function scrollToIssue(issue: any) {
+  // Handle robots.txt issues
+  if (issue.category === 'Robots.txt' || issue.url === props.analysis?.url) {
+    const robotsSection = document.querySelector('.robots-analysis-section');
+    if (robotsSection) {
+      robotsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Add a temporary highlight effect
+      robotsSection.classList.add('highlight-issue');
+      setTimeout(() => {
+        robotsSection.classList.remove('highlight-issue');
+      }, 2000);
+    }
+    return;
+  }
+
+  // Find the corresponding issue in the issues by page section
+  const pageIssues = sortedIssuesByPage.value[issue.url] || [];
+  const targetIssue = pageIssues.find((i: any) => 
+    i.message === issue.message && 
+    i.recommendation === issue.recommendation
+  );
+
+  if (targetIssue) {
+    // Create a unique ID for the issue if it doesn't exist
+    const issueId = `issue-${issue.url}-${issue.message}`.replace(/[^a-zA-Z0-9-]/g, '-');
+    const element = document.getElementById(issueId);
+    
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Add a temporary highlight effect
+      element.classList.add('highlight-issue');
+      setTimeout(() => {
+        element.classList.remove('highlight-issue');
+      }, 2000);
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -717,8 +755,81 @@ const nonEmptyCategories = computed(() => {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  background: #f7f9fa;
+  /* background: #fff; */
 }
+
+/* --- CARD STYLING TO MATCH AccessibilityAnalysis.vue --- */
+.card,
+.score-breakdown-section,
+.modern-score-breakdown,
+.category-card,
+.category-accordion-card,
+.high-impact-section,
+.recommendations-section,
+.metrics-section .metric-card,
+.crawled-pages-section,
+.failed-pages-section,
+.page-card,
+.page-issues-block,
+.page-recs-block {
+  background: #fff;
+  border-radius: 0.75rem; /* rounded-lg */
+  box-shadow: 0 4px 24px 0 rgba(30,41,59,0.08), 0 1.5px 4px 0 rgba(30,41,59,0.03); /* shadow-md */
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+/* Score bar title and explanation text for contrast */
+.score-bar-title,
+.score-explanation,
+.score-explanation.modern {
+  color: #374151; /* text-gray-700 */
+  font-weight: 500;
+}
+
+/* In dark mode, use Tailwind's text-gray-300 for these */
+.dark .card,
+.dark .score-breakdown-section,
+.dark .modern-score-breakdown,
+.dark .category-card,
+.dark .category-accordion-card,
+.dark .high-impact-section,
+.dark .recommendations-section,
+.dark .metrics-section .metric-card,
+.dark .crawled-pages-section,
+.dark .failed-pages-section,
+.dark .page-card,
+.dark .page-issues-block,
+.dark .page-recs-block {
+  background: #1f2937 !important; /* bg-gray-800 */
+  color: #f3f4f6 !important; /* text-gray-100 */
+  border-color: #374151 !important; /* border-gray-700 */
+}
+.dark .score-bar-title,
+.dark .score-explanation,
+.dark .score-explanation.modern {
+  color: #d1d5db !important; /* text-gray-300 */
+  font-weight: 500;
+}
+
+/* Remove custom backgrounds on .score-card, use card style above */
+.score-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+.dark .score-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Remove custom color on .score-bar-title in all modes */
+
+/* Remove custom color on .score-explanation in all modes */
+
 .dashboard-header {
   display: flex;
   flex-direction: column;
@@ -788,11 +899,24 @@ const nonEmptyCategories = computed(() => {
   gap: 2.5rem;
 }
 .high-impact-section {
-  background: #fff3f3;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(211,47,47,0.04);
-  margin-bottom: 1.5rem;
+  background: #f9fafb; /* bg-gray-50 */
+  color: #1e293b;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px rgba(30,41,59,0.04);
+  border-left: 6px solid #F44336;
+  border: 1px solid #e5e7eb;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.2rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.dark .high-impact-card {
+  background: #374151 !important; /* bg-gray-700 */
+  color: #f3f4f6 !important;
+  border-left: 6px solid #ef4444 !important;
+  border-color: #374151 !important;
 }
 .high-impact-section h2 {
   color: #d32f2f;
@@ -861,21 +985,20 @@ const nonEmptyCategories = computed(() => {
   text-align: center;
   margin-bottom: 1rem;
 }
-.issue-card {
-  background: white;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
-  margin-bottom: 1rem;
+.issue-card,
+.issue-card.enhanced {
+  background: #f9fafb; /* bg-gray-50 */
+  color: #1e293b;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px rgba(30,41,59,0.04);
+  border: 1px solid #e5e7eb;
+  padding: 1rem 1.5rem;
 }
-.issue-card.error {
-  border-left: 4px solid #F44336;
-}
-.issue-card.warning {
-  border-left: 4px solid #FFC107;
-}
-.issue-card.info {
-  border-left: 4px solid #2196F3;
+.dark .issue-card,
+.dark .issue-card.enhanced {
+  background: #374151 !important; /* bg-gray-700 */
+  color: #f3f4f6 !important;
+  border-color: #374151 !important;
 }
 .issue-header {
   display: flex;
@@ -889,29 +1012,45 @@ const nonEmptyCategories = computed(() => {
   font-weight: bold;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
+  margin-right: 0.7rem;
+  display: inline-block;
 }
 .issue-card.error .issue-type {
-  background: #F44336;
-  color: white;
+  background: #fee2e2; /* bg-red-100 */
+  color: #991b1b;      /* text-red-800 */
 }
 .issue-card.warning .issue-type {
-  background: #FFC107;
-  color: black;
+  background: #fef9c3; /* bg-yellow-100 */
+  color: #92400e;      /* text-yellow-800 */
 }
 .issue-card.info .issue-type {
-  background: #2196F3;
-  color: white;
+  background: #dbeafe; /* bg-blue-100 */
+  color: #1e40af;      /* text-blue-800 */
+}
+.dark .issue-card.error .issue-type {
+  background: rgba(185,28,28,0.4) !important; /* bg-red-900/40 */
+  color: #fca5a5 !important;                  /* text-red-200 */
+}
+.dark .issue-card.warning .issue-type {
+  background: rgba(202,138,4,0.4) !important; /* bg-yellow-900/40 */
+  color: #fde68a !important;                  /* text-yellow-200 */
+}
+.dark .issue-card.info .issue-type {
+  background: rgba(30,64,175,0.4) !important; /* bg-blue-900/40 */
+  color: #bfdbfe !important;                  /* text-blue-200 */
 }
 .issue-element {
-  background: #f5f5f5;
+  background: #f3f4f6; /* bg-gray-100 */
+  color: #1e293b;      /* text-gray-800 */
   padding: 0.5rem;
   border-radius: 4px;
   margin: 0.5rem 0;
   font-family: monospace;
+  font-size: 0.95em;
 }
-.issue-recommendation {
-  color: #666;
-  font-style: italic;
+.dark .issue-element {
+  background: #1f2937 !important; /* bg-gray-800 */
+  color: #f3f4f6 !important;      /* text-gray-100 */
 }
 .recommendations-section {
   margin-top: 2rem;
@@ -1107,6 +1246,7 @@ const nonEmptyCategories = computed(() => {
   font-size: 0.95rem;
   color: #666;
   margin-top: 0.5rem;
+  margin-bottom: 0;
 }
 .issues-by-page-section, .recommendations-by-page-section {
   margin-bottom: 2rem;
@@ -1150,12 +1290,23 @@ const nonEmptyCategories = computed(() => {
 .rec-priority.low { background: #e3f2fd; color: #1976d2; padding: 0.2em 0.5em; border-radius: 4px; margin-right: 0.5em; }
 .rec-impact { font-size: 0.9em; color: #888; margin-left: 0.5em; }
 .high-impact-card {
-  background: #fff;
-  border-radius: 8px;
+  background: #f9fafb; /* bg-gray-50 */
+  color: #1e293b;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px rgba(30,41,59,0.04);
+  border-left: 6px solid #F44336;
+  border: 1px solid #e5e7eb;
   padding: 1rem 1.5rem;
   margin-bottom: 1.2rem;
-  box-shadow: 0 2px 4px rgba(211,47,47,0.07);
-  border-left: 5px solid #F44336;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.dark .high-impact-card {
+  background: #374151 !important; /* bg-gray-700 */
+  color: #f3f4f6 !important;
+  border-left: 6px solid #ef4444 !important;
+  border-color: #374151 !important;
 }
 .affected-pages {
   margin-top: 0.7rem;
@@ -1202,13 +1353,26 @@ const nonEmptyCategories = computed(() => {
   background: #fdecea;
   color: #d32f2f;
 }
+.dark .issue-type-label.error {
+  background: #7f1d1d !important; /* bg-red-900 */
+  color: #fca5a5 !important;      /* text-red-200 */
+}
+
 .issue-type-label.warning {
   background: #fff8e1;
   color: #ff9800;
 }
+.dark .issue-type-label.warning {
+  background: #78350f !important; /* bg-yellow-900 */
+  color: #fde68a !important;      /* text-yellow-200 */
+}
 .issue-type-label.info {
   background: #e3f2fd;
   color: #1976d2;
+}
+.dark .issue-type-label.info {
+  background: #1e3a8a !important; /* bg-blue-900 */
+  color: #bfdbfe !important;      /* text-blue-200 */
 }
 .issue-card.error { border-left: 6px solid #F44336; }
 .issue-card.warning { border-left: 6px solid #FFC107; }
@@ -1273,24 +1437,36 @@ const nonEmptyCategories = computed(() => {
   background: none;
   color: #1976d2;
   font-size: 1em;
-  padding: 0.18em 0.45em;
+  padding: 0.4em 1.2em;
   margin-left: 0.3em;
   border: none;
-  border-radius: 50%;
+  border-radius: 9999px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
+  transition: background 0.15s, border 0.15s, box-shadow 0.15s;
   white-space: nowrap;
-  line-height: 1;
+  line-height: 1.2;
+  font-weight: 500;
+  box-shadow: none;
+  max-width: max-content;
 }
 .ai-fix-button.prominent:hover,
 .ai-fix-button.prominent:focus {
   background: #e3f2fd;
+  border: 1.5px solid #1976d2;
+  color: #1976d2;
+  outline: none;
+  box-shadow: 0 0 0 2px #1976d2, 0 1.5px 4px 0 rgba(30,41,59,0.03);
+  transition: background 0.15s, border 0.15s, box-shadow 0.15s;
 }
-.ai-fix-button.prominent:active {
-  background: #bbdefb;
+.dark .ai-fix-button.prominent:hover,
+.dark .ai-fix-button.prominent:focus {
+  background: #1e3a8a !important;
+  border: 1.5px solid #60a5fa !important;
+  color: #60a5fa !important;
+  box-shadow: 0 0 0 2px #60a5fa, 0 1.5px 4px 0 rgba(30,41,59,0.10);
 }
 /* Remove icon emoji, use SVG in template instead */
 .ai-fix-button.prominent::before {
@@ -1424,6 +1600,27 @@ const nonEmptyCategories = computed(() => {
 .score-card.structure {
   border-color: #f44336;
 }
+.dark .score-card {
+  background: #23272f !important;
+  color: #f3f4f6 !important;
+  border-color: #374151 !important;
+}
+.dark .score-card.total {
+  border-color: #374151 !important;
+}
+.dark .score-card.meta {
+  border-color: #2563eb !important;
+}
+.dark .score-card.content {
+  border-color: #22c55e !important;
+}
+.dark .score-card.technical {
+  border-color: #f59e42 !important;
+}
+.dark .score-card.structure {
+  border-color: #ef4444 !important;
+}
+
 .score-card-title {
   font-size: 1.1rem;
   font-weight: 600;
@@ -1505,5 +1702,289 @@ const nonEmptyCategories = computed(() => {
 
 .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(156, 163, 175, 0.5);
+}
+
+.highlight-issue {
+  animation: highlight 2s ease-out;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: rgba(59, 130, 246, 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+/* DARK MODE OVERRIDES */
+.dark .seo-dashboard {
+  /* background: #111827 !important; */
+}
+.dark .score-breakdown-section,
+.dark .card,
+.dark .modern-score-breakdown,
+.dark .category-card,
+.dark .category-accordion-card,
+.dark .high-impact-section,
+.dark .recommendations-section,
+.dark .metrics-section .metric-card,
+.dark .crawled-pages-section,
+.dark .failed-pages-section,
+.dark .page-card,
+.dark .page-issues-block,
+.dark .page-recs-block {
+  background: #1f2937 !important; /* bg-gray-800 */
+  color: #f3f4f6 !important; /* text-gray-100 */
+  border-color: #374151 !important; /* border-gray-700 */
+}
+.dark .score-breakdown-title,
+.dark .score-card-title,
+.dark .score-card-value,
+.dark .score-explanation,
+.dark .score-bar-title,
+.dark .category-title,
+.dark .page-url-title,
+.dark .issue-header,
+.dark .issue-type-label,
+.dark .issue-type-icon,
+.dark .metric-card h3,
+.dark .score-breakdown-item.total {
+  color: #f3f4f6 !important; /* text-gray-100 */
+}
+.dark .score-explanation.modern,
+.dark .issue-recommendation,
+.dark .rec-impact,
+.dark .no-issues,
+.dark .no-recs,
+.dark .metric-item span,
+.dark .category-issue-count {
+  color: #d1d5db !important; /* text-gray-300 */
+}
+.dark .score-card {
+  background: #23272f !important;
+  color: #f3f4f6 !important;
+  border-color: #374151 !important;
+}
+.dark .score-badge.neutral {
+  background: #374151 !important;
+  color: #f3f4f6 !important;
+}
+.dark .score-badge.blue {
+  background: #1e40af !important;
+  color: #93c5fd !important;
+}
+.dark .score-badge.green {
+  background: #166534 !important;
+  color: #6ee7b7 !important;
+}
+.dark .score-badge.orange {
+  background: #78350f !important;
+  color: #fde68a !important;
+}
+.dark .score-badge.red {
+  background: #7f1d1d !important;
+  color: #fca5a5 !important;
+}
+.dark .bg-red-50 {
+  background: rgba(185,28,28,0.12) !important; /* bg-red-900/20 */
+}
+.dark .bg-yellow-50 {
+  background: rgba(202,138,4,0.08) !important; /* bg-yellow-900/10 */
+}
+.dark .bg-blue-50 {
+  background: rgba(30,64,175,0.08) !important; /* bg-blue-900/10 */
+}
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+}
+.dark .border-blue-200 {
+  border-color: #1e40af !important;
+}
+.dark .border-green-200 {
+  border-color: #166534 !important;
+}
+.dark .border-yellow-200 {
+  border-color: #78350f !important;
+}
+.dark .border-red-200 {
+  border-color: #7f1d1d !important;
+}
+.dark .text-gray-800,
+.dark .text-gray-900 {
+  color: #f3f4f6 !important;
+}
+.dark .text-gray-700 {
+  color: #d1d5db !important;
+}
+.dark .text-blue-700 {
+  color: #60a5fa !important;
+}
+.dark .text-green-700 {
+  color: #6ee7b7 !important;
+}
+.dark .text-yellow-700 {
+  color: #fde68a !important;
+}
+.dark .text-red-700 {
+  color: #fca5a5 !important;
+}
+.dark .text-blue-400 {
+  color: #93c5fd !important;
+}
+.dark .text-green-400 {
+  color: #6ee7b7 !important;
+}
+.dark .text-yellow-400 {
+  color: #fde68a !important;
+}
+.dark .text-red-400 {
+  color: #fca5a5 !important;
+}
+.dark .text-gray-500 {
+  color: #9ca3af !important;
+}
+.dark .text-gray-400 {
+  color: #6b7280 !important;
+}
+.dark .bg-gray-50 {
+  background: #23272f !important;
+}
+.dark .bg-gray-100 {
+  background: #23272f !important;
+}
+.dark .bg-gray-200 {
+  background: #23272f !important;
+}
+.dark .bg-gray-700 {
+  background: #23272f !important;
+}
+.dark .bg-gray-800 {
+  background: #1f2937 !important;
+}
+.dark .bg-white {
+  background: #1f2937 !important;
+}
+
+/* ...existing styles... */
+.dark .issue-card.error .issue-type {
+  background: #7f1d1d !important; /* bg-red-900 */
+  color: #fca5a5 !important;      /* text-red-200 */
+}
+.dark .issue-card.warning .issue-type {
+  background: #78350f !important; /* bg-yellow-900 */
+  color: #fde68a !important;      /* text-yellow-200 */
+}
+.dark .issue-card.info .issue-type {
+  background: #1e3a8a !important; /* bg-blue-900 */
+  color: #bfdbfe !important;      /* text-blue-200 */
+}
+
+/* ...existing styles... */
+.dark .issue-card.error .issue-type {
+  background: #ef4444 !important; /* bg-red-500 */
+  color: #fff !important;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+}
+.dark .issue-card.warning .issue-type {
+  background: #f59e42 !important; /* bg-yellow-500 */
+  color: #fff !important;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+}
+.dark .issue-card.info .issue-type {
+  background: #3b82f6 !important; /* bg-blue-500 */
+  color: #fff !important;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+}
+
+/* ...existing styles... */
+.dark .issue-card.error { border-left: 6px solid #ef4444 !important; }
+.dark .issue-card.warning { border-left: 6px solid #f59e42 !important; }
+.dark .issue-card.info { border-left: 6px solid #3b82f6 !important; }
+
+/* ...existing styles... */
+.high-impact-card .issue-header {
+  background: #fee2e2; /* bg-red-50 */
+  color: #b91c1c;      /* text-red-700 */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.dark .high-impact-card .issue-header {
+  background: rgba(185,28,28,0.12) !important; /* bg-red-900/20 */
+  color: #fca5a5 !important;                   /* text-red-200 */
+}
+
+.dark .page-card {
+  background: #1f2937 !important; /* bg-gray-800 */
+  color: #f3f4f6 !important;      /* text-gray-100 */
+  border-color: #374151 !important; /* border-gray-700 */
+}
+.dark .metric-group {
+  background: #23272f !important; /* bg-gray-900 */
+  border-color: #374151 !important; /* border-gray-700 */
+}
+.dark .page-header {
+  color: #f3f4f6 !important;
+}
+.dark .page-url {
+  color: #93c5fd !important; /* text-blue-300 */
+}
+.dark .page-status {
+  color: #f3f4f6 !important;
+  background: #374151 !important;
+  border-color: #374151 !important;
+}
+.dark .page-status.success {
+  background: #166534 !important; /* bg-green-900 */
+  color: #6ee7b7 !important;      /* text-green-300 */
+}
+.dark .page-status.redirect {
+  background: #312e81 !important; /* bg-indigo-900 */
+  color: #a5b4fc !important;      /* text-indigo-300 */
+}
+.dark .page-status.client-error,
+.dark .page-status.server-error {
+  background: #7f1d1d !important; /* bg-red-900 */
+  color: #fca5a5 !important;      /* text-red-200 */
+}
+.dark .page-status.unknown {
+  background: #374151 !important;
+  color: #9ca3af !important;      /* text-gray-400 */
+}
+.dark .metric-group h4 {
+  color: #f3f4f6 !important;
+}
+.dark .metric-item {
+  color: #d1d5db !important; /* text-gray-300 */
+}
+
+.dark .score-bar-title {
+  background: #23272f !important; /* bg-gray-900 */
+  color: #f3f4f6 !important;      /* text-gray-100 */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18) !important;
+}
+
+.dark .score-card.total {
+  border-color: #374151 !important; /* dark neutral border */
+}
+.dark .score-card.meta {
+  border-color: #2563eb !important; /* blue-600 */
+}
+.dark .score-card.content {
+  border-color: #22c55e !important; /* green-500 */
+}
+.dark .score-card.technical {
+  border-color: #f59e42 !important; /* yellow-500 */
+}
+.dark .score-card.structure {
+  border-color: #ef4444 !important; /* red-500 */
 }
 </style> 

@@ -11,7 +11,7 @@
           <input
             id="url"
             v-model="url"
-            type="url"
+            type="text"
             required
             placeholder="https://example.com"
             class="flex-1 rounded-l-md border border-gray-300 px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
@@ -268,8 +268,14 @@ const emit = defineEmits<{
 function submitScan() {
   if (selectedTools.value.length === 0 || !url.value) return;
 
+  // Add protocol if missing
+  let formattedUrl = url.value.trim();
+  if (!/^https?:\/\//i.test(formattedUrl)) {
+    formattedUrl = 'https://' + formattedUrl;
+  }
+
   emit("runScan", {
-    url: url.value,
+    url: formattedUrl,
     waveApiKey: waveApiKey.value,
     tools: selectedTools.value,
     ...(enableCrawling.value && {
