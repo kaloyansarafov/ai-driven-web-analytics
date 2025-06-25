@@ -137,3 +137,31 @@ export interface UrlBookmark {
   lastScanned?: string;
   tags?: string[];
 }
+
+// SEO Analysis Types
+export interface SEOAnalysisType {
+  score: number;
+  scoreBreakdown: {
+    meta: number;
+    content: number;
+    technical: number;
+    structure: number;
+  };
+  issues: SEOIssue[];
+  metrics?: {
+    performance?: {
+      firstContentfulPaint?: number;
+      loadTime?: number;
+      largestContentfulPaint?: number;
+      timeToInteractive?: number;
+    };
+  };
+}
+
+export interface SEOIssue {
+  severity: 'high' | 'medium' | 'low';
+  message: string;
+  detail?: string;
+  explanation?: string;
+  category?: string;
+}

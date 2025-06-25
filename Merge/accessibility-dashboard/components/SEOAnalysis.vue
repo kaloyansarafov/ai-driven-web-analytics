@@ -329,6 +329,10 @@
             <span>Largest Contentful Paint:</span>
             <span>{{ formatTime(analysis?.metrics.performance.largestContentfulPaint) }}</span>
           </div>
+          <div class="metric-item">
+            <span>Time to Interactive:</span>
+            <span>{{ formatTime(analysis?.metrics.performance.timeToInteractive) }}</span>
+          </div>
         </div>
         <!-- Content -->
         <div class="metric-card">
@@ -624,7 +628,8 @@ const topKeywords = computed(() => {
 });
 
 const formatTime = (ms: number | undefined) => {
-  if (!ms) return 'N/A';
+  if (!ms || ms === 0) return 'N/A';
+  if (ms < 1000) return `${ms.toFixed(0)}ms`;
   return `${(ms / 1000).toFixed(2)}s`;
 };
 
@@ -667,7 +672,7 @@ const successfulPages = computed(() =>
 );
 
 const dedupedHighImpactIssues = computed(() => {
-  const highIssues = (props.analysis?.issues || []).filter(i => i.type === 'error');
+  const highIssues = (props.analysis?.issues || []).filter(i => i.type === 'error' || i.type === 'warning');
   const grouped: Record<string, { message: string; recommendation: string; pages: string[] } > = {};
   highIssues.forEach(issue => {
     const key = issue.message + '|' + issue.recommendation;

@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="min-h-screen bg-[linear-gradient(90deg,_#3C585E_0%,_#232B62_100%)] text-gray-900 dark:text-gray-100"
-  >
+  <div class="min-h-screen bg-[linear-gradient(90deg,_#3C585E_0%,_#232B62_100%)] text-gray-900 dark:text-gray-100">
     <div class="flex h-screen overflow-hidden">
       <!-- Sidebar navigation - hidden on mobile -->
       <AppNavigation
@@ -96,19 +94,14 @@
             <!-- HERO SECTION FULL WIDTH BACKGROUND START -->
             <div class="w-full min-h-[420px] overflow-x-hidden">
               <div class="flex items-center justify-center py-12 min-h-[420px]">
-                <section
-                  class="flex flex-col lg:flex-row items-center justify-between w-full max-w-6xl mx-auto rounded-2xl shadow-xl p-8 relative z-10"
-                >
+                <section class="flex flex-col lg:flex-row items-center justify-between w-full max-w-6xl mx-auto rounded-2xl shadow-xl p-8 relative z-10">
                   <!-- Left: Text and Form -->
                   <div class="flex-1 max-w-xl text-left">
-                    <h1
-                      class="text-5xl md:text-6xl font-extrabold text-white mb-4"
-                    >
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4">
                       Welcome to The Cre8ion Lab!
                     </h1>
                     <h2 class="text-3xl font-bold text-white mb-4">
-                      Manage your website's SEO and Accessibility metrics
-                      Easily!
+                      Manage your website's SEO and Accessibility metrics Easily!
                     </h2>
                     <p class="text-lg text-blue-100 mb-8 max-w-lg">
                       Our dashboard will help you get all the analytics that you
@@ -117,16 +110,10 @@
                       results together!
                     </p>
                     <!-- Scan Form (preserve all logic) -->
-                    <div
-                      class="bg-white/90 dark:bg-gray-800/90 rounded-lg shadow p-6 w-full"
-                    >
-                      <form @submit.prevent="runAnalyses" class="space-y-4">
+                    <div class="bg-white/90 dark:bg-gray-800/90 rounded-lg shadow p-6 w-full">
+                      <form @submit.prevent="runScan" class="space-y-4">
                         <div>
-                          <label
-                            for="url"
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                            >URL</label
-                          >
+                          <label for="url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL</label>
                           <div class="mt-1 flex items-center space-x-2">
                             <input
                               type="url"
@@ -138,12 +125,7 @@
                             />
                             <button
                               type="submit"
-                              :disabled="
-                                isLoading ||
-                                !url ||
-                                (!analysisTypes.accessibility &&
-                                  !analysisTypes.seo)
-                              "
+                              :disabled="isLoading || !url || (!analysisTypes.accessibility && !analysisTypes.seo)"
                               class="px-6 py-2 rounded-md font-semibold bg-black text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               {{ isLoading ? "Analyzing..." : "Analyze" }}
@@ -158,22 +140,12 @@
                             v-model="showAdvancedOptions"
                             class="toggle toggle-sm"
                           />
-                          <label
-                            for="advanced-options"
-                            class="text-xs text-gray-600 dark:text-gray-300 cursor-pointer"
-                            >Advanced Options</label
-                          >
+                          <label for="advanced-options" class="text-xs text-gray-600 dark:text-gray-300 cursor-pointer">Advanced Options</label>
                         </div>
                         <!-- Advanced Options Section (conditionally shown) -->
-                        <div
-                          v-if="showAdvancedOptions"
-                          class="space-y-4 border-t pt-4 mt-2"
-                        >
+                        <div v-if="showAdvancedOptions" class="space-y-4 border-t pt-4 mt-2">
                           <div>
-                            <label
-                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                              >Analysis Types</label
-                            >
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Analysis Types</label>
                             <div class="space-y-2">
                               <label class="flex items-center space-x-3">
                                 <input
@@ -182,10 +154,7 @@
                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                                   :disabled="isLoading"
                                 />
-                                <span
-                                  class="text-sm text-gray-700 dark:text-gray-300"
-                                  >Accessibility Analysis</span
-                                >
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Accessibility Analysis</span>
                               </label>
                               <label class="flex items-center space-x-3">
                                 <input
@@ -194,28 +163,15 @@
                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                                   :disabled="isLoading"
                                 />
-                                <span
-                                  class="text-sm text-gray-700 dark:text-gray-300"
-                                  >SEO Analysis</span
-                                >
+                                <span class="text-sm text-gray-700 dark:text-gray-300">SEO Analysis</span>
                               </label>
                             </div>
                           </div>
-                          <div
-                            v-if="analysisTypes.accessibility"
-                            class="space-y-4"
-                          >
+                          <div v-if="analysisTypes.accessibility" class="space-y-4">
                             <div>
-                              <label
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                                >Accessibility Tools</label
-                              >
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Accessibility Tools</label>
                               <div class="space-y-2">
-                                <label
-                                  v-for="tool in availableTools"
-                                  :key="tool.id"
-                                  class="flex items-center space-x-3"
-                                >
+                                <label v-for="tool in availableTools" :key="tool.id" class="flex items-center space-x-3">
                                   <input
                                     type="checkbox"
                                     :value="tool.id"
@@ -223,13 +179,30 @@
                                     class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                                     :disabled="isLoading"
                                   />
-                                  <span
-                                    class="text-sm text-gray-700 dark:text-gray-300"
-                                    >{{ tool.name }}</span
-                                  >
+                                  <span class="text-sm text-gray-700 dark:text-gray-300">{{ tool.name }}</span>
                                 </label>
                               </div>
                             </div>
+                            
+                            <!-- Multi-Page Crawling Option -->
+                            <div class="space-y-3">
+                              <label class="flex items-center space-x-3">
+                                <input
+                                  type="checkbox"
+                                  v-model="enableCrawling"
+                                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
+                                  :disabled="isLoading"
+                                />
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Enable multi-page crawling</span>
+                              </label>
+                              
+                              <div v-if="enableCrawling" class="ml-6">
+                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                  Will automatically discover and analyze up to 20 pages from your website. This may take several minutes.
+                                </p>
+                              </div>
+                            </div>
+                            
                             <div v-if="selectedTools.includes('wave')">
                               <label class="flex items-center space-x-3">
                                 <input
@@ -238,2859 +211,209 @@
                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
                                   :disabled="isLoading"
                                 />
-                                <span
-                                  class="text-sm text-gray-700 dark:text-gray-300"
-                                  >Include Visual Report</span
-                                >
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Include Visual Report</span>
                               </label>
-                            </div>
-                            <div>
-                              <label class="flex items-center space-x-3">
-                                <input
-                                  type="checkbox"
-                                  v-model="includeHistory"
-                                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded"
-                                  :disabled="isLoading"
-                                />
-                                <span
-                                  class="text-sm text-gray-700 dark:text-gray-300"
-                                  >Track Scan History</span
-                                >
-                              </label>
+                              
+                              <!-- WAVE API Key Warning -->
+                              <div v-if="!settings.waveApiKey || settings.waveApiKey.trim() === ''" class="mt-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+                                <div class="flex items-start">
+                                  <svg class="w-5 h-5 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                  </svg>
+                                  <div>
+                                    <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                      <strong>WAVE API Key Required:</strong> You need to configure your WAVE API key in Settings to use WAVE testing.
+                                    </p>
+                                    <button 
+                                      @click="currentView = 'settings'" 
+                                      class="mt-1 text-sm text-yellow-700 dark:text-yellow-300 underline hover:no-underline"
+                                    >
+                                      Go to Settings
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </form>
                     </div>
                   </div>
-                  <!-- Right: Illustration -->
-                  <div
-                    class="flex-1 flex items-center justify-center mt-10 lg:mt-0"
-                  >
-                    <img
-                      src="/assets/Image/Side%20Illustration.png"
-                      alt="Person analyzing dashboard illustration"
-                      class="max-w-xs w-full h-auto rounded-xl shadow-lg"
-                      loading="lazy"
-                    />
-                  </div>
                 </section>
               </div>
             </div>
             <!-- HERO SECTION FULL WIDTH BACKGROUND END -->
 
-            <!-- Results Navigation (unchanged) -->
-            <div
-              v-if="analysisComplete"
-              class="mt-8 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-md p-6"
-            >
-              <h3
-                class="text-lg font-semibold text-gray-800 dark:text-white mb-4"
-              >
-                Analysis Complete
-              </h3>
-              <div class="flex flex-wrap gap-4">
-                <button
-                  v-if="analysisTypes.accessibility"
-                  @click="navigateToAnalysis('accessibility')"
-                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  View Accessibility Results
-                </button>
-                <button
-                  v-if="analysisTypes.seo"
-                  @click="navigateToAnalysis('seo')"
-                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                >
-                  View SEO Results
-                </button>
-                <button
-                  @click="navigateToAnalysis('combined')"
-                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                >
-                  View Combined Dashboard
-                </button>
-              </div>
-            </div>
-
-            <!-- Loading state (unchanged) -->
-            <div
-              v-if="isLoading"
-              class="mt-8 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-md p-6"
-            >
-              <div class="text-center mb-6">
-                <h3
-                  class="text-lg font-semibold text-gray-800 dark:text-white mb-2"
-                >
-                  Analyzing {{ url }}
-                </h3>
-                <div
-                  class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-4"
-                >
-                  <div
-                    class="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
-                    :style="{ width: `${analysisProgress.overall}%` }"
-                  ></div>
-                </div>
-                <p class="text-sm text-gray-600 dark:text-gray-300">
-                  Overall Progress: {{ analysisProgress.overall }}%
-                </p>
-              </div>
-
-              <div class="space-y-6">
-                <!-- Accessibility Progress -->
-                <div v-if="analysisTypes.accessibility" class="space-y-2">
-                  <div class="flex justify-between items-center">
-                    <span
-                      class="text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >
-                      Accessibility Analysis
-                    </span>
-                    <span class="text-sm text-gray-500 dark:text-gray-400">
-                      {{ analysisProgress.accessibility.completed }}/{{
-                        analysisProgress.accessibility.total
-                      }}
-                      tools
-                    </span>
+            <!-- Loading State -->
+            <div v-if="isLoading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
+                <div class="text-center">
+                  <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    {{ enableCrawling ? 'Multi-Page Analysis in Progress' : 'Analysis in Progress' }}
+                  </h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                    {{ enableCrawling ? `Scanning page ${scannedPages} of up to 20...` : 'Please wait while we analyze your website...' }}
+                  </p>
+                  
+                  <!-- Multi-page progress bar -->
+                  <div v-if="enableCrawling" class="mb-4">
+                    <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                      <span>Page Progress</span>
+                      <span>{{ scannedPages }}/20</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                      <div class="bg-blue-500 h-2 rounded-full transition-all duration-300" :style="{ width: `${(scannedPages / 20) * 100}%` }"></div>
+                    </div>
                   </div>
-                  <div
-                    class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2"
-                  >
-                    <div
-                      class="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                      :style="{
-                        width: `${
-                          (analysisProgress.accessibility.completed /
-                            analysisProgress.accessibility.total) *
-                          100
-                        }%`,
-                      }"
-                    ></div>
+                  
+                  <!-- Overall progress bar -->
+                  <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-4">
+                    <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" :style="{ width: `${analysisProgress.overall}%` }"></div>
                   </div>
                   <p class="text-sm text-gray-600 dark:text-gray-300">
-                    {{ analysisProgress.accessibility.status }}
+                    Overall Progress: {{ analysisProgress.overall }}%
                   </p>
-                </div>
-
-                <!-- SEO Progress -->
-                <div v-if="analysisTypes.seo" class="space-y-2">
-                  <div class="flex justify-between items-center">
-                    <span
-                      class="text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >
-                      SEO Analysis
-                    </span>
-                    <span class="text-sm text-gray-500 dark:text-gray-400">
-                      {{ analysisProgress.seo.completed }}/{{
-                        analysisProgress.seo.total
-                      }}
-                      steps
-                    </span>
-                  </div>
-                  <div
-                    class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2"
-                  >
-                    <div
-                      class="bg-green-600 h-2 rounded-full transition-all duration-300"
-                      :style="{
-                        width: `${
-                          (analysisProgress.seo.completed /
-                            analysisProgress.seo.total) *
-                          100
-                        }%`,
-                      }"
-                    ></div>
-                  </div>
-                  <p class="text-sm text-gray-600 dark:text-gray-300">
-                    {{ analysisProgress.seo.status }}
+                  <p v-if="enableCrawling" class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    This may take a few minutes depending on the number of pages...
                   </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Error message (unchanged) -->
-            <div
-              v-else-if="error"
-              class="mt-8 bg-red-50/90 dark:bg-red-900/20 backdrop-blur-sm border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg shadow-md"
-              role="alert"
-            >
-              <div class="flex">
-                <div class="flex-shrink-0">
-                  <svg
-                    class="h-5 w-5 text-red-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div class="ml-3">
-                  <h3 class="text-sm leading-5 font-medium">Analysis failed</h3>
-                  <div class="mt-1 text-sm leading-5">{{ error }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Accessibility Analysis View -->
-          <div v-else-if="currentView === 'accessibility-analysis'">
-            <AccessibilityAnalysis
-              :results="results"
-              :selected-tools="selectedTools"
-              :scan-completed="scanCompleted"
-              :visual-report="visualReport"
-              :wave-report-url="waveReportUrl"
-              :is-loading="isLoading"
-              :url="url"
-              @rescan="handleRescan"
-            />
-          </div>
-
-          <!-- SEO Analysis View -->
-          <div v-else-if="currentView === 'seo-analysis'">
-            <SEOAnalysis
-              :url="url"
-              :initial-analysis="seoAnalysisResults"
-              @update:analysis="
-                (newAnalysis) => (seoAnalysisResults = newAnalysis)
-              "
-            />
-          </div>
-
-          <!-- Other views remain unchanged -->
-          <div v-else-if="currentView === 'saved-reports'">
-            <HistoryTracking :reports="savedReports" @rescan="handleRescan" />
-          </div>
-
-          <div v-else-if="currentView === 'settings'">
-            <div class="max-w-7xl mx-auto">
-              <h2 class="text-2xl font-bold mb-4">Settings</h2>
-              <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <form @submit.prevent="saveSettings" class="space-y-6">
-                  <div>
-                    <label
-                      for="waveApiKey"
-                      class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                    >
-                      WAVE API Key
-                    </label>
-                    <div class="mt-1">
-                      <input
-                        type="password"
-                        id="waveApiKey"
-                        v-model="settings.waveApiKey"
-                        class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                        placeholder="Enter your WAVE API key"
-                      />
-                    </div>
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                      Get your API key from the WAVE API service.
-                    </p>
-                  </div>
-
-                  <div class="flex justify-end">
-                    <button
-                      type="submit"
-                      class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      Save Settings
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="currentView === 'help'">
-            <div class="max-w-7xl mx-auto px-4 py-6">
-              <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-                <!-- Header -->
-                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                  <h1
-                    class="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center"
-                  >
-                    <span aria-hidden="true">📚</span> Help & Documentation
-                  </h1>
-                  <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    Complete guide to using the AI-Driven Web Analytics
-                    Dashboard
-                  </p>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
-                    Last updated: January 2025 •
-                    <button
-                      @click="currentView = 'settings'"
-                      class="text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      Theme Settings
-                    </button>
-                    • Press
-                    <kbd
-                      class="px-1 py-0.5 bg-gray-200 dark:bg-gray-600 rounded text-xs"
-                      >Ctrl+D</kbd
-                    >
-                    to bookmark
-                  </p>
-                </div>
-
-                <div class="p-6">
-                  <!-- Table of Contents -->
-                  <nav
-                    class="mb-8 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4"
-                    role="navigation"
-                    aria-label="Documentation table of contents"
-                  >
-                    <h2
-                      class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3"
-                    >
-                      <span aria-hidden="true">📋</span> Table of Contents
-                    </h2>
-                    <div
-                      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2"
-                    >
-                      <a
-                        href="#overview"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        ><span aria-hidden="true">🏠</span> Overview</a
-                      >
-                      <a
-                        href="#running-scans"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        ><span aria-hidden="true">🔍</span> Running Scans</a
-                      >
-                      <a
-                        href="#tool-deep-dive"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        ><span aria-hidden="true">🔧</span> Tool Deep Dive</a
-                      >
-                      <a
-                        href="#understanding-results"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        ><span aria-hidden="true">📊</span> Understanding
-                        Results</a
-                      >
-                      <a
-                        href="#ai-features"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        ><span aria-hidden="true">🤖</span> AI Features</a
-                      >
-                      <a
-                        href="#settings-config"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        ><span aria-hidden="true">⚙️</span> Settings</a
-                      >
-                      <a
-                        href="#troubleshooting"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        ><span aria-hidden="true">🔧</span> Troubleshooting</a
-                      >
-                      <a
-                        href="#best-practices"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        ><span aria-hidden="true">💡</span> Best Practices</a
-                      >
-                      <a
-                        href="#faq"
-                        class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        ><span aria-hidden="true">❓</span> FAQ</a
-                      >
-                    </div>
-                  </nav>
-
-                  <!-- Overview -->
-                  <section id="overview" class="mb-12">
-                    <h2
-                      class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-                    >
-                      <span aria-hidden="true">🏠</span> Overview
-                    </h2>
-
-                    <div class="space-y-6">
-                      <div
-                        class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg"
-                      >
-                        <h3
-                          class="text-xl font-semibold text-gray-900 dark:text-white mb-3"
-                        >
-                          What is this Dashboard?
-                        </h3>
-                        <p class="text-gray-700 dark:text-gray-300 mb-4">
-                          The AI-Driven Web Analytics Dashboard is a
-                          comprehensive tool that combines accessibility
-                          testing, SEO analysis, and AI-powered recommendations
-                          to help you optimize websites for better user
-                          experience and search engine performance.
-                        </p>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                          <div
-                            class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm"
-                          >
-                            <h4
-                              class="font-semibold text-green-600 dark:text-green-400 mb-2"
-                            >
-                              🌐 Accessibility Testing
-                            </h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                              Multi-tool scanning with WAVE, Pa11y, Lighthouse,
-                              and IBM A11y
-                            </p>
-                          </div>
-                          <div
-                            class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm"
-                          >
-                            <h4
-                              class="font-semibold text-blue-600 dark:text-blue-400 mb-2"
-                            >
-                              🔍 SEO Analysis
-                            </h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                              Technical SEO, content optimization, and
-                              performance metrics
-                            </p>
-                          </div>
-                          <div
-                            class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm"
-                          >
-                            <h4
-                              class="font-semibold text-purple-600 dark:text-purple-400 mb-2"
-                            >
-                              🤖 AI Recommendations
-                            </h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                              Smart suggestions powered by advanced AI analysis
-                            </p>
-                          </div>
-                          <div
-                            class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm"
-                          >
-                            <h4
-                              class="font-semibold text-orange-600 dark:text-orange-400 mb-2"
-                            >
-                              📈 Progress Tracking
-                            </h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                              Historical data and improvement monitoring
-                            </p>
-                          </div>
-                        </div>
+                  
+                  <!-- Detailed progress for accessibility -->
+                  <div v-if="analysisTypes.accessibility" class="space-y-4 mt-6">
+                    <div class="space-y-2">
+                      <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Accessibility Analysis</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">
+                          {{ analysisProgress.accessibility.completed }}/{{ analysisProgress.accessibility.total }} tools
+                        </span>
                       </div>
-
-                      <div
-                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
-                      >
-                        <div
-                          class="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800"
-                        >
-                          <div class="text-2xl mb-2" aria-hidden="true">👨‍💻</div>
-                          <h4
-                            class="font-semibold text-green-800 dark:text-green-200 mb-2"
-                          >
-                            Developers
-                          </h4>
-                          <p
-                            class="text-sm text-green-600 dark:text-green-400 mb-3"
-                          >
-                            Test compliance & technical SEO
-                          </p>
-                          <a
-                            href="#running-scans"
-                            class="text-xs text-green-700 dark:text-green-300 hover:underline"
-                          >
-                            Learn more →
-                          </a>
-                        </div>
-                        <div
-                          class="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
-                        >
-                          <div class="text-2xl mb-2" aria-hidden="true">📊</div>
-                          <h4
-                            class="font-semibold text-blue-800 dark:text-blue-200 mb-2"
-                          >
-                            SEO Specialists
-                          </h4>
-                          <p
-                            class="text-sm text-blue-600 dark:text-blue-400 mb-3"
-                          >
-                            Optimize search performance
-                          </p>
-                          <a
-                            href="#understanding-results"
-                            class="text-xs text-blue-700 dark:text-blue-300 hover:underline"
-                          >
-                            Learn more →
-                          </a>
-                        </div>
-                        <div
-                          class="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800"
-                        >
-                          <div class="text-2xl mb-2" aria-hidden="true">🎨</div>
-                          <h4
-                            class="font-semibold text-purple-800 dark:text-purple-200 mb-2"
-                          >
-                            UX Designers
-                          </h4>
-                          <p
-                            class="text-sm text-purple-600 dark:text-purple-400 mb-3"
-                          >
-                            Ensure accessible designs
-                          </p>
-                          <a
-                            href="#ai-features"
-                            class="text-xs text-purple-700 dark:text-purple-300 hover:underline"
-                          >
-                            Learn more →
-                          </a>
-                        </div>
-                        <div
-                          class="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800"
-                        >
-                          <div class="text-2xl mb-2" aria-hidden="true">📝</div>
-                          <h4
-                            class="font-semibold text-orange-800 dark:text-orange-200"
-                          >
-                            Content Managers
-                          </h4>
-                          <p
-                            class="text-sm text-orange-600 dark:text-orange-400"
-                          >
-                            Optimize content strategy
-                          </p>
-                        </div>
+                      <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" :style="{ width: `${(analysisProgress.accessibility.completed / analysisProgress.accessibility.total) * 100}%` }"></div>
                       </div>
-                    </div>
-                  </section>
-
-                  <!-- Running Scans -->
-                  <section id="running-scans" class="mb-12">
-                    <h2
-                      class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-                    >
-                      🔍 How to Run Scans
-                    </h2>
-
-                    <div class="space-y-6">
-                      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-                        <h3
-                          class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                        >
-                          Step-by-Step Process
-                        </h3>
-
-                        <div class="space-y-4">
-                          <div class="flex items-start space-x-4">
-                            <div
-                              class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm"
-                            >
-                              1
-                            </div>
-                            <div>
-                              <h4
-                                class="font-semibold text-gray-900 dark:text-white"
-                              >
-                                Enter Website URL
-                              </h4>
-                              <p
-                                class="text-gray-600 dark:text-gray-400 text-sm"
-                              >
-                                Type the complete URL (e.g.,
-                                https://example.com)
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="flex items-start space-x-4">
-                            <div
-                              class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm"
-                            >
-                              2
-                            </div>
-                            <div>
-                              <h4
-                                class="font-semibold text-gray-900 dark:text-white"
-                              >
-                                Select Analysis Types
-                              </h4>
-                              <p
-                                class="text-gray-600 dark:text-gray-400 text-sm"
-                              >
-                                Choose Accessibility, SEO, or both analyses
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="flex items-start space-x-4">
-                            <div
-                              class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm"
-                            >
-                              3
-                            </div>
-                            <div>
-                              <h4
-                                class="font-semibold text-gray-900 dark:text-white"
-                              >
-                                Choose Testing Tools
-                              </h4>
-                              <p
-                                class="text-gray-600 dark:text-gray-400 text-sm"
-                              >
-                                Select from WAVE, Pa11y, Lighthouse, or IBM A11y
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="flex items-start space-x-4">
-                            <div
-                              class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm"
-                            >
-                              4
-                            </div>
-                            <div>
-                              <h4
-                                class="font-semibold text-gray-900 dark:text-white"
-                              >
-                                Run Analysis
-                              </h4>
-                              <p
-                                class="text-gray-600 dark:text-gray-400 text-sm"
-                              >
-                                Click "Run Analysis" and wait for completion
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div
-                        class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4"
-                      >
-                        <div class="flex">
-                          <div class="flex-shrink-0">
-                            <svg
-                              class="h-5 w-5 text-yellow-400"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <div class="ml-3">
-                            <h4
-                              class="text-sm font-medium text-yellow-800 dark:text-yellow-200"
-                            >
-                              💡 Pro Tip
-                            </h4>
-                            <p
-                              class="text-sm text-yellow-700 dark:text-yellow-300"
-                            >
-                              For comprehensive results, run scans at different
-                              times and use multiple tools to get varied
-                              perspectives on your website's performance.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-
-                  <!-- Tool Deep Dive -->
-                  <section id="tool-deep-dive" class="mb-12">
-                    <h2
-                      class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-                    >
-                      🔧 Tool Deep Dive: Your Testing Arsenal
-                    </h2>
-
-                    <div class="space-y-8">
-                      <!-- Introduction -->
-                      <div
-                        class="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 p-6 rounded-lg"
-                      >
-                        <h3
-                          class="text-xl font-semibold text-gray-900 dark:text-white mb-3"
-                        >
-                          Why Multiple Tools?
-                        </h3>
-                        <p class="text-gray-700 dark:text-gray-300 mb-4">
-                          Each accessibility testing tool has its own strengths
-                          and detection methods. By combining multiple tools,
-                          you get comprehensive coverage that no single tool can
-                          provide alone.
-                        </p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                            <h4
-                              class="font-semibold text-indigo-600 dark:text-indigo-400 mb-2"
-                            >
-                              🎯 Different Detection Methods
-                            </h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                              Visual detection, rule-based automation,
-                              performance correlation, and enterprise compliance
-                            </p>
-                          </div>
-                          <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                            <h4
-                              class="font-semibold text-blue-600 dark:text-blue-400 mb-2"
-                            >
-                              👥 Different Audiences
-                            </h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                              Designers, developers, managers, and compliance
-                              teams each benefit from different tool
-                              perspectives
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Tool Comparison Grid -->
-                      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- WAVE -->
-                        <div
-                          class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border-l-4 border-blue-500"
-                        >
-                          <div class="flex items-center mb-4">
-                            <span class="text-3xl mr-3">🌊</span>
-                            <div>
-                              <h3
-                                class="text-lg font-semibold text-blue-800 dark:text-blue-200"
-                              >
-                                WAVE - Visual Explorer
-                              </h3>
-                              <p
-                                class="text-sm text-blue-600 dark:text-blue-400"
-                              >
-                                Web Accessibility Evaluation Tool
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="space-y-3 mb-4">
-                            <div class="text-sm">
-                              <strong class="text-blue-700 dark:text-blue-300"
-                                >Best For:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Client presentations, visual issue
-                                identification</span
-                              >
-                            </div>
-                            <div class="text-sm">
-                              <strong class="text-blue-700 dark:text-blue-300"
-                                >Unique Feature:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Shows exactly where issues appear on the
-                                page</span
-                              >
-                            </div>
-                            <div class="text-sm">
-                              <strong class="text-blue-700 dark:text-blue-300"
-                                >Use When:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                You need visual context or stakeholder
-                                buy-in</span
-                              >
-                            </div>
-                          </div>
-
-                          <div class="mb-4">
-                            <h4
-                              class="font-medium text-blue-800 dark:text-blue-200 mb-2"
-                            >
-                              What WAVE Excels At:
-                            </h4>
-                            <ul
-                              class="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-                            >
-                              <li>
-                                • 🎯 Visual Context: Shows exactly where issues
-                                occur
-                              </li>
-                              <li>
-                                • 📚 Educational: Explains WHY each issue
-                                matters
-                              </li>
-                              <li>
-                                • 🔍 Detailed Analysis: Covers 6 major
-                                categories
-                              </li>
-                              <li>
-                                • 🖼️ Visual Reports: Shareable reports with page
-                                intact
-                              </li>
-                            </ul>
-                          </div>
-
-                          <div
-                            class="bg-blue-100 dark:bg-blue-800/30 p-3 rounded text-xs"
-                          >
-                            <strong>WAVE Categories:</strong> Errors, Contrast,
-                            Alerts, Features, Structure, ARIA
-                          </div>
-                        </div>
-
-                        <!-- Pa11y -->
-                        <div
-                          class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border-l-4 border-green-500"
-                        >
-                          <div class="flex items-center mb-4">
-                            <span class="text-3xl mr-3">🤖</span>
-                            <div>
-                              <h3
-                                class="text-lg font-semibold text-green-800 dark:text-green-200"
-                              >
-                                Pa11y - Technical Validator
-                              </h3>
-                              <p
-                                class="text-sm text-green-600 dark:text-green-400"
-                              >
-                                Command-line Accessibility Testing
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="space-y-3 mb-4">
-                            <div class="text-sm">
-                              <strong class="text-green-700 dark:text-green-300"
-                                >Best For:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Automated testing, WCAG compliance
-                                verification</span
-                              >
-                            </div>
-                            <div class="text-sm">
-                              <strong class="text-green-700 dark:text-green-300"
-                                >Unique Feature:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Strict WCAG rule checking with technical
-                                details</span
-                              >
-                            </div>
-                            <div class="text-sm">
-                              <strong class="text-green-700 dark:text-green-300"
-                                >Use When:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Building automated testing or need compliance
-                                proof</span
-                              >
-                            </div>
-                          </div>
-
-                          <div class="mb-4">
-                            <h4
-                              class="font-medium text-green-800 dark:text-green-200 mb-2"
-                            >
-                              What Pa11y Excels At:
-                            </h4>
-                            <ul
-                              class="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-                            >
-                              <li>
-                                • 🔄 Automation: Perfect for CI/CD pipelines
-                              </li>
-                              <li>
-                                • 📋 WCAG Compliance: Strict adherence to
-                                guidelines
-                              </li>
-                              <li>
-                                • ⚡ Speed: Fast execution for large-scale
-                                testing
-                              </li>
-                              <li>
-                                • 🎯 Precision: Detailed technical information
-                              </li>
-                            </ul>
-                          </div>
-
-                          <div
-                            class="bg-green-100 dark:bg-green-800/30 p-3 rounded text-xs"
-                          >
-                            <strong>Standards:</strong> WCAG 2.1 AA/AAA,
-                            HTML_CodeSniffer, aXe-core integration
-                          </div>
-                        </div>
-
-                        <!-- Lighthouse -->
-                        <div
-                          class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg border-l-4 border-purple-500"
-                        >
-                          <div class="flex items-center mb-4">
-                            <span class="text-3xl mr-3">🏠</span>
-                            <div>
-                              <h3
-                                class="text-lg font-semibold text-purple-800 dark:text-purple-200"
-                              >
-                                Lighthouse - Holistic Auditor
-                              </h3>
-                              <p
-                                class="text-sm text-purple-600 dark:text-purple-400"
-                              >
-                                Google's Web Quality Audit Tool
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="space-y-3 mb-4">
-                            <div class="text-sm">
-                              <strong
-                                class="text-purple-700 dark:text-purple-300"
-                                >Best For:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Performance correlation, SEO impact
-                                analysis</span
-                              >
-                            </div>
-                            <div class="text-sm">
-                              <strong
-                                class="text-purple-700 dark:text-purple-300"
-                                >Unique Feature:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Combines accessibility with performance and
-                                SEO</span
-                              >
-                            </div>
-                            <div class="text-sm">
-                              <strong
-                                class="text-purple-700 dark:text-purple-300"
-                                >Use When:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Optimizing for both accessibility and
-                                performance</span
-                              >
-                            </div>
-                          </div>
-
-                          <div class="mb-4">
-                            <h4
-                              class="font-medium text-purple-800 dark:text-purple-200 mb-2"
-                            >
-                              What Lighthouse Excels At:
-                            </h4>
-                            <ul
-                              class="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-                            >
-                              <li>
-                                • 🎯 Performance Context: Shows
-                                accessibility-performance relationship
-                              </li>
-                              <li>
-                                • 📊 Scoring System: Quantitative metrics for
-                                tracking
-                              </li>
-                              <li>
-                                • 🔍 SEO Integration: Identifies issues
-                                affecting search ranking
-                              </li>
-                              <li>
-                                • 📱 Mobile Testing: Specifically tests mobile
-                                accessibility
-                              </li>
-                            </ul>
-                          </div>
-
-                          <div
-                            class="bg-purple-100 dark:bg-purple-800/30 p-3 rounded text-xs"
-                          >
-                            <strong>Audit Areas:</strong> Color Contrast,
-                            Keyboard Navigation, Labeling, Images, Structure
-                          </div>
-                        </div>
-
-                        <!-- IBM A11y -->
-                        <div
-                          class="bg-orange-50 dark:bg-orange-900/20 p-6 rounded-lg border-l-4 border-orange-500"
-                        >
-                          <div class="flex items-center mb-4">
-                            <span class="text-3xl mr-3">🏢</span>
-                            <div>
-                              <h3
-                                class="text-lg font-semibold text-orange-800 dark:text-orange-200"
-                              >
-                                IBM A11y - Enterprise Compliance
-                              </h3>
-                              <p
-                                class="text-sm text-orange-600 dark:text-orange-400"
-                              >
-                                Enterprise-Grade Accessibility Checker
-                              </p>
-                            </div>
-                          </div>
-
-                          <div class="space-y-3 mb-4">
-                            <div class="text-sm">
-                              <strong
-                                class="text-orange-700 dark:text-orange-300"
-                                >Best For:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Enterprise applications, legal compliance</span
-                              >
-                            </div>
-                            <div class="text-sm">
-                              <strong
-                                class="text-orange-700 dark:text-orange-300"
-                                >Unique Feature:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Detailed remediation guidance for
-                                developers</span
-                              >
-                            </div>
-                            <div class="text-sm">
-                              <strong
-                                class="text-orange-700 dark:text-orange-300"
-                                >Use When:</strong
-                              >
-                              <span class="text-gray-700 dark:text-gray-300">
-                                Need enterprise-grade compliance
-                                verification</span
-                              >
-                            </div>
-                          </div>
-
-                          <div class="mb-4">
-                            <h4
-                              class="font-medium text-orange-800 dark:text-orange-200 mb-2"
-                            >
-                              What IBM A11y Excels At:
-                            </h4>
-                            <ul
-                              class="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-                            >
-                              <li>
-                                • 🏢 Enterprise Compliance: Meets enterprise
-                                accessibility requirements
-                              </li>
-                              <li>
-                                • 📚 Detailed Remediation: Step-by-step fixing
-                                instructions
-                              </li>
-                              <li>
-                                • 🌐 Multi-Standard Testing: WCAG, Section 508,
-                                EN 301 549
-                              </li>
-                              <li>
-                                • 🔧 Developer-Focused: Technical details for
-                                implementation
-                              </li>
-                            </ul>
-                          </div>
-
-                          <div
-                            class="bg-orange-100 dark:bg-orange-800/30 p-3 rounded text-xs"
-                          >
-                            <strong>Issue Levels:</strong> Violations, Potential
-                            Violations, Recommendations, Needs Review
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Tool Comparison Tables -->
-                      <div class="space-y-8">
-                        <h3
-                          class="text-xl font-semibold text-gray-900 dark:text-white mb-6"
-                        >
-                          📊 Detailed Tool Comparison
-                        </h3>
-
-                        <!-- Overview Comparison Table -->
-                        <div
-                          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden"
-                        >
-                          <div
-                            class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600"
-                          >
-                            <h4
-                              class="text-lg font-medium text-gray-900 dark:text-white"
-                            >
-                              🔍 Overview Comparison
-                            </h4>
-                          </div>
-                          <div class="overflow-x-auto">
-                            <table class="w-full">
-                              <thead class="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Tool
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Developer
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Type
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Primary Focus
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    API Required
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody
-                                class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600"
-                              >
-                                <tr
-                                  class="hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                                >
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-2xl mr-3">🌊</span>
-                                      <div>
-                                        <div
-                                          class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >
-                                          WAVE
-                                        </div>
-                                        <div
-                                          class="text-sm text-blue-600 dark:text-blue-400"
-                                        >
-                                          Visual Explorer
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    WebAIM
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Web API
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Visual accessibility evaluation
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                    >
-                                      Yes (Free tier available)
-                                    </span>
-                                  </td>
-                                </tr>
-                                <tr
-                                  class="hover:bg-green-50 dark:hover:bg-green-900/20"
-                                >
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-2xl mr-3">🤖</span>
-                                      <div>
-                                        <div
-                                          class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >
-                                          Pa11y
-                                        </div>
-                                        <div
-                                          class="text-sm text-green-600 dark:text-green-400"
-                                        >
-                                          Technical Validator
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Team Pa11y
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Command Line
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    WCAG compliance testing
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                    >
-                                      No
-                                    </span>
-                                  </td>
-                                </tr>
-                                <tr
-                                  class="hover:bg-purple-50 dark:hover:bg-purple-900/20"
-                                >
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-2xl mr-3">🏠</span>
-                                      <div>
-                                        <div
-                                          class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >
-                                          Lighthouse
-                                        </div>
-                                        <div
-                                          class="text-sm text-purple-600 dark:text-purple-400"
-                                        >
-                                          Holistic Auditor
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Google Chrome Team
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Browser Engine
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Performance + Accessibility
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                    >
-                                      No
-                                    </span>
-                                  </td>
-                                </tr>
-                                <tr
-                                  class="hover:bg-orange-50 dark:hover:bg-orange-900/20"
-                                >
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-2xl mr-3">🏢</span>
-                                      <div>
-                                        <div
-                                          class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >
-                                          IBM A11y
-                                        </div>
-                                        <div
-                                          class="text-sm text-orange-600 dark:text-orange-400"
-                                        >
-                                          Enterprise Compliance
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    IBM Accessibility
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Library + Engine
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Enterprise compliance
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                    >
-                                      No
-                                    </span>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-
-                        <!-- Technical Specifications Table -->
-                        <div
-                          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden"
-                        >
-                          <div
-                            class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600"
-                          >
-                            <h4
-                              class="text-lg font-medium text-gray-900 dark:text-white"
-                            >
-                              ⚙️ Technical Specifications
-                            </h4>
-                          </div>
-                          <div class="overflow-x-auto">
-                            <table class="w-full">
-                              <thead class="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Tool
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Detection Engine
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Standards Covered
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Output Format
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Speed
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody
-                                class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600"
-                              >
-                                <tr>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-xl mr-2">🌊</span>
-                                      <span
-                                        class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >WAVE</span
-                                      >
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Custom rule engine + Visual analysis
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    WCAG 2.1, Section 508
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    JSON + Visual report
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                    >
-                                      Medium
-                                    </span>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-xl mr-2">🤖</span>
-                                      <span
-                                        class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >Pa11y</span
-                                      >
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    HTML_CodeSniffer + aXe-core
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    WCAG 2.1 AA/AAA
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    JSON, CLI output
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                    >
-                                      Fast
-                                    </span>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-xl mr-2">🏠</span>
-                                      <span
-                                        class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >Lighthouse</span
-                                      >
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Chrome DevTools + aXe-core
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    WCAG 2.1, Performance metrics
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    JSON, HTML report
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                    >
-                                      Medium
-                                    </span>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-xl mr-2">🏢</span>
-                                      <span
-                                        class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >IBM A11y</span
-                                      >
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    IBM Custom engine + Rules
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    WCAG 2.1, Section 508, EN 301 549
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    JSON, Detailed reports
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
-                                    >
-                                      Slower
-                                    </span>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-
-                        <!-- Use Cases & Best Practices Table -->
-                        <div
-                          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden"
-                        >
-                          <div
-                            class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600"
-                          >
-                            <h4
-                              class="text-lg font-medium text-gray-900 dark:text-white"
-                            >
-                              🎯 Use Cases & Best Practices
-                            </h4>
-                          </div>
-                          <div class="overflow-x-auto">
-                            <table class="w-full">
-                              <thead class="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Tool
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Ideal For
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Unique Strength
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Learning Curve
-                                  </th>
-                                  <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                  >
-                                    Setup Complexity
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody
-                                class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600"
-                              >
-                                <tr>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-xl mr-2">🌊</span>
-                                      <span
-                                        class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >WAVE</span
-                                      >
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Designers, Client presentations, Education
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Visual context on actual page
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                    >
-                                      Easy
-                                    </span>
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                    >
-                                      API Key needed
-                                    </span>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-xl mr-2">🤖</span>
-                                      <span
-                                        class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >Pa11y</span
-                                      >
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Developers, CI/CD, Automation
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Strict WCAG compliance checking
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                    >
-                                      Medium
-                                    </span>
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                    >
-                                      Simple
-                                    </span>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-xl mr-2">🏠</span>
-                                      <span
-                                        class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >Lighthouse</span
-                                      >
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Product managers, Performance teams
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Holistic quality scoring
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                    >
-                                      Easy
-                                    </span>
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                    >
-                                      Simple
-                                    </span>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                      <span class="text-xl mr-2">🏢</span>
-                                      <span
-                                        class="text-sm font-medium text-gray-900 dark:text-white"
-                                        >IBM A11y</span
-                                      >
-                                    </div>
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Enterprise, Legal compliance, Complex apps
-                                  </td>
-                                  <td
-                                    class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
-                                  >
-                                    Detailed remediation guidance
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
-                                    >
-                                      Advanced
-                                    </span>
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                    >
-                                      Moderate
-                                    </span>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-
-                        <!-- Pros and Cons Comparison -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          <div
-                            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden"
-                          >
-                            <div
-                              class="px-6 py-4 bg-green-50 dark:bg-green-900/20 border-b border-green-200 dark:border-green-700"
-                            >
-                              <h4
-                                class="text-lg font-medium text-green-800 dark:text-green-200"
-                              >
-                                ✅ Pros Summary
-                              </h4>
-                            </div>
-                            <div class="p-6 space-y-4">
-                              <div class="border-l-4 border-blue-500 pl-4">
-                                <h5
-                                  class="font-medium text-blue-700 dark:text-blue-300"
-                                >
-                                  🌊 WAVE
-                                </h5>
-                                <ul
-                                  class="text-sm text-gray-600 dark:text-gray-400 mt-1 space-y-1"
-                                >
-                                  <li>• Excellent visual feedback</li>
-                                  <li>• Great educational value</li>
-                                  <li>• Perfect for stakeholder demos</li>
-                                  <li>• Comprehensive issue categorization</li>
-                                </ul>
-                              </div>
-                              <div class="border-l-4 border-green-500 pl-4">
-                                <h5
-                                  class="font-medium text-green-700 dark:text-green-300"
-                                >
-                                  🤖 Pa11y
-                                </h5>
-                                <ul
-                                  class="text-sm text-gray-600 dark:text-gray-400 mt-1 space-y-1"
-                                >
-                                  <li>• Fast and reliable automation</li>
-                                  <li>• Strict WCAG compliance</li>
-                                  <li>• Perfect for CI/CD integration</li>
-                                  <li>• No API dependencies</li>
-                                </ul>
-                              </div>
-                              <div class="border-l-4 border-purple-500 pl-4">
-                                <h5
-                                  class="font-medium text-purple-700 dark:text-purple-300"
-                                >
-                                  🏠 Lighthouse
-                                </h5>
-                                <ul
-                                  class="text-sm text-gray-600 dark:text-gray-400 mt-1 space-y-1"
-                                >
-                                  <li>• Holistic quality assessment</li>
-                                  <li>• Google-backed credibility</li>
-                                  <li>• Performance correlation insights</li>
-                                  <li>• Mobile-first testing</li>
-                                </ul>
-                              </div>
-                              <div class="border-l-4 border-orange-500 pl-4">
-                                <h5
-                                  class="font-medium text-orange-700 dark:text-orange-300"
-                                >
-                                  🏢 IBM A11y
-                                </h5>
-                                <ul
-                                  class="text-sm text-gray-600 dark:text-gray-400 mt-1 space-y-1"
-                                >
-                                  <li>• Enterprise-grade thoroughness</li>
-                                  <li>• Multi-standard compliance</li>
-                                  <li>• Detailed remediation steps</li>
-                                  <li>• Legal compliance focus</li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div
-                            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden"
-                          >
-                            <div
-                              class="px-6 py-4 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-700"
-                            >
-                              <h4
-                                class="text-lg font-medium text-red-800 dark:text-red-200"
-                              >
-                                ⚠️ Considerations & Limitations
-                              </h4>
-                            </div>
-                            <div class="p-6 space-y-4">
-                              <div class="border-l-4 border-blue-500 pl-4">
-                                <h5
-                                  class="font-medium text-blue-700 dark:text-blue-300"
-                                >
-                                  🌊 WAVE
-                                </h5>
-                                <ul
-                                  class="text-sm text-gray-600 dark:text-gray-400 mt-1 space-y-1"
-                                >
-                                  <li>• Requires API key (cost factor)</li>
-                                  <li>• Rate limiting on free tier</li>
-                                  <li>• Less suitable for automation</li>
-                                  <li>• Slower than command-line tools</li>
-                                </ul>
-                              </div>
-                              <div class="border-l-4 border-green-500 pl-4">
-                                <h5
-                                  class="font-medium text-green-700 dark:text-green-300"
-                                >
-                                  🤖 Pa11y
-                                </h5>
-                                <ul
-                                  class="text-sm text-gray-600 dark:text-gray-400 mt-1 space-y-1"
-                                >
-                                  <li>• Limited visual context</li>
-                                  <li>• Technical setup required</li>
-                                  <li>• Command-line only interface</li>
-                                  <li>• May miss some visual issues</li>
-                                </ul>
-                              </div>
-                              <div class="border-l-4 border-purple-500 pl-4">
-                                <h5
-                                  class="font-medium text-purple-700 dark:text-purple-300"
-                                >
-                                  🏠 Lighthouse
-                                </h5>
-                                <ul
-                                  class="text-sm text-gray-600 dark:text-gray-400 mt-1 space-y-1"
-                                >
-                                  <li>• Limited accessibility focus</li>
-                                  <li>• Performance-heavy testing</li>
-                                  <li>
-                                    • Less detailed than specialized tools
-                                  </li>
-                                  <li>• May not catch all a11y issues</li>
-                                </ul>
-                              </div>
-                              <div class="border-l-4 border-orange-500 pl-4">
-                                <h5
-                                  class="font-medium text-orange-700 dark:text-orange-300"
-                                >
-                                  🏢 IBM A11y
-                                </h5>
-                                <ul
-                                  class="text-sm text-gray-600 dark:text-gray-400 mt-1 space-y-1"
-                                >
-                                  <li>• Slower execution time</li>
-                                  <li>• More complex setup</li>
-                                  <li>• Steeper learning curve</li>
-                                  <li>• Potentially overwhelming output</li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Decision Matrix -->
-                        <div
-                          class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-6 rounded-lg"
-                        >
-                          <h4
-                            class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                          >
-                            🎯 Quick Decision Matrix
-                          </h4>
-                          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div class="text-center">
-                              <div class="text-2xl mb-2">🎨</div>
-                              <div
-                                class="text-sm font-medium text-gray-900 dark:text-white"
-                              >
-                                Visual Design
-                              </div>
-                              <div
-                                class="text-xs text-indigo-600 dark:text-indigo-400 mt-1"
-                              >
-                                Use WAVE
-                              </div>
-                            </div>
-                            <div class="text-center">
-                              <div class="text-2xl mb-2">⚙️</div>
-                              <div
-                                class="text-sm font-medium text-gray-900 dark:text-white"
-                              >
-                                Automation
-                              </div>
-                              <div
-                                class="text-xs text-green-600 dark:text-green-400 mt-1"
-                              >
-                                Use Pa11y
-                              </div>
-                            </div>
-                            <div class="text-center">
-                              <div class="text-2xl mb-2">📊</div>
-                              <div
-                                class="text-sm font-medium text-gray-900 dark:text-white"
-                              >
-                                Performance
-                              </div>
-                              <div
-                                class="text-xs text-purple-600 dark:text-purple-400 mt-1"
-                              >
-                                Use Lighthouse
-                              </div>
-                            </div>
-                            <div class="text-center">
-                              <div class="text-2xl mb-2">🏢</div>
-                              <div
-                                class="text-sm font-medium text-gray-900 dark:text-white"
-                              >
-                                Enterprise
-                              </div>
-                              <div
-                                class="text-xs text-orange-600 dark:text-orange-400 mt-1"
-                              >
-                                Use IBM A11y
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Interactive Tool Selector -->
-                      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-                        <h3
-                          class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                        >
-                          🎯 Tool Recommendation Engine
-                        </h3>
-                        <div class="space-y-4">
-                          <div>
-                            <label
-                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                            >
-                              What's your primary goal?
-                            </label>
-                            <select
-                              v-model="selectedGoal"
-                              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            >
-                              <option value="">Select your goal...</option>
-                              <option value="presentation">
-                                Present findings to stakeholders
-                              </option>
-                              <option value="development">
-                                Automate testing in development
-                              </option>
-                              <option value="compliance">
-                                Ensure legal compliance
-                              </option>
-                              <option value="performance">
-                                Optimize performance and accessibility
-                              </option>
-                              <option value="education">
-                                Learn about accessibility issues
-                              </option>
-                              <option value="enterprise">
-                                Enterprise-grade testing
-                              </option>
-                            </select>
-                          </div>
-
-                          <div
-                            v-if="selectedGoal"
-                            class="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-md border border-blue-200 dark:border-blue-700"
-                          >
-                            <h4
-                              class="font-medium text-blue-900 dark:text-blue-100 mb-3"
-                            >
-                              Recommended Tools for
-                              {{ getGoalName(selectedGoal) }}:
-                            </h4>
-
-                            <div
-                              v-if="selectedGoal === 'presentation'"
-                              class="space-y-2"
-                            >
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Primary: WAVE</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Visual reports perfect for stakeholders</span
-                                >
-                              </div>
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Secondary: Lighthouse</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Scoring metrics for executive summaries</span
-                                >
-                              </div>
-                            </div>
-
-                            <div
-                              v-else-if="selectedGoal === 'development'"
-                              class="space-y-2"
-                            >
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Primary: Pa11y</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Perfect for CI/CD automation</span
-                                >
-                              </div>
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Secondary: WAVE</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Visual verification of fixes</span
-                                >
-                              </div>
-                            </div>
-
-                            <div
-                              v-else-if="selectedGoal === 'compliance'"
-                              class="space-y-2"
-                            >
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Primary: IBM A11y</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Enterprise-grade compliance
-                                  verification</span
-                                >
-                              </div>
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Secondary: Pa11y</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >WCAG technical validation</span
-                                >
-                              </div>
-                            </div>
-
-                            <div
-                              v-else-if="selectedGoal === 'performance'"
-                              class="space-y-2"
-                            >
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Primary: Lighthouse</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Combines accessibility with performance
-                                  metrics</span
-                                >
-                              </div>
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Secondary: WAVE</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Visual context for accessibility issues</span
-                                >
-                              </div>
-                            </div>
-
-                            <div
-                              v-else-if="selectedGoal === 'education'"
-                              class="space-y-2"
-                            >
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Primary: WAVE</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Best educational explanations and visual
-                                  context</span
-                                >
-                              </div>
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Secondary: IBM A11y</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Detailed remediation guidance</span
-                                >
-                              </div>
-                            </div>
-
-                            <div
-                              v-else-if="selectedGoal === 'enterprise'"
-                              class="space-y-2"
-                            >
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Primary: IBM A11y</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Built for enterprise-scale applications</span
-                                >
-                              </div>
-                              <div class="flex items-center space-x-2">
-                                <span
-                                  class="inline-block bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium"
-                                  >Secondary: Pa11y</span
-                                >
-                                <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
-                                  >Automated compliance monitoring</span
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Strategic Combinations -->
-                      <div
-                        class="bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800 dark:to-slate-800 p-6 rounded-lg"
-                      >
-                        <h3
-                          class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                        >
-                          🎯 Strategic Tool Combinations
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div
-                            class="bg-white dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600"
-                          >
-                            <h4
-                              class="font-medium text-gray-900 dark:text-white mb-2"
-                            >
-                              🚀 Complete Workflow
-                            </h4>
-                            <ol
-                              class="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-                            >
-                              <li>
-                                1. <strong>Start with WAVE</strong> - Visual
-                                identification
-                              </li>
-                              <li>
-                                2. <strong>Use Pa11y</strong> - Technical
-                                validation
-                              </li>
-                              <li>
-                                3. <strong>Check Lighthouse</strong> -
-                                Performance impact
-                              </li>
-                              <li>
-                                4. <strong>Verify with IBM A11y</strong> - Final
-                                compliance
-                              </li>
-                            </ol>
-                          </div>
-                          <div
-                            class="bg-white dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600"
-                          >
-                            <h4
-                              class="font-medium text-gray-900 dark:text-white mb-2"
-                            >
-                              ⚡ Quick Assessment
-                            </h4>
-                            <ol
-                              class="text-sm text-gray-700 dark:text-gray-300 space-y-1"
-                            >
-                              <li>
-                                1. <strong>WAVE + Lighthouse</strong> - Fast
-                                overview
-                              </li>
-                              <li>2. Great for initial assessments</li>
-                              <li>3. Perfect for stakeholder meetings</li>
-                              <li>4. Covers visual and performance aspects</li>
-                            </ol>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Advanced Tips -->
-                      <div
-                        class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-400 p-6"
-                      >
-                        <div class="flex items-start">
-                          <div class="flex-shrink-0">
-                            <svg
-                              class="h-5 w-5 text-amber-400 mt-0.5"
-                              fill="none"
-                              stroke="currentColor"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                          </div>
-                          <div class="ml-3">
-                            <h4
-                              class="text-sm font-medium text-amber-800 dark:text-amber-200 mb-2"
-                            >
-                              🎓 Pro Tips for Tool Usage
-                            </h4>
-                            <ul
-                              class="text-sm text-amber-700 dark:text-amber-300 space-y-1"
-                            >
-                              <li>
-                                • <strong>Start Visual:</strong> Use WAVE first
-                                to get familiar with the page's accessibility
-                                landscape
-                              </li>
-                              <li>
-                                • <strong>Automate Early:</strong> Integrate
-                                Pa11y into your development workflow from day
-                                one
-                              </li>
-                              <li>
-                                • <strong>Think Holistically:</strong> Use
-                                Lighthouse to understand how accessibility
-                                affects overall user experience
-                              </li>
-                              <li>
-                                • <strong>Plan for Scale:</strong> IBM A11y
-                                becomes more valuable as your application grows
-                                in complexity
-                              </li>
-                              <li>
-                                • <strong>Cross-Reference:</strong> Issues found
-                                by multiple tools should be prioritized first
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-
-                  <!-- Understanding Results -->
-                  <section id="understanding-results" class="mb-12">
-                    <h2
-                      class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-                    >
-                      📊 Understanding Results
-                    </h2>
-
-                    <div class="space-y-6">
-                      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div
-                          class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border-l-4 border-red-500"
-                        >
-                          <h4
-                            class="font-semibold text-red-800 dark:text-red-200 flex items-center mb-2"
-                          >
-                            🚨 Errors
-                          </h4>
-                          <p class="text-sm text-red-700 dark:text-red-300">
-                            Critical issues that must be fixed immediately.
-                            These violate accessibility standards and prevent
-                            users from accessing content.
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border-l-4 border-yellow-500"
-                        >
-                          <h4
-                            class="font-semibold text-yellow-800 dark:text-yellow-200 flex items-center mb-2"
-                          >
-                            ⚠️ Warnings
-                          </h4>
-                          <p
-                            class="text-sm text-yellow-700 dark:text-yellow-300"
-                          >
-                            Important issues that should be addressed. May cause
-                            difficulties for some users or impact SEO
-                            performance.
-                          </p>
-                        </div>
-
-                        <div
-                          class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-500"
-                        >
-                          <h4
-                            class="font-semibold text-blue-800 dark:text-blue-200 flex items-center mb-2"
-                          >
-                            ℹ️ Notices
-                          </h4>
-                          <p class="text-sm text-blue-700 dark:text-blue-300">
-                            Informational items and best practice suggestions
-                            for continuous improvement.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-                        <h3
-                          class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                        >
-                          Testing Tools Overview
-                        </h3>
-                        <div class="space-y-3">
-                          <div class="flex items-start space-x-3">
-                            <div
-                              class="w-2 h-2 bg-blue-500 rounded-full mt-2"
-                            ></div>
-                            <div>
-                              <strong class="text-gray-900 dark:text-white"
-                                >WAVE:</strong
-                              >
-                              <span
-                                class="text-gray-700 dark:text-gray-300 ml-2"
-                                >Visual accessibility evaluation with detailed
-                                explanations</span
-                              >
-                            </div>
-                          </div>
-                          <div class="flex items-start space-x-3">
-                            <div
-                              class="w-2 h-2 bg-green-500 rounded-full mt-2"
-                            ></div>
-                            <div>
-                              <strong class="text-gray-900 dark:text-white"
-                                >Pa11y:</strong
-                              >
-                              <span
-                                class="text-gray-700 dark:text-gray-300 ml-2"
-                                >Command-line accessibility testing with WCAG
-                                compliance focus</span
-                              >
-                            </div>
-                          </div>
-                          <div class="flex items-start space-x-3">
-                            <div
-                              class="w-2 h-2 bg-purple-500 rounded-full mt-2"
-                            ></div>
-                            <div>
-                              <strong class="text-gray-900 dark:text-white"
-                                >Lighthouse:</strong
-                              >
-                              <span
-                                class="text-gray-700 dark:text-gray-300 ml-2"
-                                >Google's comprehensive audit including
-                                performance and SEO</span
-                              >
-                            </div>
-                          </div>
-                          <div class="flex items-start space-x-3">
-                            <div
-                              class="w-2 h-2 bg-orange-500 rounded-full mt-2"
-                            ></div>
-                            <div>
-                              <strong class="text-gray-900 dark:text-white"
-                                >IBM A11y:</strong
-                              >
-                              <span
-                                class="text-gray-700 dark:text-gray-300 ml-2"
-                                >Enterprise-grade accessibility testing with
-                                detailed remediation guidance</span
-                              >
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-
-                  <!-- AI Features -->
-                  <section id="ai-features" class="mb-12">
-                    <h2
-                      class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-                    >
-                      🤖 AI-Powered Features
-                    </h2>
-
-                    <div class="space-y-6">
-                      <div
-                        class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-lg"
-                      >
-                        <h3
-                          class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                        >
-                          How AI Recommendations Work
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div class="space-y-4">
-                            <div class="flex items-start space-x-3">
-                              <div
-                                class="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold"
-                              >
-                                1
-                              </div>
-                              <p
-                                class="text-gray-700 dark:text-gray-300 text-sm"
-                              >
-                                AI analyzes each issue in the context of your
-                                specific website
-                              </p>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                              <div
-                                class="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold"
-                              >
-                                2
-                              </div>
-                              <p
-                                class="text-gray-700 dark:text-gray-300 text-sm"
-                              >
-                                Provides clear explanations of why each issue
-                                matters
-                              </p>
-                            </div>
-                          </div>
-                          <div class="space-y-4">
-                            <div class="flex items-start space-x-3">
-                              <div
-                                class="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold"
-                              >
-                                3
-                              </div>
-                              <p
-                                class="text-gray-700 dark:text-gray-300 text-sm"
-                              >
-                                Offers step-by-step implementation guidance
-                              </p>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                              <div
-                                class="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold"
-                              >
-                                4
-                              </div>
-                              <p
-                                class="text-gray-700 dark:text-gray-300 text-sm"
-                              >
-                                Includes technical terms glossary and related
-                                resources
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div
-                          class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
-                        >
-                          <h4
-                            class="font-semibold text-blue-800 dark:text-blue-200 mb-2"
-                          >
-                            🔧 Technical Fixes
-                          </h4>
-                          <p class="text-sm text-blue-700 dark:text-blue-300">
-                            Code examples and implementation details for
-                            developers
-                          </p>
-                        </div>
-                        <div
-                          class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg"
-                        >
-                          <h4
-                            class="font-semibold text-green-800 dark:text-green-200 mb-2"
-                          >
-                            📝 Content Improvements
-                          </h4>
-                          <p class="text-sm text-green-700 dark:text-green-300">
-                            Writing and content structure optimization
-                            suggestions
-                          </p>
-                        </div>
-                        <div
-                          class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg"
-                        >
-                          <h4
-                            class="font-semibold text-purple-800 dark:text-purple-200 mb-2"
-                          >
-                            🎨 Design Enhancements
-                          </h4>
-                          <p
-                            class="text-sm text-purple-700 dark:text-purple-300"
-                          >
-                            Visual and user experience improvement
-                            recommendations
-                          </p>
-                        </div>
-                        <div
-                          class="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg"
-                        >
-                          <h4
-                            class="font-semibold text-orange-800 dark:text-orange-200 mb-2"
-                          >
-                            ⚡ Performance Optimizations
-                          </h4>
-                          <p
-                            class="text-sm text-orange-700 dark:text-orange-300"
-                          >
-                            Speed and efficiency improvement strategies
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-
-                  <!-- Settings -->
-                  <section id="settings" class="mb-12">
-                    <h2
-                      class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-                    >
-                      ⚙️ Settings & Configuration
-                    </h2>
-
-                    <div class="space-y-6">
-                      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-                        <h3
-                          class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
-                        >
-                          API Configuration
-                        </h3>
-                        <div class="space-y-4">
-                          <div
-                            class="border border-gray-200 dark:border-gray-600 p-4 rounded-lg"
-                          >
-                            <h4
-                              class="font-semibold text-gray-900 dark:text-white mb-2"
-                            >
-                              WAVE API Key
-                            </h4>
-                            <p
-                              class="text-gray-600 dark:text-gray-400 text-sm mb-2"
-                            >
-                              Required for WAVE accessibility testing
-                            </p>
-                            <a
-                              href="https://wave.webaim.org/api/"
-                              target="_blank"
-                              class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                            >
-                              Get your free API key →
-                            </a>
-                          </div>
-                          <div
-                            class="border border-gray-200 dark:border-gray-600 p-4 rounded-lg"
-                          >
-                            <h4
-                              class="font-semibold text-gray-900 dark:text-white mb-2"
-                            >
-                              Gemini AI API Key
-                            </h4>
-                            <p
-                              class="text-gray-600 dark:text-gray-400 text-sm mb-2"
-                            >
-                              Required for AI-powered recommendations
-                            </p>
-                            <a
-                              href="https://makersuite.google.com/app/apikey"
-                              target="_blank"
-                              class="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                            >
-                              Get your API key from Google AI Studio →
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div
-                        class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg"
-                      >
-                        <h4
-                          class="font-semibold text-blue-800 dark:text-blue-200 mb-2"
-                        >
-                          Display Preferences
-                        </h4>
-                        <ul
-                          class="text-sm text-blue-700 dark:text-blue-300 space-y-1"
-                        >
-                          <li>
-                            • <strong>Theme:</strong> Switch between light and
-                            dark modes
-                          </li>
-                          <li>
-                            • <strong>Visual Reports:</strong> Enable/disable
-                            embedded WAVE visual reports
-                          </li>
-                          <li>
-                            • <strong>History Tracking:</strong> Control whether
-                            scans are saved to history
-                          </li>
-                          <li>
-                            • <strong>Advanced Options:</strong> Show/hide
-                            advanced configuration options
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </section>
-
-                  <!-- Troubleshooting -->
-                  <section id="troubleshooting" class="mb-12">
-                    <h2
-                      class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-                    >
-                      🔧 Troubleshooting
-                    </h2>
-
-                    <div class="space-y-4">
-                      <div
-                        class="border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4 rounded-lg"
-                      >
-                        <h4
-                          class="font-semibold text-red-800 dark:text-red-200 mb-2"
-                        >
-                          ❌ Scan Failed or Timed Out
-                        </h4>
-                        <div
-                          class="text-sm text-red-700 dark:text-red-300 space-y-2"
-                        >
-                          <p>
-                            <strong>Common causes:</strong> Website down,
-                            incorrect URL, blocked automated tools, network
-                            issues
-                          </p>
-                          <p>
-                            <strong>Solutions:</strong> Verify URL, try
-                            different page, check website accessibility, wait
-                            and retry
-                          </p>
-                        </div>
-                      </div>
-
-                      <div
-                        class="border border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg"
-                      >
-                        <h4
-                          class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2"
-                        >
-                          ⚠️ Missing API Key Errors
-                        </h4>
-                        <div
-                          class="text-sm text-yellow-700 dark:text-yellow-300"
-                        >
-                          <p>
-                            <strong>Solution:</strong> Configure your API keys
-                            in the Settings section for WAVE and Gemini AI
-                            services
-                          </p>
-                        </div>
-                      </div>
-
-                      <div
-                        class="border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg"
-                      >
-                        <h4
-                          class="font-semibold text-blue-800 dark:text-blue-200 mb-2"
-                        >
-                          ℹ️ Slow Performance
-                        </h4>
-                        <div class="text-sm text-blue-700 dark:text-blue-300">
-                          <p>
-                            <strong>Tips:</strong> Select fewer tools, disable
-                            visual reports, test smaller pages, clear browser
-                            cache
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-
-                  <!-- Best Practices -->
-                  <section id="best-practices" class="mb-12">
-                    <h2
-                      class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-                    >
-                      💡 Best Practices
-                    </h2>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div class="space-y-4">
-                        <div
-                          class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg"
-                        >
-                          <h4
-                            class="font-semibold text-green-800 dark:text-green-200 mb-2"
-                          >
-                            🎯 Testing Strategy
-                          </h4>
-                          <ul
-                            class="text-sm text-green-700 dark:text-green-300 space-y-1"
-                          >
-                            <li>• Test key pages regularly</li>
-                            <li>
-                              • Use multiple tools for comprehensive coverage
-                            </li>
-                            <li>• Test after major updates</li>
-                            <li>• Monitor trends over time</li>
-                          </ul>
-                        </div>
-
-                        <div
-                          class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg"
-                        >
-                          <h4
-                            class="font-semibold text-blue-800 dark:text-blue-200 mb-2"
-                          >
-                            📊 Result Analysis
-                          </h4>
-                          <ul
-                            class="text-sm text-blue-700 dark:text-blue-300 space-y-1"
-                          >
-                            <li>• Prioritize errors over warnings</li>
-                            <li>• Focus on high-impact issues first</li>
-                            <li>• Use AI recommendations for guidance</li>
-                            <li>• Track improvement over time</li>
-                          </ul>
-                        </div>
-                      </div>
-
-                      <div class="space-y-4">
-                        <div
-                          class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg"
-                        >
-                          <h4
-                            class="font-semibold text-purple-800 dark:text-purple-200 mb-2"
-                          >
-                            🔄 Workflow Integration
-                          </h4>
-                          <ul
-                            class="text-sm text-purple-700 dark:text-purple-300 space-y-1"
-                          >
-                            <li>• Include in development process</li>
-                            <li>• Set up regular scanning schedule</li>
-                            <li>• Share results with team</li>
-                            <li>• Document improvements made</li>
-                          </ul>
-                        </div>
-
-                        <div
-                          class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg"
-                        >
-                          <h4
-                            class="font-semibold text-orange-800 dark:text-orange-200 mb-2"
-                          >
-                            ⚡ Performance Tips
-                          </h4>
-                          <ul
-                            class="text-sm text-orange-700 dark:text-orange-300 space-y-1"
-                          >
-                            <li>• Start with fewer tools for speed</li>
-                            <li>• Test during off-peak hours</li>
-                            <li>• Use saved reports for comparison</li>
-                            <li>• Export data for external analysis</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-
-                  <!-- FAQ -->
-                  <section id="faq" class="mb-12">
-                    <h2
-                      class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center"
-                    >
-                      ❓ Frequently Asked Questions
-                    </h2>
-
-                    <div class="space-y-4">
-                      <div
-                        class="border-b border-gray-200 dark:border-gray-600 pb-4"
-                      >
-                        <h4
-                          class="font-semibold text-gray-900 dark:text-white mb-2"
-                        >
-                          Q: How accurate are the accessibility test results?
-                        </h4>
-                        <p class="text-gray-700 dark:text-gray-300 text-sm">
-                          A: The dashboard uses industry-standard tools that
-                          catch about 30-40% of accessibility issues. Manual
-                          testing is still recommended for comprehensive audits.
-                        </p>
-                      </div>
-
-                      <div
-                        class="border-b border-gray-200 dark:border-gray-600 pb-4"
-                      >
-                        <h4
-                          class="font-semibold text-gray-900 dark:text-white mb-2"
-                        >
-                          Q: Can I test password-protected websites?
-                        </h4>
-                        <p class="text-gray-700 dark:text-gray-300 text-sm">
-                          A: Currently, only publicly accessible websites can be
-                          tested. For internal sites, make them temporarily
-                          accessible or use tools locally.
-                        </p>
-                      </div>
-
-                      <div
-                        class="border-b border-gray-200 dark:border-gray-600 pb-4"
-                      >
-                        <h4
-                          class="font-semibold text-gray-900 dark:text-white mb-2"
-                        >
-                          Q: How often should I run scans?
-                        </h4>
-                        <p class="text-gray-700 dark:text-gray-300 text-sm">
-                          A: Run scans after significant changes and at least
-                          monthly for active websites. For development, consider
-                          scanning with each deployment.
-                        </p>
-                      </div>
-
-                      <div
-                        class="border-b border-gray-200 dark:border-gray-600 pb-4"
-                      >
-                        <h4
-                          class="font-semibold text-gray-900 dark:text-white mb-2"
-                        >
-                          Q: Are my scan results stored securely?
-                        </h4>
-                        <p class="text-gray-700 dark:text-gray-300 text-sm">
-                          A: Results are stored locally in your browser. No data
-                          is sent to external servers except for API calls to
-                          testing services.
-                        </p>
-                      </div>
-
-                      <div class="pb-4">
-                        <h4
-                          class="font-semibold text-gray-900 dark:text-white mb-2"
-                        >
-                          Q: What browsers are supported?
-                        </h4>
-                        <p class="text-gray-700 dark:text-gray-300 text-sm">
-                          A: Works best in modern browsers (Chrome, Firefox,
-                          Safari, Edge). Some features may not work in older
-                          versions.
-                        </p>
-                      </div>
-                    </div>
-                  </section>
-
-                  <!-- Footer -->
-                  <div
-                    class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700 text-center"
-                  >
-                    <div
-                      class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-lg"
-                    >
-                      <h3
-                        class="text-lg font-semibold text-gray-900 dark:text-white mb-2"
-                      >
-                        Need More Help?
-                      </h3>
-                      <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        This dashboard is designed to make web accessibility and
-                        SEO testing accessible to everyone.
+                      <p v-if="analysisProgress.accessibility.currentTool" class="text-xs text-gray-500 dark:text-gray-400">
+                        Current: {{ analysisProgress.accessibility.currentTool }}
                       </p>
-                      <div class="flex justify-center space-x-4 text-sm">
-                        <span class="text-gray-500 dark:text-gray-400"
-                          >Made with ❤️ for better web accessibility</span
-                        >
-                      </div>
                     </div>
+                  </div>
+                  
+                  <!-- Detailed progress for SEO -->
+                  <div v-if="analysisTypes.seo" class="space-y-4 mt-6">
+                    <div class="space-y-2">
+                      <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">SEO Analysis</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">
+                          {{ analysisProgress.seo.completed }}/{{ analysisProgress.seo.total }} steps
+                        </span>
+                      </div>
+                      <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div class="bg-green-600 h-2 rounded-full transition-all duration-300" :style="{ width: `${(analysisProgress.seo.completed / analysisProgress.seo.total) * 100}%` }"></div>
+                      </div>
+                      <p v-if="analysisProgress.seo.currentStep" class="text-xs text-gray-500 dark:text-gray-400">
+                        Current: {{ analysisProgress.seo.currentStep }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Results Section -->
+            <div v-if="scanCompleted" class="mt-8">
+              <!-- Dashboard Selection Buttons -->
+              <div class="max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-white mb-6 text-center">
+                  Choose Your Dashboard View
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <!-- SEO Dashboard Button -->
+                  <div v-if="seoAnalysisResults" class="group">
+                    <button
+                      @click="currentView = 'seo-analysis'"
+                      class="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/20 transition-all duration-300 group-hover:scale-105"
+                    >
+                      <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-400 transition-colors">
+                          <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">SEO Analysis</h3>
+                        <p class="text-blue-100 text-sm mb-4">
+                          View detailed SEO metrics, performance scores, and optimization recommendations
+                        </p>
+                        <div class="flex items-center justify-center space-x-4 text-xs text-blue-200">
+                          <span class="flex items-center">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-1"></span>
+                            Performance
+                          </span>
+                          <span class="flex items-center">
+                            <span class="w-2 h-2 bg-yellow-400 rounded-full mr-1"></span>
+                            SEO Score
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+
+                  <!-- Accessibility Dashboard Button -->
+                  <div v-if="results.length > 0" class="group">
+                    <button
+                      @click="currentView = 'accessibility-analysis'"
+                      class="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/20 transition-all duration-300 group-hover:scale-105"
+                    >
+                      <div class="text-center">
+                        <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-400 transition-colors">
+                          <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Accessibility Analysis</h3>
+                        <p class="text-purple-100 text-sm mb-4">
+                          Review accessibility issues, compliance status, and improvement suggestions
+                        </p>
+                        <div class="flex items-center justify-center space-x-4 text-xs text-purple-200">
+                          <span class="flex items-center">
+                            <span class="w-2 h-2 bg-red-400 rounded-full mr-1"></span>
+                            {{ results.filter(r => r.type === 'error').length }} Errors
+                          </span>
+                          <span class="flex items-center">
+                            <span class="w-2 h-2 bg-yellow-400 rounded-full mr-1"></span>
+                            {{ results.filter(r => r.type === 'warning').length }} Warnings
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+
+                  <!-- Combined Dashboard Button -->
+                  <div v-if="seoAnalysisResults && results.length > 0" class="group">
+                    <button
+                      @click="currentView = 'combined-dashboard'"
+                      class="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:bg-white/20 transition-all duration-300 group-hover:scale-105"
+                    >
+                      <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:from-blue-400 group-hover:to-purple-400 transition-all">
+                          <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                          </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Combined Dashboard</h3>
+                        <p class="text-blue-100 text-sm mb-4">
+                          Comprehensive view with both SEO and accessibility metrics in one dashboard
+                        </p>
+                        <div class="flex items-center justify-center space-x-4 text-xs text-blue-200">
+                          <span class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-1"></span>
+                            SEO + A11y
+                          </span>
+                          <span class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-1"></span>
+                            Unified View
+                          </span>
+                        </div>
+                      </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -3103,7 +426,99 @@
               :accessibility-results="results"
               :accessibility-summary="accessibilitySummary"
               :seo-summary="seoSummary"
+              :analyzed-url="url"
             />
+          </div>
+
+          <div v-else-if="currentView === 'seo-analysis'">
+            <SEOAnalysis 
+              :url="url" 
+              :initial-analysis="seoAnalysisResults" 
+              @back-to-dashboard="currentView = 'dashboard'"
+            />
+          </div>
+
+          <div v-else-if="currentView === 'accessibility-analysis'">
+            <div class="max-w-7xl mx-auto">
+              <div class="mb-6">
+                <button
+                  @click="currentView = 'dashboard'"
+                  class="flex items-center text-white hover:text-purple-200 transition-colors mb-4"
+                >
+                  <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to Dashboard
+                </button>
+                <h1 class="text-3xl font-bold text-white">Accessibility Analysis Results</h1>
+                <p class="text-purple-100 mt-2">Accessibility issues and compliance recommendations</p>
+              </div>
+              <AccessibilityAnalysis 
+                :results="results" 
+                :selectedTools="selectedTools"
+                :scanCompleted="scanCompleted"
+                :visualReport="visualReport"
+                :waveReportUrl="waveReportUrl"
+                :isLoading="isLoading"
+              />
+            </div>
+          </div>
+
+          <div v-else-if="currentView === 'settings'">
+            <div class="max-w-7xl mx-auto">
+              <div class="mb-6">
+                <button
+                  @click="currentView = 'dashboard'"
+                  class="flex items-center text-white hover:text-blue-200 transition-colors mb-4"
+                >
+                  <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to Dashboard
+                </button>
+                <h1 class="text-3xl font-bold text-white">Settings</h1>
+                <p class="text-blue-100 mt-2">Configure your dashboard settings</p>
+              </div>
+              <Settings />
+            </div>
+          </div>
+
+          <div v-else-if="currentView === 'help'">
+            <div class="max-w-7xl mx-auto">
+              <div class="mb-6">
+                <button
+                  @click="currentView = 'dashboard'"
+                  class="flex items-center text-white hover:text-green-200 transition-colors mb-4"
+                >
+                  <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to Dashboard
+                </button>
+                <h1 class="text-3xl font-bold text-white">Help & Support</h1>
+                <p class="text-green-100 mt-2">Get help and learn how to use the dashboard</p>
+              </div>
+              <Help />
+            </div>
+          </div>
+
+          <div v-else-if="currentView === 'saved-reports'">
+            <div class="max-w-7xl mx-auto">
+              <div class="mb-6">
+                <button
+                  @click="currentView = 'dashboard'"
+                  class="flex items-center text-white hover:text-yellow-200 transition-colors mb-4"
+                >
+                  <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to Dashboard
+                </button>
+                <h1 class="text-3xl font-bold text-white">Saved Reports</h1>
+                <p class="text-yellow-100 mt-2">View and manage your saved analysis reports</p>
+              </div>
+              <Bookmarks />
+            </div>
           </div>
         </main>
       </div>
@@ -3124,6 +539,9 @@ import SEOAnalysis from "./pages/seo-analysis.vue";
 import { nanoid } from "nanoid/non-secure";
 import CombinedDashboard from "./pages/combined-dashboard.vue";
 import type { SEOAnalysis as SEOAnalysisType } from "./utils/seo/SEOAnalyzer";
+import Settings from "./pages/settings.vue";
+import Help from "./pages/help.vue";
+import Bookmarks from "./pages/bookmarks.vue";
 
 // Define the Issue type
 interface Issue {
@@ -3160,6 +578,7 @@ interface ScanSummary {
   warnings: number;
   notices: number;
   tools: string[];
+  scannedPages: number;
   issues: Partial<Issue>[];
   pageTitle?: string;
   timestamp: number;
@@ -3230,6 +649,8 @@ const settings = ref({
 const showAdvancedOptions = ref(false);
 const targetUrl = ref("");
 const selectedGoal = ref("");
+const enableCrawling = ref(false);
+const scannedPages = ref(0);
 
 // Add this function to safely access localStorage
 function getLocalStorage(key: string, defaultValue: string = ""): string {
@@ -3260,8 +681,17 @@ onMounted(() => {
   // Initialize with default tools
   selectedTools.value = [...defaultTools];
 
-  // Load settings
+  // Load settings from localStorage
   settings.value.waveApiKey = getLocalStorage("waveApiKey");
+  console.log("Loaded WAVE API key:", settings.value.waveApiKey ? "Configured" : "Not configured");
+
+  // Listen for WAVE API key updates from settings page
+  const handleWaveApiKeyUpdate = (event: CustomEvent) => {
+    settings.value.waveApiKey = event.detail.apiKey;
+    console.log("WAVE API key updated:", settings.value.waveApiKey ? "Configured" : "Not configured");
+  };
+  
+  window.addEventListener('waveApiKeyUpdated', handleWaveApiKeyUpdate as EventListener);
 
   // Load recent scans
   try {
@@ -3273,6 +703,20 @@ onMounted(() => {
 
   // Load saved reports
   loadSavedReports();
+
+  // On mount, ensure 'seo' is in selectedTools if analysisTypes.seo is true
+  if (analysisTypes.value.seo && !selectedTools.value.includes('seo')) {
+    selectedTools.value.push('seo');
+  }
+  if (analysisTypes.value.accessibility) {
+    const accessibilityToolIds = availableTools.map(t => t.id);
+    if (!selectedTools.value.some(t => accessibilityToolIds.includes(t))) {
+      selectedTools.value = [
+        ...selectedTools.value,
+        ...accessibilityToolIds.filter(t => !selectedTools.value.includes(t))
+      ];
+    }
+  }
 });
 
 // Handle scan from recent scans list
@@ -3293,6 +737,19 @@ function handleNavigation(view: string) {
   // Handle specific views
   if (view === "saved-reports") {
     loadSavedReports();
+    // Ensure the page is responsive by triggering a refresh
+    setTimeout(() => {
+      const bookmarksComponent = document.querySelector('[data-page="saved-reports"]');
+      if (bookmarksComponent && typeof bookmarksComponent.loadReports === 'function') {
+        bookmarksComponent.loadReports();
+      }
+    }, 100);
+  } else if (view === "settings") {
+    // Load settings from localStorage to ensure they're available
+    settings.value.waveApiKey = getLocalStorage("waveApiKey");
+  } else if (view === "help") {
+    // Help page is static content, no special handling needed
+    console.log("Help page loaded");
   } else if (view === "dashboard") {
     // Reset analysis states when going back to dashboard
     scanCompleted.value = false;
@@ -3344,7 +801,7 @@ function handleRescan(rescanUrl: string) {
   analysisComplete.value = false;
   error.value = "";
   // Run the analysis
-  runAnalyses();
+  runScan();
 }
 
 // Toggle individual issue details
@@ -3500,6 +957,154 @@ watch(currentView, (newView) => {
   }
 });
 
+// Update the runScan function to better handle multi-page analysis
+async function runScan() {
+  if (!url.value.trim()) {
+    error.value = "Please enter a valid URL";
+    return;
+  }
+
+  // Reset state
+  results.value = [];
+  error.value = null;
+  isLoading.value = true;
+  scanCompleted.value = false;
+  scannedPages.value = 0;
+  waveReportUrl.value = "";
+
+  // Reset progress
+  analysisProgress.value = {
+    accessibility: { 
+      currentStep: 0, 
+      completed: 0, 
+      status: "Starting...", 
+      total: selectedTools.value.filter(t => t !== 'seo').length 
+    },
+    seo: { 
+      currentStep: 0, 
+      completed: 0, 
+      status: "Starting...", 
+      total: selectedTools.value.includes('seo') ? 1 : 0 
+    },
+    overall: 0
+  };
+  
+  console.log("Progress initialized:", {
+    accessibility: analysisProgress.value.accessibility,
+    seo: analysisProgress.value.seo,
+    selectedTools: selectedTools.value
+  });
+
+  try {
+    console.log("Starting scan with settings:", {
+      url: url.value,
+      selectedTools: selectedTools.value,
+      enableCrawling: enableCrawling.value,
+      maxPages: enableCrawling.value ? 20 : 1
+    });
+    
+    // Debug: Log the actual enableCrawling value
+    console.log("enableCrawling.value:", enableCrawling.value);
+    console.log("typeof enableCrawling.value:", typeof enableCrawling.value);
+
+    const allIssues: Issue[] = [];
+    let hasErrors = false;
+
+    // Run accessibility tools sequentially to update progress
+    const accessibilityTools = selectedTools.value.filter(t => t !== 'seo');
+    for (const tool of accessibilityTools) {
+      try {
+        analysisProgress.value.accessibility.status = `Running ${tool} analysis...`;
+        analysisProgress.value.accessibility.currentStep = tool;
+        
+        let toolResults;
+        if (tool === "pa11y") {
+          toolResults = await runPa11yScan();
+        } else if (tool === "wave") {
+          toolResults = await runWaveScan();
+        } else if (tool === "lighthouse") {
+          toolResults = await runLighthouseScan();
+        } else if (tool === "ibm-a11y") {
+          toolResults = await runIbmA11yScan();
+        }
+
+        if (toolResults && Array.isArray(toolResults)) {
+          allIssues.push(...toolResults);
+        }
+        
+        analysisProgress.value.accessibility.completed++;
+        updateOverallProgress();
+        
+      } catch (toolError: any) {
+        console.error(`${tool} scan error:`, toolError);
+        hasErrors = true;
+        error.value = `${tool} scan failed: ${toolError.message || "Unknown error"}`;
+        analysisProgress.value.accessibility.completed++;
+        updateOverallProgress();
+      }
+    }
+
+    // Run SEO analysis if selected
+    if (selectedTools.value.includes("seo")) {
+      try {
+        analysisProgress.value.seo.status = "Running SEO analysis...";
+        const seoResults = await runSEOAnalysis();
+        
+        if (seoResults && seoResults.issues) {
+          // Convert SEO issues to the same format as accessibility issues
+          const seoIssues = seoResults.issues.map((issue: any) => ({
+            type: issue.type || 'warning',
+            code: issue.code || 'SEO-ISSUE',
+            message: issue.message || issue.description || 'SEO issue found',
+            context: issue.context || '',
+            source: 'seo',
+            selector: issue.selector || '',
+            detail: issue.detail || issue.explanation || '',
+            pageUrl: issue.pageUrl || url.value,
+          }));
+          allIssues.push(...seoIssues);
+        }
+        
+        // Store SEO results separately for the dashboard
+        seoAnalysisResults.value = seoResults;
+        console.log("SEO results stored:", seoAnalysisResults.value);
+        
+        analysisProgress.value.seo.completed = 1;
+        analysisProgress.value.seo.status = "SEO analysis complete";
+        updateOverallProgress();
+        
+      } catch (seoError: any) {
+        console.error("SEO analysis error:", seoError);
+        hasErrors = true;
+        error.value = `SEO analysis failed: ${seoError.message || "Unknown error"}`;
+        analysisProgress.value.seo.completed = 1;
+        updateOverallProgress();
+      }
+    }
+
+    if (allIssues.length > 0 || !hasErrors) {
+      results.value = allIssues;
+      scanCompleted.value = true;
+      saveToRecentScans(url.value);
+      
+      console.log(`Scan completed successfully. Found ${allIssues.length} issues across ${scannedPages.value} pages.`);
+      console.log("Final scannedPages value:", scannedPages.value);
+      console.log("Final seoAnalysisResults:", seoAnalysisResults.value);
+    }
+
+    // Update progress to complete
+    analysisProgress.value.accessibility.status = "Complete";
+    analysisProgress.value.seo.status = "Complete";
+    updateOverallProgress();
+
+  } catch (err: any) {
+    console.error("Scan error:", err);
+    error.value = err.message || "An unexpected error occurred during the scan";
+  } finally {
+    isLoading.value = false;
+  }
+}
+
 // Run an accessibility scan
 async function runAnalyses() {
   if (!url.value) return;
@@ -3512,6 +1117,7 @@ async function runAnalyses() {
   scanCompleted.value = false;
   visualReport.value = true;
   waveReportUrl.value = "";
+  scannedPages.value = 0;
 
   // Reset progress
   analysisProgress.value = {
@@ -3617,41 +1223,86 @@ async function runAnalyses() {
 
 // Add this helper function
 function updateOverallProgress() {
-  const totalSteps =
-    (analysisTypes.value.accessibility
-      ? analysisProgress.value.accessibility.total
-      : 0) + (analysisTypes.value.seo ? analysisProgress.value.seo.total : 0);
-
-  const completedSteps =
-    analysisProgress.value.accessibility.completed +
-    analysisProgress.value.seo.completed;
-
-  analysisProgress.value.overall = Math.round(
-    (completedSteps / totalSteps) * 100
-  );
+  const totalSteps = analysisProgress.value.accessibility.total + analysisProgress.value.seo.total;
+  const completedSteps = analysisProgress.value.accessibility.completed + analysisProgress.value.seo.completed;
+  
+  console.log("Progress update:", {
+    accessibility: {
+      total: analysisProgress.value.accessibility.total,
+      completed: analysisProgress.value.accessibility.completed,
+      status: analysisProgress.value.accessibility.status
+    },
+    seo: {
+      total: analysisProgress.value.seo.total,
+      completed: analysisProgress.value.seo.completed,
+      status: analysisProgress.value.seo.status
+    },
+    totalSteps,
+    completedSteps
+  });
+  
+  if (totalSteps > 0) {
+    analysisProgress.value.overall = Math.round((completedSteps / totalSteps) * 100);
+  } else {
+    analysisProgress.value.overall = 0;
+  }
+  
+  console.log("Overall progress:", analysisProgress.value.overall + "%");
 }
 
-// Update the runPa11yScan function to return results
+// Update the runPa11yScan function to support crawling
 async function runPa11yScan() {
   try {
     console.log("Running Pa11y scan on:", url.value);
-    const response = await axios.post("/api/pa11y", {
-      url: url.value,
-      standard: "WCAG2AA",
-      includeNotices: true,
-      includeWarnings: true,
-      timeout: 30000,
-    });
-
-    if (response.data?.pages?.[0]?.issues) {
-      return response.data.pages[0].issues.map((issue: any) => ({
-        ...issue,
-        source: "pa11y",
-      }));
+    console.log("enableCrawling.value in runPa11yScan:", enableCrawling.value);
+    
+    if (enableCrawling.value) {
+      console.log("Using crawl API for multi-page analysis");
+      // Use crawl API for multi-page analysis
+      const response = await axios.post("/api/crawl", {
+        url: url.value,
+        maxPages: 5,
+        tools: ["pa11y"]
+      });
+      if (response.data?.pages) {
+        // Update progress
+        scannedPages.value = response.data.pages.length;
+        console.log(`Crawl API returned ${response.data.pages.length} pages`);
+        
+        // Flatten all issues from all pages
+        const allIssues = [];
+        response.data.pages.forEach(page => {
+          if (page.toolResults?.pa11y?.success && page.toolResults.pa11y.result?.issues) {
+            const pageIssues = page.toolResults.pa11y.result.issues.map((issue) => ({
+              ...issue,
+              source: "pa11y",
+              pageUrl: page.url
+            }));
+            allIssues.push(...pageIssues);
+          }
+        });
+        console.log(`Total issues from crawl: ${allIssues.length}`);
+        return allIssues;
+      } else {
+        throw new Error("Invalid response format from crawl API");
+      }
     } else {
-      throw new Error("Invalid response format from Pa11y API");
+      console.log("Using single page API");
+      // Single page scan (existing logic)
+      scannedPages.value = 1;
+      const response = await axios.post("/api/pa11y", {
+        url: url.value,
+      });
+      if (response.data?.pages?.[0]?.issues) {
+        return response.data.pages[0].issues.map((issue) => ({
+          ...issue,
+          source: "pa11y",
+        }));
+      } else {
+        throw new Error("Invalid response format from Pa11y API");
+      }
     }
-  } catch (err: any) {
+  } catch (err) {
     console.error("Pa11y scan error:", err);
     throw new Error(
       err.response?.data?.error || err.message || "Pa11y scan failed"
@@ -3659,110 +1310,205 @@ async function runPa11yScan() {
   }
 }
 
-// Update the runWaveScan function to return results
+// Update the runWaveScan function to support crawling
 async function runWaveScan() {
   try {
     console.log("Running WAVE scan on:", url.value);
-    const response = await axios.post("/api/wave", {
-      url: url.value,
-      apiKey: settings.value.waveApiKey,
-    });
-
-    // Check for different possible response formats
-    if (response.data) {
-      let issues = [];
-
-      // Handle different WAVE API response formats
-      if (response.data.issues) {
-        // Direct issues array
-        issues = response.data.issues;
-      } else if (response.data.categories) {
-        // Grouped by categories
-        Object.values(response.data.categories).forEach((category: any) => {
-          if (category.items) {
-            issues = issues.concat(category.items);
+    console.log("WAVE API key status:", settings.value.waveApiKey ? "Present" : "Missing");
+    console.log("WAVE API key length:", settings.value.waveApiKey ? settings.value.waveApiKey.length : 0);
+    
+    // Check if WAVE API key is configured
+    if (!settings.value.waveApiKey || settings.value.waveApiKey.trim() === '') {
+      throw new Error("WAVE API key is not configured. Please go to Settings and add your WAVE API key.");
+    }
+    
+    console.log("Making WAVE API call with key:", settings.value.waveApiKey.substring(0, 8) + "...");
+    
+    if (enableCrawling.value) {
+      // Use crawl API for multi-page analysis
+      const response = await axios.post("/api/crawl", {
+        url: url.value,
+        maxPages: 5,
+        tools: ["wave"],
+        waveApiKey: settings.value.waveApiKey
+      });
+      if (response.data?.pages) {
+        // Update progress
+        scannedPages.value = response.data.pages.length;
+        
+        // Flatten all issues from all pages
+        const allIssues = [];
+        response.data.pages.forEach(page => {
+          if (page.toolResults?.wave?.success && page.toolResults.wave.result?.issues) {
+            const pageIssues = page.toolResults.wave.result.issues.map((issue) => ({
+              ...issue,
+              source: "wave",
+              pageUrl: page.url
+            }));
+            allIssues.push(...pageIssues);
           }
         });
-      } else if (response.data.summary) {
-        // Summary format with nested issues
-        if (response.data.summary.errors) {
-          issues = issues.concat(
-            response.data.summary.errors.map((error: any) => ({
-              ...error,
-              type: "error",
-            }))
-          );
-        }
-        if (response.data.summary.warnings) {
-          issues = issues.concat(
-            response.data.summary.warnings.map((warning: any) => ({
-              ...warning,
-              type: "warning",
-            }))
-          );
-        }
-        if (response.data.summary.notices) {
-          issues = issues.concat(
-            response.data.summary.notices.map((notice: any) => ({
-              ...notice,
-              type: "notice",
-            }))
-          );
-        }
-      }
-
-      if (issues.length > 0) {
-        return issues.map((issue: any) => ({
-          type: issue.type || "notice",
-          code: issue.code || issue.id || "WAVE-UNKNOWN",
-          message: issue.message || issue.description || "No message provided",
-          context: issue.context || issue.html || "",
-          source: "wave",
-          selector: issue.selector || "",
-          detail: issue.detail || issue.explanation || "",
-        }));
+        return allIssues;
       } else {
-        console.log("WAVE scan completed with no issues found");
-        return [];
+        throw new Error("Invalid response format from crawl API");
       }
     } else {
-      throw new Error("Empty response from WAVE API");
+      // Single page scan (existing logic)
+      scannedPages.value = 1;
+      console.log("Making single page WAVE API call to /api/wave");
+      const response = await axios.post("/api/wave", {
+        url: url.value,
+        apiKey: settings.value.waveApiKey,
+      });
+      console.log("WAVE API response received:", response.status, response.data ? "Has data" : "No data");
+      
+      // Check for different possible response formats
+      if (response.data) {
+        let issues = [];
+        // Handle different WAVE API response formats
+        if (response.data.issues) {
+          // Direct issues array
+          issues = response.data.issues;
+        } else if (response.data.categories) {
+          // Grouped by categories
+          Object.values(response.data.categories).forEach((category) => {
+            if (category.items) {
+              issues = issues.concat(category.items);
+            }
+          });
+        } else if (response.data.summary) {
+          // Summary format with nested issues
+          if (response.data.summary.errors) {
+            issues = issues.concat(
+              response.data.summary.errors.map((error) => ({
+                ...error,
+                type: "error",
+              }))
+            );
+          }
+          if (response.data.summary.warnings) {
+            issues = issues.concat(
+              response.data.summary.warnings.map((warning) => ({
+                ...warning,
+                type: "warning",
+              }))
+            );
+          }
+          if (response.data.summary.notices) {
+            issues = issues.concat(
+              response.data.summary.notices.map((notice) => ({
+                ...notice,
+                type: "notice",
+              }))
+            );
+          }
+        }
+        if (issues.length > 0) {
+          return issues.map((issue) => ({
+            type: issue.type || "notice",
+            code: issue.code || issue.id || "WAVE-UNKNOWN",
+            message: issue.message || issue.description || "No message provided",
+            context: issue.context || issue.html || "",
+            source: "wave",
+            selector: issue.selector || "",
+            detail: issue.detail || issue.explanation || "",
+          }));
+        } else {
+          console.log("WAVE scan completed with no issues found");
+          return [];
+        }
+      } else {
+        throw new Error("Empty response from WAVE API");
+      }
     }
-  } catch (err: any) {
+  } catch (err) {
     console.error("WAVE scan error:", err);
-    if (err.response?.data?.error) {
-      throw new Error(`WAVE scan failed: ${err.response.data.error}`);
+    console.error("Error details:", {
+      message: err.message,
+      response: err.response?.data,
+      status: err.response?.status
+    });
+    
+    // Provide specific guidance based on error type
+    if (err.message && err.message.includes("WAVE API key is not configured")) {
+      throw new Error("WAVE API key is not configured. Please go to Settings and add your WAVE API key.");
+    } else if (err.response?.data?.error) {
+      if (err.response.data.error.includes("invalid key") || err.response.data.error.includes("unauthorized")) {
+        throw new Error("Invalid WAVE API key. Please check your key in Settings and try again.");
+      } else if (err.response.data.error.includes("quota") || err.response.data.error.includes("limit")) {
+        throw new Error("WAVE API quota exceeded. Please try again later or upgrade your WAVE account.");
+      } else {
+        throw new Error(`WAVE scan failed: ${err.response.data.error}`);
+      }
     } else if (err.message) {
       throw new Error(`WAVE scan failed: ${err.message}`);
     } else {
-      throw new Error("WAVE scan failed: Unknown error");
+      throw new Error("WAVE scan failed: Unknown error. Please check your internet connection and try again.");
     }
   }
 }
 
-// Update the runLighthouseScan function to return results
+// Update the runLighthouseScan function to support crawling
 async function runLighthouseScan() {
   try {
     console.log("Running Lighthouse scan on:", url.value);
-    const response = await axios.post("/api/lighthouse", {
-      url: url.value,
-      categories: ["accessibility"],
-    });
-
-    if (response.data?.audits) {
-      return response.data.audits
-        .filter((audit: any) => audit.score !== null && audit.score < 1)
-        .map((audit: any) => ({
-          type: audit.score === 0 ? "error" : "warning",
-          code: audit.id,
-          message: audit.title,
-          context: audit.description,
-          source: "lighthouse",
-          selector: audit.selector,
-          detail: audit.explanation,
-        }));
+    if (enableCrawling.value) {
+      // Use crawl API for multi-page analysis
+      const response = await axios.post("/api/crawl", {
+        url: url.value,
+        maxPages: 5,
+        tools: ["lighthouse"]
+      });
+      if (response.data?.pages) {
+        // Update progress
+        scannedPages.value = response.data.pages.length;
+        
+        // Flatten all issues from all pages
+        const allIssues = [];
+        response.data.pages.forEach(page => {
+          if (page.toolResults?.lighthouse?.success && page.toolResults.lighthouse.result?.audits) {
+            const pageIssues = page.toolResults.lighthouse.result.audits
+              .filter((audit: any) => audit.score !== null && audit.score < 1)
+              .map((audit: any) => ({
+                type: audit.score === 0 ? "error" : "warning",
+                code: audit.id,
+                message: audit.title,
+                context: audit.description,
+                source: "lighthouse",
+                selector: audit.selector,
+                detail: audit.explanation,
+                pageUrl: page.url
+              }));
+            allIssues.push(...pageIssues);
+          }
+        });
+        return allIssues;
+      } else {
+        throw new Error("Invalid response format from crawl API");
+      }
     } else {
-      throw new Error("Invalid response format from Lighthouse API");
+      // Single page scan (existing logic)
+      scannedPages.value = 1;
+      const response = await axios.post("/api/lighthouse", {
+        url: url.value,
+        categories: ["accessibility"],
+      });
+
+      if (response.data?.audits) {
+        return response.data.audits
+          .filter((audit: any) => audit.score !== null && audit.score < 1)
+          .map((audit: any) => ({
+            type: audit.score === 0 ? "error" : "warning",
+            code: audit.id,
+            message: audit.title,
+            context: audit.description,
+            source: "lighthouse",
+            selector: audit.selector,
+            detail: audit.explanation,
+          }));
+      } else {
+        throw new Error("Invalid response format from Lighthouse API");
+      }
     }
   } catch (err: any) {
     console.error("Lighthouse scan error:", err);
@@ -3772,21 +1518,52 @@ async function runLighthouseScan() {
   }
 }
 
-// Update the runIbmA11yScan function to return results
+// Update the runIbmA11yScan function to support crawling
 async function runIbmA11yScan() {
   try {
     console.log("Running IBM Accessibility Checker scan on:", url.value);
-    const response = await axios.post("/api/ibm-a11y", {
-      url: url.value,
-    });
-
-    if (response.data?.issues) {
-      return response.data.issues.map((issue: any) => ({
-        ...issue,
-        source: "ibm-a11y",
-      }));
+    if (enableCrawling.value) {
+      // Use crawl API for multi-page analysis
+      const response = await axios.post("/api/crawl", {
+        url: url.value,
+        maxPages: 5,
+        tools: ["ibm-a11y"]
+      });
+      if (response.data?.pages) {
+        // Update progress
+        scannedPages.value = response.data.pages.length;
+        
+        // Flatten all issues from all pages
+        const allIssues = [];
+        response.data.pages.forEach(page => {
+          if (page.toolResults?.["ibm-a11y"]?.success && page.toolResults["ibm-a11y"].result?.issues) {
+            const pageIssues = page.toolResults["ibm-a11y"].result.issues.map((issue: any) => ({
+              ...issue,
+              source: "ibm-a11y",
+              pageUrl: page.url
+            }));
+            allIssues.push(...pageIssues);
+          }
+        });
+        return allIssues;
+      } else {
+        throw new Error("Invalid response format from crawl API");
+      }
     } else {
-      throw new Error("Invalid response format from IBM A11y API");
+      // Single page scan (existing logic)
+      scannedPages.value = 1;
+      const response = await axios.post("/api/ibm-a11y", {
+        url: url.value,
+      });
+
+      if (response.data?.issues) {
+        return response.data.issues.map((issue: any) => ({
+          ...issue,
+          source: "ibm-a11y",
+        }));
+      } else {
+        throw new Error("Invalid response format from IBM A11y API");
+      }
     }
   } catch (err: any) {
     console.error("IBM A11y scan error:", err);
@@ -3831,6 +1608,7 @@ function saveFullScanHistory(scannedUrl: string) {
       warnings: warningCount.value,
       notices: noticeCount.value,
       tools: selectedTools.value,
+      scannedPages: scannedPages.value,
       issues: results.value.map((issue: Issue) => ({
         type: issue.type,
         code: issue.code,
@@ -3838,6 +1616,7 @@ function saveFullScanHistory(scannedUrl: string) {
         source: issue.source,
         context: issue.context ?? undefined,
         selector: issue.selector,
+        pageUrl: issue.pageUrl ?? undefined,
       })),
       pageTitle: typeof document !== "undefined" ? document.title : undefined,
       timestamp: Date.now(),
@@ -3898,6 +1677,7 @@ function loadReport(report: ScanSummary) {
 
   // Set the state based on the loaded report
   url.value = report.url;
+  scannedPages.value = report.scannedPages || 1;
   results.value = report.issues.map(
     (issue) =>
       ({
@@ -4059,30 +1839,208 @@ async function runSEOAnalysis() {
     analysisProgress.value.seo.currentStep = "all";
     analysisProgress.value.seo.status = "Analyzing SEO...";
 
-    const response = await fetch("/api/seo", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    if (enableCrawling.value) {
+      // Use crawl API for multi-page analysis
+      const response = await axios.post("/api/crawl", {
         url: url.value,
-      }),
-    });
+        maxPages: 5,
+        tools: ["seo"]
+      });
+      
+      if (response.data?.pages) {
+        // Update progress
+        scannedPages.value = response.data.pages.length;
+        
+        // Process SEO analysis for all pages
+        const allSeoResults = [];
+        for (const page of response.data.pages) {
+          if (page.toolResults?.seo?.success) {
+            allSeoResults.push({
+              ...page.toolResults.seo.result,
+              pageUrl: page.url
+            });
+          }
+        }
+        
+        // Combine results from all pages
+        const combinedSeoResults = combineSeoResults(allSeoResults);
+        seoAnalysisResults.value = combinedSeoResults;
+        analysisProgress.value.seo.completed = 1;
+        analysisProgress.value.seo.status = "SEO analysis complete";
+        updateOverallProgress();
+        return combinedSeoResults;
+      } else {
+        throw new Error("Invalid response format from crawl API");
+      }
+    } else {
+      // Single page scan (existing logic)
+      scannedPages.value = 1;
+      const response = await fetch("/api/seo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: url.value,
+        }),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to analyze SEO");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to analyze SEO");
+      }
+
+      const data = await response.json();
+      seoAnalysisResults.value = data;
+      analysisProgress.value.seo.completed = 1;
+      analysisProgress.value.seo.status = "SEO analysis complete";
+      updateOverallProgress();
+      return data;
     }
-
-    const data = await response.json();
-    seoAnalysisResults.value = data;
-    analysisProgress.value.seo.completed = 1;
-    analysisProgress.value.seo.status = "SEO analysis complete";
-    updateOverallProgress();
-    return data;
   } catch (err: any) {
     throw new Error(err.message || "Failed to complete SEO analysis");
   }
+}
+
+// Helper function to combine SEO results from multiple pages
+function combineSeoResults(seoResults: any[]) {
+  if (seoResults.length === 0) {
+    return null;
+  }
+  
+  if (seoResults.length === 1) {
+    return seoResults[0];
+  }
+  
+  // Combine metrics from all pages
+  const combinedMetrics = {
+    performance: {
+      loadTime: seoResults.reduce((sum, r) => sum + (r.metrics?.performance?.loadTime || 0), 0) / seoResults.length,
+      firstContentfulPaint: seoResults.reduce((sum, r) => sum + (r.metrics?.performance?.firstContentfulPaint || 0), 0) / seoResults.length,
+      largestContentfulPaint: seoResults.reduce((sum, r) => sum + (r.metrics?.performance?.largestContentfulPaint || 0), 0) / seoResults.length,
+      timeToInteractive: seoResults.reduce((sum, r) => sum + (r.metrics?.performance?.timeToInteractive || 0), 0) / seoResults.length,
+    },
+    content: {
+      wordCount: seoResults.reduce((sum, r) => sum + (r.metrics?.content?.wordCount || 0), 0),
+      keywordDensity: combineKeywordDensity(seoResults.map(r => r.metrics?.content?.keywordDensity || {})),
+    },
+    technical: {
+      images: {
+        total: seoResults.reduce((sum, r) => sum + (r.metrics?.technical?.images?.total || 0), 0),
+        withAlt: seoResults.reduce((sum, r) => sum + (r.metrics?.technical?.images?.withAlt || 0), 0),
+        withoutAlt: seoResults.reduce((sum, r) => sum + (r.metrics?.technical?.images?.withoutAlt || 0), 0),
+      },
+      links: {
+        internal: seoResults.reduce((sum, r) => sum + (r.metrics?.technical?.links?.internal || 0), 0),
+        external: seoResults.reduce((sum, r) => sum + (r.metrics?.technical?.links?.external || 0), 0),
+        broken: seoResults.reduce((sum, r) => sum + (r.metrics?.technical?.links?.broken || 0), 0),
+      },
+      headings: {
+        h1: seoResults.reduce((sum, r) => sum + (r.metrics?.technical?.headings?.h1 || 0), 0),
+        h2: seoResults.reduce((sum, r) => sum + (r.metrics?.technical?.headings?.h2 || 0), 0),
+        h3: seoResults.reduce((sum, r) => sum + (r.metrics?.technical?.headings?.h3 || 0), 0),
+      },
+    },
+    meta: {
+      hasTitle: seoResults.some(r => r.metrics?.meta?.hasTitle),
+      hasDescription: seoResults.some(r => r.metrics?.meta?.hasDescription),
+      hasCanonical: seoResults.some(r => r.metrics?.meta?.hasCanonical),
+      hasRobots: seoResults.some(r => r.metrics?.meta?.hasRobots),
+      ogTags: seoResults.reduce((sum, r) => sum + (r.metrics?.meta?.ogTags || 0), 0),
+      twitterTags: seoResults.reduce((sum, r) => sum + (r.metrics?.meta?.twitterTags || 0), 0),
+    },
+  };
+  
+  // Combine issues from all pages
+  const combinedIssues = [];
+  for (const result of seoResults) {
+    if (result.issues) {
+      for (const issue of result.issues) {
+        combinedIssues.push({
+          ...issue,
+          pageUrl: result.pageUrl || issue.url,
+        });
+      }
+    }
+  }
+  
+  // Combine recommendations from all pages
+  const combinedRecommendations = [];
+  for (const result of seoResults) {
+    if (result.recommendations) {
+      for (const rec of result.recommendations) {
+        combinedRecommendations.push({
+          ...rec,
+          pageUrl: result.pageUrl || rec.url,
+        });
+      }
+    }
+  }
+  
+  // Calculate average score
+  const avgScore = seoResults.reduce((sum, r) => sum + (r.score || 0), 0) / seoResults.length;
+  
+  return {
+    url: url.value,
+    score: Math.round(avgScore),
+    issues: combinedIssues,
+    recommendations: combinedRecommendations,
+    metrics: combinedMetrics,
+    robotsAnalysis: seoResults[0]?.robotsAnalysis || {},
+    crawledPages: {
+      total: seoResults.length,
+      pages: seoResults.map(r => ({
+        url: r.pageUrl || r.url,
+        status: 200,
+        wordCount: r.metrics?.content?.wordCount || 0,
+        headings: {
+          h1: r.metrics?.technical?.headings?.h1 || 0,
+          h2: r.metrics?.technical?.headings?.h2 || 0,
+          h3: r.metrics?.technical?.headings?.h3 || 0,
+        },
+        images: {
+          total: r.metrics?.technical?.images?.total || 0,
+          withAlt: r.metrics?.technical?.images?.withAlt || 0,
+          withoutAlt: r.metrics?.technical?.images?.withoutAlt || 0,
+        },
+        links: {
+          internal: r.metrics?.technical?.links?.internal || 0,
+          external: r.metrics?.technical?.links?.external || 0,
+        },
+      })),
+    },
+    scoreBreakdown: {
+      total: Math.round(avgScore),
+      meta: Math.round(seoResults.reduce((sum, r) => sum + (r.scoreBreakdown?.meta || 0), 0) / seoResults.length),
+      content: Math.round(seoResults.reduce((sum, r) => sum + (r.scoreBreakdown?.content || 0), 0) / seoResults.length),
+      technical: Math.round(seoResults.reduce((sum, r) => sum + (r.scoreBreakdown?.technical || 0), 0) / seoResults.length),
+      structure: Math.round(seoResults.reduce((sum, r) => sum + (r.scoreBreakdown?.structure || 0), 0) / seoResults.length),
+    },
+  };
+}
+
+// Helper function to combine keyword density from multiple pages
+function combineKeywordDensity(keywordDensities: Record<string, number>[]) {
+  const combined: Record<string, number> = {};
+  const counts: Record<string, number> = {};
+  
+  for (const density of keywordDensities) {
+    for (const [keyword, value] of Object.entries(density)) {
+      if (!combined[keyword]) {
+        combined[keyword] = 0;
+        counts[keyword] = 0;
+      }
+      combined[keyword] += value;
+      counts[keyword]++;
+    }
+  }
+  
+  // Calculate average
+  for (const keyword in combined) {
+    combined[keyword] = combined[keyword] / counts[keyword];
+  }
+  
+  return combined;
 }
 
 // Update the navigateToAnalysis function
@@ -4194,6 +2152,39 @@ function getGoalName(goal: string): string {
 
 // Expose the function to child components
 defineExpose({ setScanCompleted });
+
+// Watchers to sync analysisTypes and selectedTools
+watch(
+  () => analysisTypes.value.seo,
+  (newVal) => {
+    if (newVal) {
+      if (!selectedTools.value.includes('seo')) {
+        selectedTools.value.push('seo');
+      }
+    } else {
+      selectedTools.value = selectedTools.value.filter(t => t !== 'seo');
+    }
+  }
+);
+
+watch(
+  () => analysisTypes.value.accessibility,
+  (newVal) => {
+    const accessibilityToolIds = availableTools.map(t => t.id);
+    if (newVal) {
+      // If no accessibility tools are selected, select all by default
+      if (!selectedTools.value.some(t => accessibilityToolIds.includes(t))) {
+        selectedTools.value = [
+          ...selectedTools.value,
+          ...accessibilityToolIds.filter(t => !selectedTools.value.includes(t))
+        ];
+      }
+    } else {
+      // Remove all accessibility tools
+      selectedTools.value = selectedTools.value.filter(t => !accessibilityToolIds.includes(t));
+    }
+  }
+);
 </script>
 
 <style>
@@ -4226,3 +2217,4 @@ body {
   scrollbar-color: #3c585e #232b62;
 }
 </style>
+

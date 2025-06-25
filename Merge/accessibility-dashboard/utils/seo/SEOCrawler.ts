@@ -54,6 +54,7 @@ interface PageData {
     loadTime: number;
     firstContentfulPaint: number;
     largestContentfulPaint: number;
+    timeToInteractive: number;
   };
 }
 
@@ -170,7 +171,8 @@ class SEOCrawler {
             performance: {
               loadTime: 0,
               firstContentfulPaint: 0,
-              largestContentfulPaint: 0
+              largestContentfulPaint: 0,
+              timeToInteractive: 0
             }
           });
         }
@@ -302,27 +304,55 @@ class SEOCrawler {
         .trim() || bodyText;
       console.log(`Main content length: ${mainContent.length} characters`);
 
-      // Get performance metrics with fallback
+      // Get performance metrics with improved timing and fallbacks
       console.log('Getting performance metrics...');
       let performance = await page.evaluate(() => {
-        try {
-          const perf = performance.getEntriesByType('navigation')[0];
-          return {
-            loadTime: perf?.loadEventEnd - perf?.navigationStart || 0,
-            firstContentfulPaint: performance.getEntriesByName('first-contentful-paint')[0]?.startTime || 0,
-            largestContentfulPaint: performance.getEntriesByName('largest-contentful-paint')[0]?.startTime || 0
+        return new Promise((resolve) => {
+          const waitForMetrics = () => {
+            try {
+              const navigation = performance.getEntriesByType('navigation')[0];
+              const paintEntries = performance.getEntriesByType('paint');
+              const fcp = paintEntries.find(entry => entry.name === 'first-contentful-paint');
+              const lcp = paintEntries.find(entry => entry.name === 'largest-contentful-paint');
+              const domContentLoaded = navigation.domContentLoadedEventEnd - navigation.navigationStart;
+              const tti = domContentLoaded + 1000; // Approximate TTI
+              const metrics = {
+                loadTime: navigation.loadEventEnd - navigation.navigationStart,
+                firstContentfulPaint: fcp ? fcp.startTime : 0,
+                largestContentfulPaint: lcp ? lcp.startTime : 0,
+                timeToInteractive: tti
+              };
+              if (metrics.loadTime > 0) {
+                resolve(metrics);
+              } else {
+                setTimeout(() => {
+                  const retryNavigation = performance.getEntriesByType('navigation')[0];
+                  const retryPaintEntries = performance.getEntriesByType('paint');
+                  const retryFcp = retryPaintEntries.find(entry => entry.name === 'first-contentful-paint');
+                  const retryLcp = retryPaintEntries.find(entry => entry.name === 'largest-contentful-paint');
+                  const retryTti = retryNavigation.domContentLoadedEventEnd - retryNavigation.navigationStart + 1000;
+                  resolve({
+                    loadTime: retryNavigation.loadEventEnd - retryNavigation.navigationStart,
+                    firstContentfulPaint: retryFcp ? retryFcp.startTime : 0,
+                    largestContentfulPaint: retryLcp ? retryLcp.startTime : 0,
+                    timeToInteractive: retryTti
+                  });
+                }, 2000);
+              }
+            } catch (error) {
+              console.warn('Failed to get performance metrics:', error);
+              resolve({
+                loadTime: 0,
+                firstContentfulPaint: 0,
+                largestContentfulPaint: 0,
+                timeToInteractive: 0
+              });
+            }
           };
-        } catch (error) {
-          console.warn('Failed to get performance metrics:', error);
-          return {
-            loadTime: 0,
-            firstContentfulPaint: 0,
-            largestContentfulPaint: 0
-          };
-        }
+          waitForMetrics();
+        });
       });
       console.log('Performance metrics:', performance);
-
       // Fallback to Lighthouse metrics if Playwright fails
       if ((performance.loadTime === 0 && performance.firstContentfulPaint === 0 && performance.largestContentfulPaint === 0) && depth === 0) {
         try {
@@ -331,7 +361,8 @@ class SEOCrawler {
           performance = {
             loadTime: audits['interactive']?.numericValue || 0,
             firstContentfulPaint: audits['first-contentful-paint']?.numericValue || 0,
-            largestContentfulPaint: audits['largest-contentful-paint']?.numericValue || 0
+            largestContentfulPaint: audits['largest-contentful-paint']?.numericValue || 0,
+            timeToInteractive: audits['interactive']?.numericValue || 0
           };
           console.log('Used Lighthouse performance metrics:', performance);
         } catch (e) {

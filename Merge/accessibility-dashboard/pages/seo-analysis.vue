@@ -1,6 +1,15 @@
 <template>
   <div class="max-w-7xl mx-auto">
     <div class="mb-6">
+      <button
+        @click="$emit('back-to-dashboard')"
+        class="flex items-center text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-4"
+      >
+        <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Dashboard
+      </button>
       <h2 class="text-2xl font-bold mb-2">SEO Analysis</h2>
       <p class="text-gray-600 dark:text-gray-300">
         View your website's SEO performance analysis and recommendations.
@@ -61,6 +70,11 @@ import LoadingState from '../components/LoadingState.vue';
 const props = defineProps<{
   url: string;
   initialAnalysis?: SEOAnalysisType | null;
+}>();
+
+// Define emits
+const emit = defineEmits<{
+  'back-to-dashboard': [];
 }>();
 
 const isAnalyzing = ref(false);
