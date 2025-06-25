@@ -1406,8 +1406,8 @@ async function runWaveScan() {
         if (issues.length > 0) {
           return issues.map((issue) => ({
             type: issue.type || "notice",
-            code: issue.code || issue.id || "WAVE-UNKNOWN",
-            message: issue.message || issue.description || "No message provided",
+            code: issue.code || issue.id || issue.ruleId || (issue.category && issue.category.key) || "WAVE-UNKNOWN",
+            message: issue.message || issue.description || issue.title || (typeof issue === 'object' ? JSON.stringify(issue) : String(issue)) || "No message provided",
             context: issue.context || issue.html || "",
             source: "wave",
             selector: issue.selector || "",
