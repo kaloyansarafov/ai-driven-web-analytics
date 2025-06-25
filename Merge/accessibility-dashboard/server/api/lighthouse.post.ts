@@ -58,8 +58,8 @@ export default defineEventHandler(async (event) => {
           .filter((audit: any) => audit.score !== null && audit.score < 1)
           .map((audit: any): LighthouseAudit => ({
             id: audit.id,
-            title: audit.title,
-            description: audit.description,
+            title: audit.description,
+            description: audit.displayValue,
             score: audit.score,
             scoreDisplayMode: audit.scoreDisplayMode,
             explanation: audit.explanation,

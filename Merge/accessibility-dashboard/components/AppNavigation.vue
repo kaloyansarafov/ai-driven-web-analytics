@@ -68,33 +68,6 @@
           <ul class="space-y-2">
             <li>
               <button
-                @click="navigateTo('combined-dashboard')"
-                class="w-full flex items-center space-x-2 p-2 rounded-md"
-                :class="
-                  activePage === 'combined-dashboard'
-                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                "
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M11 3v8H3a9 9 0 1018 0h-8V3z"
-                  />
-                </svg>
-                <span>Dashboard</span>
-              </button>
-            </li>
-            <li>
-              <button
                 @click="navigateTo('dashboard')"
                 class="w-full flex items-center space-x-2 p-2 rounded-md"
                 :class="
@@ -118,6 +91,33 @@
                   />
                 </svg>
                 <span>Home Page</span>
+              </button>
+            </li>
+            <li>
+              <button
+                @click="navigateTo('combined-dashboard')"
+                class="w-full flex items-center space-x-2 p-2 rounded-md"
+                :class="
+                  activePage === 'combined-dashboard'
+                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 3v8H3a9 9 0 1018 0h-8V3z"
+                  />
+                </svg>
+                <span>Dashboard</span>
               </button>
             </li>
             <li>
@@ -267,16 +267,6 @@
       <!-- Sidebar bottom controls -->
       <div class="flex flex-col items-center gap-4 p-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
         <ThemeToggle />
-        <button
-          class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          aria-label="User menu"
-        >
-          <img
-            class="h-8 w-8 rounded-full"
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt="User avatar"
-          />
-        </button>
       </div>
     </div>
 
@@ -345,22 +335,6 @@
             <ul class="space-y-2">
               <li>
                 <button
-                  @click="navigateTo('combined-dashboard')"
-                  class="w-full flex items-center space-x-2 p-2 rounded-md"
-                  :class="
-                    activePage === 'combined-dashboard'
-                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  "
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3v8H3a9 9 0 1018 0h-8V3z" />
-                  </svg>
-                  <span>Dashboard</span>
-                </button>
-              </li>
-              <li>
-                <button
                   @click="navigateTo('dashboard')"
                   class="w-full flex items-center space-x-2 p-2 rounded-md"
                   :class="
@@ -384,6 +358,22 @@
                     />
                   </svg>
                   <span>Home Page</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  @click="navigateTo('combined-dashboard')"
+                  class="w-full flex items-center space-x-2 p-2 rounded-md"
+                  :class="
+                    activePage === 'combined-dashboard'
+                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  "
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3v8H3a9 9 0 1018 0h-8V3z" />
+                  </svg>
+                  <span>Dashboard</span>
                 </button>
               </li>
               <li>

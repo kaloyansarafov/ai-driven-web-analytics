@@ -1,372 +1,389 @@
 <template>
-  <div class="bg-white p-6 rounded-lg shadow-md">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold">Bookmarked URLs</h2>
-      <div class="flex space-x-2">
-        <button
-          @click="addBookmark"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Add Bookmark
-        </button>
-        <button
-          @click="clearBookmarks"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200"
-          :disabled="historyStore.bookmarks.length === 0"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v10m4-10v10m5-16l-7-7m0 0L0 4m12-4v12"
-            />
-          </svg>
-          Clear All
-        </button>
+  <div class="max-w-6xl mx-auto p-6" data-page="saved-reports">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Saved Reports & Scan History</h1>
+      
+      <!-- Tabs for Saved Reports and Scan History -->
+      <div class="mb-6">
+        <div class="border-b border-gray-200 dark:border-gray-700">
+          <nav class="-mb-px flex space-x-8">
+            <button
+              @click="activeTab = 'reports'"
+              :class="[
+                activeTab === 'reports'
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300',
+                'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'
+              ]"
+            >
+              Saved Reports ({{ reports.length }})
+            </button>
+            <button
+              @click="activeTab = 'history'"
+              :class="[
+                activeTab === 'history'
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300',
+                'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'
+              ]"
+            >
+              Scan History ({{ scanHistory.length }})
+            </button>
+          </nav>
+        </div>
       </div>
-    </div>
 
-    <!-- Add bookmark form -->
-    <div
-      v-if="showAddForm"
-      class="mb-6 p-4 border border-indigo-200 bg-indigo-50 rounded-md"
-    >
-      <h3 class="text-lg font-medium mb-3">Add URL Bookmark</h3>
-      <form @submit.prevent="saveBookmark">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label
-              for="url"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >URL</label
-            >
-            <input
-              id="url"
-              v-model="newBookmark.url"
-              type="url"
-              required
-              placeholder="https://example.com"
-              class="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-            />
+      <!-- Saved Reports Tab -->
+      <div v-if="activeTab === 'reports'">
+        <!-- No reports message -->
+        <div v-if="reports.length === 0" class="text-center py-12">
+          <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
           </div>
-          <div>
-            <label
-              for="title"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Title (Optional)</label
-            >
-            <input
-              id="title"
-              v-model="newBookmark.title"
-              type="text"
-              placeholder="My Website"
-              class="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-            />
-          </div>
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button
-            type="button"
-            @click="showAddForm = false"
-            class="px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200"
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No saved reports yet</h3>
+          <p class="text-gray-500 dark:text-gray-400 mb-4">Your analysis reports will appear here once you run some scans.</p>
+          <button 
+            @click="goToDashboard" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
           >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Save Bookmark
+            Run Your First Analysis
           </button>
         </div>
-      </form>
-    </div>
 
-    <div v-if="historyStore.bookmarks.length === 0" class="text-center py-10">
-      <p class="text-lg text-gray-500">
-        No bookmarks yet. Add URLs to bookmark them for quick access.
-      </p>
-    </div>
+        <!-- Reports list -->
+        <div v-else class="space-y-4">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
+              {{ reports.length }} Saved Report{{ reports.length !== 1 ? 's' : '' }}
+            </h2>
+            <button 
+              @click="clearAllReports" 
+              class="text-red-600 hover:text-red-700 text-sm font-medium"
+            >
+              Clear All
+            </button>
+          </div>
 
-    <div v-else>
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                URL
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Added
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Last Scanned
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="bookmark in historyStore.bookmarks" :key="bookmark.id">
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div
-                    class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-md"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                      />
-                    </svg>
+          <div class="grid gap-4">
+            <div 
+              v-for="(report, index) in reports" 
+              :key="index"
+              class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex items-center space-x-3 mb-2">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white truncate">
+                      {{ report.url }}
+                    </h3>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                      {{ formatDate(report.timestamp) }}
+                    </span>
                   </div>
-                  <div class="ml-4">
-                    <div class="text-sm font-medium text-gray-900">
-                      {{ bookmark.title || "Untitled" }}
+                  
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                    <div class="text-center">
+                      <div class="text-2xl font-bold text-red-600">{{ report.errors || 0 }}</div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">Errors</div>
                     </div>
-                    <div class="text-sm text-gray-500">{{ bookmark.url }}</div>
+                    <div class="text-center">
+                      <div class="text-2xl font-bold text-yellow-600">{{ report.warnings || 0 }}</div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">Warnings</div>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-2xl font-bold text-blue-600">{{ report.notices || 0 }}</div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">Notices</div>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-2xl font-bold text-green-600">{{ report.scannedPages || 1 }}</div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">Pages</div>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-wrap gap-2 mb-3">
+                    <span 
+                      v-for="tool in report.tools" 
+                      :key="tool"
+                      class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full"
+                    >
+                      {{ tool }}
+                    </span>
                   </div>
                 </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">
-                  {{ formatDate(bookmark.createdAt) }}
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div v-if="bookmark.lastScanned" class="text-sm text-gray-900">
-                  {{ formatDate(bookmark.lastScanned) }}
-                </div>
-                <div v-else class="text-sm text-gray-500">Not scanned yet</div>
-              </td>
-              <td
-                class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-              >
-                <button
-                  @click="runScan(bookmark)"
-                  class="text-indigo-600 hover:text-indigo-900 mr-3"
-                >
-                  Run Scan
-                </button>
-                <button
-                  @click="editBookmark(bookmark)"
-                  class="text-blue-600 hover:text-blue-900 mr-3"
-                >
-                  Edit
-                </button>
-                <button
-                  @click="removeBookmark(bookmark.id)"
-                  class="text-red-600 hover:text-red-900"
-                >
-                  Remove
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
 
-    <!-- Edit bookmark modal -->
-    <div
-      v-if="showEditModal"
-      class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50"
-    >
-      <div class="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
-        <h3 class="text-lg font-medium mb-4">Edit Bookmark</h3>
-        <form @submit.prevent="updateBookmark">
-          <div class="mb-4">
-            <label
-              for="edit-url"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >URL</label
-            >
-            <input
-              id="edit-url"
-              v-model="editedBookmark.url"
-              type="url"
-              required
-              class="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-            />
+                <div class="flex space-x-2 ml-4">
+                  <button 
+                    @click="viewReport(report)"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                  >
+                    View
+                  </button>
+                  <button 
+                    @click="deleteReport(index)"
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mb-4">
-            <label
-              for="edit-title"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Title</label
-            >
-            <input
-              id="edit-title"
-              v-model="editedBookmark.title"
-              type="text"
-              class="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-            />
+        </div>
+      </div>
+
+      <!-- Scan History Tab -->
+      <div v-if="activeTab === 'history'">
+        <!-- No history message -->
+        <div v-if="scanHistory.length === 0" class="text-center py-12">
+          <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
           </div>
-          <div class="flex justify-end space-x-2">
-            <button
-              type="button"
-              @click="showEditModal = false"
-              class="px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200"
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No scan history yet</h3>
+          <p class="text-gray-500 dark:text-gray-400 mb-4">Your scan history will appear here once you run some analyses.</p>
+          <button 
+            @click="goToDashboard" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+          >
+            Run Your First Analysis
+          </button>
+        </div>
+
+        <!-- History list -->
+        <div v-else class="space-y-4">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
+              {{ scanHistory.length }} Scan{{ scanHistory.length !== 1 ? 's' : '' }} in History
+            </h2>
+            <button 
+              @click="clearAllHistory" 
+              class="text-red-600 hover:text-red-700 text-sm font-medium"
             >
-              Cancel
+              Clear History
             </button>
-            <button
-              type="submit"
-              class="px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Save Changes
-            </button>
           </div>
-        </form>
+
+          <div class="grid gap-4">
+            <div 
+              v-for="(scan, index) in scanHistory" 
+              :key="scan.id || index"
+              class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex items-center space-x-3 mb-2">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white truncate">
+                      {{ scan.url }}
+                    </h3>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                      {{ formatDate(scan.timestamp || scan.date) }}
+                    </span>
+                  </div>
+                  
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                    <div class="text-center">
+                      <div class="text-2xl font-bold text-red-600">{{ scan.errors || 0 }}</div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">Errors</div>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-2xl font-bold text-yellow-600">{{ scan.warnings || 0 }}</div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">Warnings</div>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-2xl font-bold text-blue-600">{{ scan.notices || 0 }}</div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">Notices</div>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-2xl font-bold text-green-600">{{ scan.scannedPages || 1 }}</div>
+                      <div class="text-xs text-gray-500 dark:text-gray-400">Pages</div>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-wrap gap-2 mb-3">
+                    <span 
+                      v-for="tool in scan.tools" 
+                      :key="tool"
+                      class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded-full"
+                    >
+                      {{ tool }}
+                    </span>
+                  </div>
+
+                  <div v-if="scan.scanDuration" class="text-xs text-gray-500 dark:text-gray-400">
+                    Duration: {{ Math.round(scan.scanDuration / 1000) }}s
+                  </div>
+                </div>
+
+                <div class="flex space-x-2 ml-4">
+                  <button 
+                    @click="viewScanHistory(scan)"
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                  >
+                    View
+                  </button>
+                  <button 
+                    @click="deleteScanHistory(index)"
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, reactive } from "vue";
-import { useHistoryStore } from "~/stores/historyStore";
-import type { UrlBookmark } from "~/types";
-import { useRouter } from "vue-router";
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 
-const historyStore = useHistoryStore();
-const router = useRouter();
+const reports = ref([])
+const scanHistory = ref([])
+const activeTab = ref('reports')
 
-// UI state
-const showAddForm = ref(false);
-const showEditModal = ref(false);
-
-// New bookmark form data
-const newBookmark = reactive({
-  url: "",
-  title: "",
-});
-
-// Edited bookmark data
-const editedBookmark = reactive({
-  id: "",
-  url: "",
-  title: "",
-});
-
-// Add a new bookmark
-function addBookmark() {
-  showAddForm.value = true;
-  // Clear the form
-  newBookmark.url = "";
-  newBookmark.title = "";
-}
-
-// Save a new bookmark
-function saveBookmark() {
-  if (!newBookmark.url) return;
-
-  historyStore.addBookmark(newBookmark.url, newBookmark.title);
-  showAddForm.value = false;
-}
-
-// Edit an existing bookmark
-function editBookmark(bookmark: UrlBookmark) {
-  editedBookmark.id = bookmark.id;
-  editedBookmark.url = bookmark.url;
-  editedBookmark.title = bookmark.title || "";
-
-  showEditModal.value = true;
-}
-
-// Update bookmark
-function updateBookmark() {
-  if (!editedBookmark.id || !editedBookmark.url) return;
-
-  historyStore.updateBookmark(editedBookmark.id, {
-    url: editedBookmark.url,
-    title: editedBookmark.title,
-  });
-
-  showEditModal.value = false;
-}
-
-// Remove a bookmark
-function removeBookmark(id: string) {
-  if (confirm("Are you sure you want to remove this bookmark?")) {
-    historyStore.removeBookmark(id);
-  }
-}
-
-// Run a scan for a bookmarked URL
-function runScan(bookmark: UrlBookmark) {
-  router.push({
-    path: "/",
-    query: {
-      url: bookmark.url,
-    },
-  });
-}
-
-// Clear all bookmarks
-function clearBookmarks() {
-  if (
-    confirm(
-      "Are you sure you want to clear all bookmarks? This cannot be undone."
-    )
-  ) {
-    historyStore.clearBookmarks();
-  }
-}
-
-// Format dates
-function formatDate(dateString: string): string {
+// Load reports from localStorage
+function loadReports() {
   try {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    }).format(date);
-  } catch (e) {
-    return dateString;
+    // Use scanHistory instead of savedReports since that's where the actual data is saved
+    const savedHistory = localStorage.getItem('scanHistory')
+    if (savedHistory) {
+      reports.value = JSON.parse(savedHistory)
+    } else {
+      reports.value = []
+    }
+  } catch (error) {
+    console.error('Error loading saved reports:', error)
+    reports.value = []
   }
 }
+
+// Load scan history from localStorage
+function loadScanHistory() {
+  try {
+    const history = localStorage.getItem('scanHistory')
+    if (history) {
+      scanHistory.value = JSON.parse(history)
+    } else {
+      scanHistory.value = []
+    }
+  } catch (error) {
+    console.error('Error loading scan history:', error)
+    scanHistory.value = []
+  }
+}
+
+// Save reports to localStorage
+function saveReports() {
+  try {
+    // Save to scanHistory to maintain consistency with the main app
+    localStorage.setItem('scanHistory', JSON.stringify(reports.value))
+  } catch (error) {
+    console.error('Error saving reports:', error)
+  }
+}
+
+// Format date for display
+function formatDate(timestamp) {
+  if (!timestamp) return 'Unknown date'
+  
+  try {
+    const date = new Date(timestamp)
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+  } catch (error) {
+    return 'Invalid date'
+  }
+}
+
+// View a specific report
+function viewReport(report) {
+  // Store the report data for the dashboard to use
+  localStorage.setItem('selectedReport', JSON.stringify(report))
+  
+  // Navigate to dashboard with the report data
+  if (typeof window !== 'undefined') {
+    window.location.href = '/#dashboard'
+  }
+}
+
+// View a specific scan from history
+function viewScanHistory(scan) {
+  // Store the scan data for the dashboard to use
+  localStorage.setItem('selectedScanHistory', JSON.stringify(scan))
+  
+  // Navigate to dashboard with the scan data
+  if (typeof window !== 'undefined') {
+    window.location.href = '/#dashboard'
+  }
+}
+
+// Delete a specific report
+function deleteReport(index) {
+  if (confirm('Are you sure you want to delete this report?')) {
+    reports.value.splice(index, 1)
+    saveReports()
+  }
+}
+
+// Delete a specific scan from history
+function deleteScanHistory(index) {
+  if (confirm('Are you sure you want to delete this scan from history?')) {
+    scanHistory.value.splice(index, 1)
+    localStorage.setItem('scanHistory', JSON.stringify(scanHistory.value))
+  }
+}
+
+// Clear all reports
+function clearAllReports() {
+  if (confirm('Are you sure you want to delete all saved reports? This action cannot be undone.')) {
+    reports.value = []
+    saveReports()
+  }
+}
+
+// Clear all scan history
+function clearAllHistory() {
+  if (confirm('Are you sure you want to clear all scan history? This action cannot be undone.')) {
+    scanHistory.value = []
+    localStorage.setItem('scanHistory', JSON.stringify(scanHistory.value))
+  }
+}
+
+// Go to dashboard
+function goToDashboard() {
+  if (typeof window !== 'undefined') {
+    window.location.href = '/#dashboard'
+  }
+}
+
+// Load reports on mount
+onMounted(() => {
+  loadReports()
+  loadScanHistory()
+  
+  // Listen for storage changes to update the list
+  const handleStorageChange = () => {
+    loadReports()
+    loadScanHistory()
+  }
+  
+  window.addEventListener('storage', handleStorageChange)
+  
+  // Clean up event listener
+  onUnmounted(() => {
+    window.removeEventListener('storage', handleStorageChange)
+  })
+})
+
+// Expose functions for parent components
+defineExpose({
+  loadReports,
+  saveReports,
+  loadScanHistory
+})
 </script>

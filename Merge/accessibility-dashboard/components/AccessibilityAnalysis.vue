@@ -1,12 +1,5 @@
 <template>
   <div>
-    <div class="mb-6">
-      <h2 class="text-2xl font-bold mb-2">Accessibility Analysis</h2>
-      <p class="text-gray-600 dark:text-gray-300">
-        View detailed analysis of your accessibility scan results.
-      </p>
-    </div>
-
     <!-- WAVE Visual Report -->
     <div
       v-if="
@@ -53,7 +46,14 @@
           title="WAVE Report"
           class="w-full h-full"
           sandbox="allow-scripts allow-same-origin"
+          @error="iframeError = true"
+          @load="iframeLoaded = true"
+          v-show="!iframeError"
         ></iframe>
+        <div v-if="iframeError" class="p-6 text-center text-yellow-800 bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-200">
+          <p class="mb-2 font-semibold">WAVE Visual Report cannot be embedded due to browser security restrictions.</p>
+          <a :href="waveReportUrl" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Open WAVE Report in a new window</a>
+        </div>
       </div>
     </div>
 
@@ -138,6 +138,52 @@
                 class="ml-2 px-2 py-1 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-800/30 text-blue-800 dark:text-blue-200"
               >
                 Info
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WCAG Compliance Summary -->
+        <div class="mt-8">
+          <h3 class="text-lg font-semibold mb-3">WCAG Compliance Issues</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-3 border rounded-md flex items-center">
+              <div
+                class="bg-red-100 text-red-800 font-bold text-lg rounded-full h-10 w-10 flex items-center justify-center mr-3"
+              >
+                A
+              </div>
+              <div>
+                <div class="font-medium">Level A</div>
+                <div class="text-sm text-gray-500">
+                  {{ wcagACount }} issues
+                </div>
+              </div>
+            </div>
+            <div class="p-3 border rounded-md flex items-center">
+              <div
+                class="bg-orange-100 text-orange-800 font-bold text-lg rounded-full h-10 w-10 flex items-center justify-center mr-3"
+              >
+                AA
+              </div>
+              <div>
+                <div class="font-medium">Level AA</div>
+                <div class="text-sm text-gray-500">
+                  {{ wcagAACount }} issues
+                </div>
+              </div>
+            </div>
+            <div class="p-3 border rounded-md flex items-center">
+              <div
+                class="bg-yellow-100 text-yellow-800 font-bold text-lg rounded-full h-10 w-10 flex items-center justify-center mr-3"
+              >
+                AAA
+              </div>
+              <div>
+                <div class="font-medium">Level AAA</div>
+                <div class="text-sm text-gray-500">
+                  {{ wcagAAACount }} issues
+                </div>
               </div>
             </div>
           </div>
@@ -502,7 +548,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import SummaryChart from './SummaryChart.vue';
 import HistoryTracking from './HistoryTracking.vue';
 import axios from 'axios';
@@ -528,11 +574,12 @@ const expandedGroups = ref<string[]>([]);
 const expandedDetails = ref<number[]>([]);
 const showTechDetails = ref<number[]>([]);
 const searchQuery = ref('');
+const iframeError = ref(false);
+const iframeLoaded = ref(false);
 
 // Computed properties
 const filteredResults = computed(() => {
   if (!searchQuery.value) return props.results || [];
-  
   const query = searchQuery.value.toLowerCase();
   return (props.results || []).filter(result => 
     result.message.toLowerCase().includes(query) ||
@@ -544,6 +591,11 @@ const filteredResults = computed(() => {
 
 const filteredIssues = computed(() => {
   let issues = filteredResults.value;
+  // Apply source filter
+  if (filterSource.value !== 'all') {
+    issues = issues.filter((issue) => issue.source === filterSource.value);
+  }
+  // Apply type filter
   if (filterType.value !== 'all') {
     issues = issues.filter((issue) => issue.type === filterType.value);
   }
@@ -576,6 +628,35 @@ const hasLighthouseIssues = computed(() =>
 
 const hasIbmA11yIssues = computed(() =>
   props.results.some((issue) => issue.source === 'ibm-a11y')
+);
+
+// WCAG Compliance Level Counts
+function extractWcagLevelFromIssue(issue) {
+  // Check code for WCAG2A, WCAG2AA, WCAG2AAA
+  if (issue.code) {
+    if (/WCAG2AAA?/i.test(issue.code)) {
+      if (/WCAG2AAA/i.test(issue.code)) return 'AAA';
+      if (/WCAG2AA/i.test(issue.code)) return 'AA';
+      if (/WCAG2A/i.test(issue.code)) return 'A';
+    }
+  }
+  // Check message for WCAG AA, WCAG AAA, WCAG A
+  if (issue.message) {
+    if (/WCAG\s*AAA/i.test(issue.message)) return 'AAA';
+    if (/WCAG\s*AA/i.test(issue.message)) return 'AA';
+    if (/WCAG\s*A/i.test(issue.message)) return 'A';
+  }
+  return undefined;
+}
+
+const wcagACount = computed(() =>
+  filteredResults.value.filter(issue => extractWcagLevelFromIssue(issue) === 'A').length
+);
+const wcagAACount = computed(() =>
+  filteredResults.value.filter(issue => extractWcagLevelFromIssue(issue) === 'AA').length
+);
+const wcagAAACount = computed(() =>
+  filteredResults.value.filter(issue => extractWcagLevelFromIssue(issue) === 'AAA').length
 );
 
 // Methods
@@ -719,4 +800,19 @@ async function getAIRecommendations(issue: any) {
 const handleSearch = (query: string) => {
   searchQuery.value = query;
 };
-</script> 
+
+// Watch for new results and reset filters
+watch(() => props.results, () => {
+  filterSource.value = 'all';
+  filterType.value = 'all';
+});
+</script>
+
+<style scoped>
+div.mb-6 > h2,
+div.mb-6 > p,
+h2.text-2xl.font-bold.mb-2,
+p.text-gray-600.dark\:text-gray-300 {
+  color: #fff !important;
+}
+</style> 

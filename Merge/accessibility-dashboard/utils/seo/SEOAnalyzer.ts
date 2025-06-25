@@ -67,6 +67,7 @@ interface SEOMetrics {
     loadTime: number;
     firstContentfulPaint: number;
     largestContentfulPaint: number;
+    timeToInteractive: number;
   };
   content: {
     wordCount: number;
@@ -480,7 +481,8 @@ class SEOAnalyzer {
       performance: {
         loadTime: page.performance?.loadTime || 0,
         firstContentfulPaint: page.performance?.firstContentfulPaint || 0,
-        largestContentfulPaint: page.performance?.largestContentfulPaint || 0
+        largestContentfulPaint: page.performance?.largestContentfulPaint || 0,
+        timeToInteractive: page.performance?.timeToInteractive || 0
       },
       content: {
         wordCount: page.seo?.content?.wordCount || 0,
